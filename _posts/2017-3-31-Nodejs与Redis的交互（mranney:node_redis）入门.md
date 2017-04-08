@@ -3,8 +3,8 @@
 layout: post
 title: "Nodejs与Redis的交互（mranney/node_redis）入门"
 date:   2017-03-31 17:00:00
-categories: node.js
-tags: node.js redis
+categories: nodejs
+tags: nodejs redis
 description: Nodejs与Redis的交互（mranney/node_redis）入门
 ---
 
