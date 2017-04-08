@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "一种简单的cocos2d-x动态更新方案"
+title: "centos 搭建 svn"
 date:   2017-03-31 17:00:00
 categories: centos
 tags: centos subversion
