@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "centos 搭建 svn"
+title: "centos7 搭建 svn"
 date:   2017-03-31 17:00:00
 categories: centos
 tags: centos subversion
