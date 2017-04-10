@@ -1,13 +1,3 @@
- <script>
-    // 百度统计代码
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?c537b1fd4f1cbe9874d988d9e4c5306b";//+site.baidu_tongji_id;
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s); 
-    })();
-  </script>
 
 <head>
     <meta charset="utf-8">
@@ -25,6 +15,15 @@
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
     <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml " | prepend: site.baseurl | prepend: site.url }}">
 
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?c537b1fd4f1cbe9874d988d9e4c5306b";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
 <!-- {% if site.baidu_tongji_id %}
     <script>
     // 百度统计代码
