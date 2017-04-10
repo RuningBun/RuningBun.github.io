@@ -9,8 +9,8 @@
 title: on my way
 small-title: 会跑的包子
 brief-intro: 无论从何时开始，都不要担心太晚
-baseurl: "https://runingbun.github.io/" # the subpath of your site, e.g. /blog
-url: "http://blog.xiawan.space/" # the base hostname & protocol for your site
+baseurl: "https://blog.xiawan.space/" # the subpath of your site, e.g. /blog
+url: "https://blog.xiawan.space/" # the base hostname & protocol for your site
 
 permalink: /:year/:month/:day/:title/
 
@@ -19,7 +19,7 @@ permalink: /:year/:month/:day/:title/
 #facebook_username: gaohaoyang.water
 github_username:  RuningBun
 email: 2016ZhangL@gmail.com
-weibo_username: 710260185@qq.com
+weibo_username: 白字小先生
 zhihu_username: 会跑的包子
 #linkedIn_username: gaohaoyang
 dribbble_username:
