@@ -9,8 +9,8 @@
 title: on my way
 small-title: 会跑的包子
 brief-intro: 无论从何时开始，都不要担心太晚
-baseurl: "https://blog.xiawan.space/" # the subpath of your site, e.g. /blog
-url: "https://blog.xiawan.space/" # the base hostname & protocol for your site
+baseurl: "http://blog.xiawan.space/" # the subpath of your site, e.g. /blog
+url: "http://blog.xiawan.space/" # the base hostname & protocol for your site
 
 permalink: /:year/:month/:day/:title/
 
