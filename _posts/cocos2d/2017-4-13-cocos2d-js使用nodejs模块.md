@@ -3,7 +3,7 @@ layout: post
 title: "cocos2d-js使用nodejs模块"
 date:   2017-04-13 15:00:00
 categories: cocos2d-js
-tags: cocos2d-js
+tags: cocos2d-js nodejs
 description: cocos2d-js使用nodejs模块
 ---
 * content
