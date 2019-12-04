@@ -12,7 +12,7 @@ icon: heart
 
 
 ## 友情链接
-[会跑的包子](http://blog.xiawan.space/){:target="_blank"}
+[会跑的包子](http://blog.xiawan.space/){:target="_blank"} \|
 [gitHub](https://github.com/RuningBun){:target="_blank"}
 
 ## 留言
