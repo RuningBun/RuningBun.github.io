@@ -13,7 +13,7 @@ icon: heart
 
 ## 友情链接
 
-[博客](http://blog.xiawan.space/){:target="_blank"} 
+[博客](http://blog.xiawan.space/){:target="_blank"} \
 
 [gitHub](https://github.com/RuningBun){:target="_blank"}
 
