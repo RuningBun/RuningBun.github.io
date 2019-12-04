@@ -3,7 +3,7 @@ layout: post
 title: "mysql中key 、primary key 、unique key 与index区别"
 date:   2017-03-31 17:00:00
 categories: mysql
-tags: mysql centos
+tags: mysql 
 description: aliyun  mysql
 ---
 
