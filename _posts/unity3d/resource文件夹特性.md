@@ -7,6 +7,9 @@ tags: unity3d
 description:
 ---
 
+* content
+{:toc}
+
 ##不要使用它！
 强烈不建议使用Resources系统，原因如下：
 	• 使用Resources文件夹将会使细粒度的内存管理变得更难
