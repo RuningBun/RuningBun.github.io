@@ -10,7 +10,7 @@ title: 白字先生
 small-title: 亡羊补牢，犹未晚也
 brief-intro: 学习会更快乐
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://blog.xiawan.space/" # the base hostname & protocol for your site
+url: "http://liujilu.com/" # the base hostname & protocol for your site
 
 
 permalink: /:year/:month/:day/:title/
