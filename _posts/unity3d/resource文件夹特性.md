@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "resource文件夹优缺点"
-date:   2017-03-31 17:00:00
+date:   2019-11-09 00:00:00
 categories: unity3d
 tags: unity3d
-description:
+description: unity3d resource文件夹优缺点
 ---
 
 * content
