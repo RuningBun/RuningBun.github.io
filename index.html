@@ -5,7 +5,7 @@ layout: default
 <div class="page clearfix" index>
     <div class="left">
         <h1>Welcome to My Blog!</h1>
-        <small>成长带来的财富</small>
+        <small>这里记录着我的生活学习之路</small>
         <hr>
         <ul>
             {% for post in paginator.posts %}
@@ -69,6 +69,15 @@ layout: default
     <!-- <button class="anchor"><i class="fa fa-anchor"></i></button> -->
     <div class="right">
         <div class="wrap">
+            <div class="col-md-3 hidden-sm hidden-xs">
+                <div class="side">
+                    <div>
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                        搜索
+                     </div>
+                    {% include sidebar-search.html %}
+                </div>
+            </div>
             <div class="side">
                 <div>
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -120,7 +129,7 @@ layout: default
 
                     {% if max == min %}
                         {% assign diff = 1 %}
-                    {% else %}
+                    {% else %}    
                         {% assign diff = max | minus: min %}
                     {% endif %}
 
@@ -145,29 +154,29 @@ layout: default
                 </div>
             </div>
 
-            <!-- <div class="side">
+            <div class="side">
                 <div>
                     <i class="fa fa-external-link"></i>
-                    给包子加点馅
+                    喂下小松鼠吧
                 </div>
                 <ul  class="content-ul" style="padding-left: 3px;padding-right: 0px;">
                     <object type="application/x-shockwave-flash" style="outline:none;" data="http://cdn.abowman.com/widgets/hamster/hamster.swf?" width="260" height="205"><param name="movie" value="http://cdn.abowman.com/widgets/hamster/hamster.swf?"></param><param name="AllowScriptAccess" value="always"></param><param name="wmode" value="opaque"></param></object>
                 </ul>
-            </div> -->
+            </div>
 
             <!--
                 <div class="side">
                     <div>
-                        <i class="fa fa-external-link"></i>
-                        Links
+                        <i class="fa fa-external-link"></i>        
+                        Links                
                     </div>
                     <ul  class="content-ul">
-
+                       
                     </ul>
                 </div>
             -->
         </div>
     </div>
 </div>
-<!-- <script src="{{ "/js/scroll.min.js " | prepend: site.baseurl }}" charset="utf-8"></script>
-<script src="{{ "/js/pageContent.js " | prepend: site.baseurl }}" charset="utf-8"></script> -->
+<!-- <script src="{{ "/js/scroll.min.js " | prepend: site.baseurl }}" charset="utf-8"></script> -->
+<!-- <script src="{{ "/js/pageContent.js " | prepend: site.baseurl }}" charset="utf-8"></script> -->

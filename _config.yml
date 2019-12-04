@@ -6,11 +6,12 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: on my way
-small-title: 会跑的包子
-brief-intro: 无论从何时开始，都不要担心太晚
-baseurl: "http://blog.xiawan.space/" # the subpath of your site, e.g. /blog
-url: "http://blog.xiawan.space/" # the base hostname & protocol for your site
+title: 白字先生
+small-title: 亡羊补牢，犹未晚也
+brief-intro: 学习会更快乐
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "blog.xiawan.space" # the base hostname & protocol for your site
+
 
 permalink: /:year/:month/:day/:title/
 
@@ -18,29 +19,29 @@ permalink: /:year/:month/:day/:title/
 #twitter_username: gaohaoyang126
 #facebook_username: gaohaoyang.water
 github_username:  RuningBun
-email: 2016ZhangL@gmail.com
-weibo_username: 白字小先生
-zhihu_username: 会跑的包子
+email: 2016zhang@gmail.com
+weibo_username: 
+zhihu_username: 
 #linkedIn_username: gaohaoyang
 dribbble_username:
 
-keywords: 会跑的包子,个人博客,白字小先生,cocos2d-x,cocos2d-js,node.js,javascript
-description: 会跑的包子,记录着什么，管他呢。
-description_footer: 记录着什么，管他呢
+keywords: 
+description: 
+description_footer: 
 
 
 # comments
 # two ways to comment, only choose one, and use your own short name
 # 两种评论插件，选一个就好了，使用自己的 short_name
-duoshuo_shortname: RuningBun
+duoshuo_shortname: janda
 disqus_shortname: #gaohaoyang
 
 # statistic analysis 统计代码
 # 百度统计 id，将统计代码替换为自己的百度统计id，即
-# hm.src = "https://hm.baidu.com/hm.js?xxxxxxxxxxxx";
+# hm.src = "//hm.baidu.com/hm.js?xxxxxxxxxxxx";
 # xxxxx字符串
-baidu_tongji_id: c537b1fd4f1cbe9874d988d9e4c5306b
-#google_analytics_id: #UA-72449510-4 # google 分析追踪id
+baidu_tongji_id: 7c79ce8b12138941bb600c05c4fb1a7f
+google_analytics_id: UA-103416878-1 # google 分析追踪id
 
 # Build settings
 markdown: kramdown
@@ -60,5 +61,12 @@ tag_dir: tag/
 excerpt_separator: <!--more-->
 
 # paginate
-gems: [jekyll-paginate]
+gems: [jekyll-paginate,jekyll-sitemap]
 paginate: 3
+
+
+# 搜索服务
+#algolia:
+#  application_id: '36883FPR2D'
+#  index_name: '36883FPR2D'
+#  search_only_api_key: '2d40767987f704b3b04b9efce7ff49c8'
