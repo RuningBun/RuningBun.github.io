@@ -3,7 +3,7 @@ layout: post
 title: "nodejs redis 交互入门"
 date:   2017-03-31 17:00:00
 categories: nodejs
-tags: nodejs,redis
+tags: nodejs redis
 description: nodejs redis 交互入门
 ---
 简介和安装
