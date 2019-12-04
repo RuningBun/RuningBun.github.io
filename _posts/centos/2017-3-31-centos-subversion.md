@@ -1,10 +1,8 @@
 ---
 layout: post
 title: "centos7 搭建 svn"
-date:   2017-03-31 17:00:00
 categories: centos
 tags: centos subversion
-description: aliyun 搭建svn
 ---
 
 * content

@@ -1,10 +1,8 @@
 ---
 layout: post
 title: "mysql中key 、primary key 、unique key 与index区别"
-date:   2017-03-31 17:00:00
 categories: mysql
 tags: mysql 
-description: aliyun  mysql
 ---
 
 一、key与primary key区别
