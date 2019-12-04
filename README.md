@@ -6,4 +6,4 @@ _posts：博客文章默认的存放位置
 _config.yml：关于jekyll模板引擎的配置文件
 index.html：默认的主页 -->
 我的博客地址 https://runingbun.github.io//.
-后期会把blog.xiawan.space 移植到这个博客中来.
+可以用 blog.xiawan.space 访问
