@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "resource文件夹优缺点"
+title: "Unity3d Resource文件夹优缺点"
 categories: unity3d
 tags: unity3d
 ---
