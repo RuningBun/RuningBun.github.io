@@ -149,7 +149,8 @@
         }
     }
 }
-@media screen and (max-width: 770px) {
+// 显示预览内容区域
+@media screen and (max-width: 300px) { 
     .page[index] {
         .left>ul li {
             h2 {
