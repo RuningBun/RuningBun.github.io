@@ -5,6 +5,9 @@ categories: mysql
 tags: mysql 
 ---
 
+* content
+{:toc}
+
 一、key与primary key区别
 ```
 CREATE TABLE wh_logrecord (
