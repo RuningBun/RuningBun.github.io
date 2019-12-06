@@ -9,8 +9,6 @@ icon: heart
 {:toc}
 
 ## 关于我
-# exsi 虚拟主机
-# ddns 家庭主机外网可访问
 # cocos2d-x
 # cocos2d-js
 # cocos-creator
@@ -19,8 +17,10 @@ icon: heart
 # centos
 # nodejs
 # c#
+# exsi 虚拟主机
+# ddns 家庭主机外网可访问
 
-## 广而不精是大忌！！！！
+## 广而不精是大忌！ 
 
 ## 联系我
 

@@ -9,7 +9,7 @@ tags: cocos2d-js nodejs
 * content
 {:toc}
 
-#Node.js
+# Node.js
 自 Node.js 问世以来，JavaScript 在服务端的地位得到了许多人的认可。javascript 也不再是以往被认为的“前端的玩具语言”。在开发流程与规范上，node.js 提供了一套完整的方案，其中最基本的就是CommonJS 规范。它将 javascript 划分为模块，模块之间通过 require 进行调用——这很像其它语言的 include 或 import。
 
 
@@ -31,8 +31,8 @@ Cocos2d-js 的变通方式是在网页中追加
 /* scriptCore.cpp */
 
 ```
-// register some global functions
-JS_DefineFunction(cx, global, "require", ScriptingCore::executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    // register some global functions
+    JS_DefineFunction(cx, global, "require", ScriptingCore::executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
 ```
 这个 require 没办法像 CommonJS 规定的那样返回模块对象。并且这个 require function 是只读的，无法在 spidermonkey 里面用自己的 require 覆盖掉。
 Solution
@@ -41,8 +41,8 @@ Solution
 
 但是 Cocos2d-x jsb 将 require 限制为只读，只好动个小手术，把 require 更名为 ccrequire 或者其它的了。
 ```
-// register some global functions
-JS_DefineFunction(cx, global, "ccrequire", ScriptingCore::executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
+    // register some global functions
+    JS_DefineFunction(cx, global, "ccrequire", ScriptingCore::executeScript, 1, JSPROP_READONLY | JSPROP_PERMANENT);
 ```
 此外，还要同时修改 jsb_boot.js / jsb.js / jsb_debugger.js 里面 require 为 ccrequire 即可。
 这样，即不影响 Cocos2d-js 原有的 require 功能（其实只是简单的 excuteScript），又可以 require 由 browserify 打包的 node.js 模块了。而开发的过程中，则可以完全以 node.js 的方式对 model 层进行开发和测试。

@@ -68,51 +68,51 @@ insert into t (a ,b ) values (null,null);#可以重复
 
 四、使用UNIQUE KEY
 ```
-CREATE TABLE `secure_vulnerability_warning` (
-  `id` int(10) NOT NULL auto_increment,
-  `date` date NOT NULL,
-  `type` varchar(100) NOT NULL,
-  `sub_type` varchar(100) NOT NULL,
-  `domain_name` varchar(128) NOT NULL,
-  `url` text NOT NULL,
-  `parameters` text NOT NULL,
-  `hash` varchar(100) NOT NULL,
-  `deal` int(1) NOT NULL,
-  `deal_date` date default NULL,
-  `remark` text,
-  `last_push_time` datetime default NULL,
-  `push_times` int(11) default '1',
-  `first_set_ok_time` datetime default NULL,
-  `last_set_ok_time` datetime default NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `date` (`date`,`hash`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+  CREATE TABLE `secure_vulnerability_warning` (
+    `id` int(10) NOT NULL auto_increment,
+    `date` date NOT NULL,
+    `type` varchar(100) NOT NULL,
+    `sub_type` varchar(100) NOT NULL,
+    `domain_name` varchar(128) NOT NULL,
+    `url` text NOT NULL,
+    `parameters` text NOT NULL,
+    `hash` varchar(100) NOT NULL,
+    `deal` int(1) NOT NULL,
+    `deal_date` date default NULL,
+    `remark` text,
+    `last_push_time` datetime default NULL,
+    `push_times` int(11) default '1',
+    `first_set_ok_time` datetime default NULL,
+    `last_set_ok_time` datetime default NULL,
+    PRIMARY KEY  (`id`),
+    UNIQUE KEY `date` (`date`,`hash`)
+  ) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 ```
 UNIQUE KEY的用途：主要是用来防止数据插入的时候重复的。
 
 1，创建表时
 ```
-CREATE TABLE Persons
-(
-Id_P int NOT NULL,
-LastName varchar(255) NOT NULL,
-FirstName varchar(255),
-Address varchar(255),
-City varchar(255),
-UNIQUE (Id_P)
-)
+  CREATE TABLE Persons
+  (
+  Id_P int NOT NULL,
+  LastName varchar(255) NOT NULL,
+  FirstName varchar(255),
+  Address varchar(255),
+  City varchar(255),
+  UNIQUE (Id_P)
+  )
 ```
 如果需要命名 UNIQUE 约束，以及为多个列定义 UNIQUE 约束，请使用下面的 SQL 语法：
 ```
-CREATE TABLE Persons
-(
-Id_P int NOT NULL,
-LastName varchar(255) NOT NULL,
-FirstName varchar(255),
-Address varchar(255),
-City varchar(255),
-CONSTRAINT uc_PersonID UNIQUE (Id_P,LastName)
-)
+  CREATE TABLE Persons
+  (
+  Id_P int NOT NULL,
+  LastName varchar(255) NOT NULL,
+  FirstName varchar(255),
+  Address varchar(255),
+  City varchar(255),
+  CONSTRAINT uc_PersonID UNIQUE (Id_P,LastName)
+  )
 ```
 2，当表已被创建时，如需在 "Id_P" 列创建 UNIQUE 约束，请使用下列 SQL：
 

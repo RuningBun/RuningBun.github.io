@@ -35,30 +35,31 @@ auth-access=write
 password-db=passwd
 
 注：修改的文件前面不能有空格，否则启动svn server出错
-```
-vi auth
-
-[groups]
-
-# harry_and_sally = harry,sally
-
-manager = sally
-
-# [repository:/baz/fuz]
-# @harry_and_sally = rw
-# * = r
-[/]
-@manager=rw
-*=r
-
-vi passwd
-[users]
-#<用户1> = <密码1>
-#<用户2> = <密码2>
-sally=123456
-
 
 ```
+    vi auth
+
+    [groups]
+
+    # harry_and_sally = harry,sally
+
+    manager = sally
+
+    # [repository:/baz/fuz]
+    # @harry_and_sally = rw
+    # * = r
+    [/]
+    @manager=rw
+    *=r
+
+    vi passwd
+    [users]
+    #<用户1> = <密码1>
+    #<用户2> = <密码2>
+    sally=123456
+
+```
+
 启动服务器
  svnserve -d -r /www/svndata/oplinux
 5.svn服务端口3690要放开，否则会无法访问；
