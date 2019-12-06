@@ -8,6 +8,8 @@ icon: heart
 * content
 {:toc}
 
+# 广而不精是大忌！
+
 ## 关于我
      cocos2d-x
      cocos2d-js
@@ -21,8 +23,7 @@ icon: heart
      exsi 虚拟主机
      ddns 家庭主机外网可访问
 
-# 广而不精是大忌！ 
-
+ 
 ## 联系我
 
 * **GitHub:**   [https://github.com/RuningBun](https://github.com/RuningBun)
