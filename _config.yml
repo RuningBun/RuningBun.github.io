@@ -62,7 +62,7 @@ excerpt_separator: <!--more-->
 
 # paginate
 gems: [jekyll-paginate,jekyll-sitemap]
-paginate: 3
+paginate: 10
 
 
 # 搜索服务
