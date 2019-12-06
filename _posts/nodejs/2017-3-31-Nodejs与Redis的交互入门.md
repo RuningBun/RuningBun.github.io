@@ -4,6 +4,10 @@ title: "nodejs redis 交互入门"
 categories: nodejs
 tags: nodejs redis
 ---
+
+* content
+{:toc}
+
 简介和安装
 
 redis简介： 开源高性能key-value存储；采用内存中（in-memory）数据集的方式，也可以采用磁盘存储方式（前者性能高，但数据可能丢失，后者正好相反） 支持字符串（strings）、哈希（hashes）、列表（lists）、集合（sets）和 有序集合（sorted sets）等；支持对复杂数据结构的高速操作。 特性多，支持主从同步、pub/sub等 支持多种客户端（http://redis.io/clients） ... 　　注：应用场景没有提到，暂时没有太多实际体会，不瞎说，以免误导人，但是从它的简介和特性来说，起码缓存场景是不错的！
