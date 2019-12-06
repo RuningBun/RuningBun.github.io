@@ -27,10 +27,12 @@ tags: unity3d
 		 不太可能添加补丁或者不受平台和设备影响的内容
 		 用于最小化引导的内容 
 
-当项目被构建时，所有名为Resources的文件夹中的所有Asset和Object都会合并到同一个序列化文件中。
+  当项目被构建时，所有名为Resources的文件夹中的所有Asset和Object都会合并到同一个序列化文件中。
 这个序列化文件中还含有元数据（Metadata）和索引（Indexing）信息，类似于AssetBundle。
-正如AssetBundle文档中所描述的那样，这个索引中包含了一个用于将给定Object名称转换为恰当的File GUID和Local ID的序列化查找树，同时它也用于定位在序列化文件中偏移了指定字节数的Object。
-在大多数平台上，用于查找的数据结构是平衡查找树，其时间复杂度为O(nlog(n))。
-因此，索引加载时间随Resources文件夹内Object数量而增长的速度高于线性增长。
-加载Resources文件这一操作无法跳过，它会在应用程序启动显示不可交互的启动画面（Splash Screen）时执行。
-在一台低端设备上，初始化一个包含10000个资源文件的Resources系统要花费几秒的时间，然而在Resources文件夹中的这些Object很多都不会在应用程序的第一个Scene中使用到，完全没有必要加载。
+
+  正如AssetBundle文档中所描述的那样，这个索引中包含了一个用于将给定Object名称转换为恰当的File GUID和Local ID的序列化查找树，同时它也用于定位在序列化文件中偏移了指定字节数的Object。
+在大多数平台上，用于查找的数据结构是平衡查找树，其时间复杂度为O(nlog(n))。因此，索引加载时间随Resources文件夹内Object数量而增长的速度高于线性增长。
+
+  加载Resources文件这一操作无法跳过，它会在应用程序启动显示不可交互的启动画面（Splash Screen）时执行。
+
+  在一台低端设备上，初始化一个包含10000个资源文件的Resources系统要花费几秒的时间，然而在Resources文件夹中的这些Object很多都不会在应用程序的第一个Scene中使用到，完全没有必要加载。
