@@ -56,7 +56,7 @@ EventSystem负责管理，BaseInputModule负责输入，BaseRaycaster负责确�
 
 ### 拖拉事件
 
-接口 |事件|作用|注意事项
+接口|事件|作用|注意事项
 - | :-: | :-: | :-: | -:
 IBeginDragHandler|OnBeginDrag|开始拖拉|必须同时实现IDragHandler，否则失效
 IDragHandler|OnDrag|正在拖拉|每当移动一定距离，就发生一次拖拉事件
@@ -64,7 +64,8 @@ IEndDragHandler|OnEndDrag|结束拖拉|必须同时实现IDragHandler，否则�
 IInitializePotentialDragHandler|OnInitializePotentialDrag|可能发生拖拉|必须同时实现IDragHandler。在对象内点击就会发生
 
 ### 点击事件
-接口|	事件|	作用|	注意事项
+
+接口|事件|作用|注意事项
 - | :-: | :-: | :-: | -:
 IPointerEnterHandler|	OnPointerEnter|	鼠标进入对象
 IPointerExitHandler	|OnPointerExit|	鼠标离开对象
@@ -73,7 +74,8 @@ IPointerClickHandler|	OnPointerClick|	点击中该对象|	在OnPointerUp后发�
 IPointerUpHandler|	OnPointerUp|	松开鼠标
 
 ### 其他事件
-接口	|事件|	作用|	注意事项
+
+接口|事件|作用|注意事项
 - | :-: | :-: | :-: | -:
 IScrollHandler	|OnScroll|	操作鼠标中间的滚轮|
 ISelectHandler	|OnSelect	|当EventSystem选中该对象|	使用EventSystem中的SetSelectedGameObject方法来选中
