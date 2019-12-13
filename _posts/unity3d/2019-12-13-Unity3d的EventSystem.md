@@ -77,7 +77,7 @@ IPointerUpHandler|OnPointerUp|松开鼠标
 
 接口|事件|作用|注意事项
 - | :-: | :-: | :-: | -:
-IScrollHandler|OnScroll|操作鼠标中间的滚轮|
+IScrollHandler|OnScroll|操作鼠标中间的滚轮
 ISelectHandler|OnSelect|当EventSystem选中该对象|使用EventSystem中的SetSelectedGameObject方法来选中
 IDeselectHandler|OnDeselect|不再选中该对象|点击对象外的地方就会变成不选中
 IUpdateSelectedHandler|OnUpdateSelected|当对象被选中，则每帧都会发生|对象被选中才会发生
@@ -85,5 +85,6 @@ ISubmitHandler|OnSubmit|点击Submit键(默认是Enter键)|对象被选中才会
 ICancelHandler|OnCancel|点击Cancel键(默认是Esc键)|对象被选中才会发生
 IMoveHandler|OnMove|点击方向键|对象被选中才会发生
 IDropHandler|OnDrop|拖拉结束|拖拉开始的地方必须先实现IDragHandler，该事件在拖拉结束的对象上发生(但不能是拖拉开始的对象)
+
 >OnDrop的一个例子：物体A上实现了IDragHandler（和IDropHandler），物体B上实现了IDropHandler。从物体A上开始Drag，在物体A上结束Drag，没有触发OnDrop；从物体A上开始Drag，在物体B上结束Drag，可以触发OnDrop。
 
