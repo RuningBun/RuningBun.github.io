@@ -33,7 +33,7 @@ tags: unity3d
         3.1 3D模式，可以把UI对象像3D物体一样处理，常用于VR或者AR
         3.2 Event Camera：用于处理UI事件的摄像机（如果不设置，不能正常注册UI事件）
 
-##### 1.3: Canvas组件 总结
+#### 1.3: Canvas组件 总结
 -    Canvas组件用来干啥 — 画布组件，用于渲染显示UI控件，UI控件必须作为子对象
 -    场景中可以有多个Canvas对象 — 不同的渲染和分辨率适应方式（不常用）
 -    Canvas组件的3种渲染方式
@@ -51,7 +51,7 @@ tags: unity3d
 
 宽高*缩放系数 = 屏幕分辨率   
 参考分辨率 在缩放模式的宽高模式中出现的参数，参与分辨率自适应的计算
-#### 2.1 Reference Resolution:
+####  Reference Resolution:
 -     Constant Pixel Size（恒定像素模式）：无论屏幕大小如何，UI始终保持相同像素大小
 -     Scale With Screen Size（缩放模式）：根据屏幕尺寸进行缩放，随着屏幕尺寸放大缩小
 -     Constant Physical Size（恒定物理模式）：无论屏幕大小和分辨率如何，UI元素始终保持相同物理大小
