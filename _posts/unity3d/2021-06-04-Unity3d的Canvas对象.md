@@ -124,3 +124,30 @@ Reference Pixels Per Unit （单位参考像素）
 总结
 -   会让UI控件始终保持设置的尺寸大小显示
 -   而且会根据设备DPI进行计算，让在不同设备上的显示大小更加准确
+
+
+####  World:
+- 当Canvas的渲染模式设置为世界空间3D渲染模式时这时Canvas Scaler 的缩放模式会强制变为
+World 3D世界模式
+
+- Dynamic Pixels Per Unit：UI中动态创建的位图（例如文本）中，单位像素数（类似密度）
+- Reference Pixels Per Unit：单位参考像素，多少像素对应Unity中的一个单位（默认一个单
+位为100像素）
+
+只有在3D渲染模式下才会启用的模式 主要用于控制该模式下的像素密度
+
+
+## Graphic Raycaster
+投射器它是用于检测UI输入事件的射线发射器它主要负责通过射线检测玩家和UI元素的交互判断是否点击到了UI元素
+
+-   Ignore Reversed Graphics：是否忽略反转图形
+-   Blocking Objects：射线被哪些类型的碰撞器阻挡（在覆盖渲染模式下无效）
+-   Blocking Mask：射线被哪些层级的碰撞器阻挡（在覆盖渲染模式下无效）
+```
+1.Graphic Raycaster组件用来干啥
+用于UI元素的射线检测，用于触发交互
+2.Graphic Raycaster参数
+Ignore Reversed Graphics：是否忽略反转图形
+Blocking Objects：射线被哪些类型的碰撞器阻挡（在覆盖渲染模式下无效）
+Blocking Mask：射线被哪些层级的碰撞器阻挡（在覆盖渲染模式下无效）
+```

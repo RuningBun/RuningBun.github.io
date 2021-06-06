@@ -18,6 +18,8 @@ tags: unity3d
     负责处理输入、射线投射以及发送事件
     一个场景中只能有一个EventSystem，否则EventSystem会失效
 
+
+
 ### 2. BaseInputModule
 负责处理输入（点击、拖拽等），把输入事件发送到具体的对象
 >1. Standalone Input Module：基本的键盘和鼠标输入系统，并跟踪鼠标的位置，以及鼠标/键盘所按下的按键。
