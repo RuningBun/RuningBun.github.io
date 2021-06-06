@@ -13,10 +13,18 @@ tags: unity3d
 >系统生成的Event System里面主要有两个Components，分别是Event System和Standalone Input Module。
 >其中Standalone Input Module是派生自BaseInputModule。
 
+
+
 ## 作用
 ### 1. EventSystem
     负责处理输入、射线投射以及发送事件
     一个场景中只能有一个EventSystem，否则EventSystem会失效
+
+-   First Selected：首先选择的游戏对象，可以设置游戏一开始的默认选择
+-   Send Navigation Events：是否允许导航事件（移动/按下/取消）
+-   Drag Threshold：拖拽操作的阈值（移动多少像素算拖拽）
+
+
 
 
 
@@ -26,6 +34,15 @@ tags: unity3d
 >2. Touch Input Module：基本的触摸输入系统，用于处理触摸、拖拽以及位置数据，并可在其实现中模拟鼠标行为。
 >3. Pointer Input Module：提供上面两者的基本功能，同时还可以通过代码进行访问。
 可以自己继承BaseInputModule来实现自己的交互方式。
+
+
+-   Horizontal Axis：水平轴按钮对应的热键名（该名字对应Input管理器）
+-   Vertical Axis：垂直轴按钮对应的热键名（该名字对应Input管理器）
+-   Submit Button：提交（确定）按钮对应的热建名（该名字对应Input管理器）
+-   Cancel Button：取消按钮对应的热建名（该名字对应Input管理器）
+-   Input Actions Per Second：每秒允许键盘/控制器输入的数量
+-   Repeat Delay：每秒输入操作重复率生效前的延迟时间
+-   ForceModule Active：是否强制模块处于激活状态
 
 ### 3. BaseRaycaster
 >负责确定目标对象
