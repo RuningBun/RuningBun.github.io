@@ -106,5 +106,20 @@ IMoveHandler|OnMove|点击方向键|对象被选中才会发生
 IDropHandler|OnDrop|拖拉结束|拖拉开始的地方必须先实现IDragHandler，该事件在拖拉结束的对象上发生(但不能是拖拉开始的对象)
 
 
+>PointerEventData参数的关键内容
+```
+父类：BaseEventData
+
+pointerId： 鼠标左右中键点击鼠标的ID 通过它可以判断右键点击
+position：当前指针位置（屏幕坐标系）
+pressPosition：按下的时候指针的位置
+delta：指针移动增量
+clickCount：连击次数
+clickTime：点击时间
+```
+
 >OnDrop的一个例子：物体A上实现了IDragHandler（和IDropHandler），物体B上实现了IDropHandler。从物体A上开始Drag，在物体A上结束Drag，没有触发OnDrop；从物体A上开始Drag，在物体B上结束Drag，可以触发OnDrop。
+
+
+
 

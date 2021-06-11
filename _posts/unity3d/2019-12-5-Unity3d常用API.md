@@ -207,10 +207,8 @@ tags: unity3d
     Quaternion target= Quaternion.LookRotation(temp);
     player.rotation = Quaternion.Slerp(player.rotation, target, Time.deltaTime); //插值的缓慢旋转
 ```
-
 	 
 ## 13.Rigidbody 刚体组件 控制角色的移动
-
 ```
     .position: 可以通过刚体来控制运动，在控制运动方面，使用rigibody.positon比transform.porition计算要快的多，相关的物理计算也是在刚体中计算好了，但是不建议使用这个方法来持续的控制物体的运动，不平滑，控制一两次的时候还可以使用
     MovePosition() 对position的优化，其中利用了插值运算，一般持续运动的则使用这个方法，不出现卡顿的现象
