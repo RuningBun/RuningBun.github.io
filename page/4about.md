@@ -13,10 +13,12 @@ icon: heart
      cocos2d-x
      cocos2d-js
      cocos-creator
+     javascript
      nodejs
      python
      unity3d
      c#
+     lua
 
 
 ## 联系我
