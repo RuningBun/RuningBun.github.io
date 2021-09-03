@@ -10,15 +10,17 @@ icon: heart
 
 
 ## 我的技术栈
-     cocos2d-x
-     cocos2d-js
-     cocos-creator
-     javascript
-     nodejs
-     python
-     unity3d
-     c#
-     lua
+###  游戏引擎
+          cocos2d-x
+          cocos2d-js
+          cocos-creator
+          unity3d
+###  使用过的开发语言
+          javascript
+          nodejs
+          c#
+          lua
+          python
 
 
 ## 联系我
