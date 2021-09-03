@@ -10,12 +10,16 @@ icon: heart
 
 
 ## 我的技术栈
+
 ###  游戏引擎
+
           cocos2d-x
           cocos2d-js
           cocos-creator
           unity3d
+
 ###  使用过的开发语言
+
           javascript
           nodejs
           c#
