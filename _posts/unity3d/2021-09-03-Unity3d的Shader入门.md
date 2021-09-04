@@ -47,7 +47,11 @@ _Texture ("Texture", 2D) = "white" {}
 
 表面着色器可以被若干的标签（tags）所修饰，而硬件将通过判定这些标签来决定什么时候调用该着色器。比如我们的例子中SubShader的第一句
 
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Opaque" } 渲染非透明物体
+             "RenderType" = "Transparent" 渲染含有透明效果的物体
+             "IgnoreProjector"="True"（不被Projectors影响）
+             "ForceNoShadowCasting"="True"（从不产生阴影）
+             "Queue"="xxx"（指定渲染顺序队列）
 
 告诉了系统应该在渲染非透明物体时调用我们。Unity定义了一些列这样的渲染过程，与RenderType是Opaque相对应的显而易见的是"RenderType" = "Transparent"，表示渲染含有透明效果的物体时调用。在这里Tags其实暗示了你的Shader输出的是什么，如果输出中都是非透明物体，那写在Opaque里；如果想渲染透明或者半透明的像素，那应该写在Transparent中。
 
