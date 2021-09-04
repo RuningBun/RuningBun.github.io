@@ -22,11 +22,11 @@ tags: unity3d rider
 Rider中集成了unity support插件无须安装
 集成对shader的部分语法支持
 
-- Rider对于Unity的支持介绍：[https://www.jetbrains.com/zh-cn/dotnet/promo/unity/]
+- Rider对于Unity的支持介绍：[https://www.jetbrains.com/zh-cn/dotnet/promo/unity/](https://www.jetbrains.com/zh-cn/dotnet/promo/unity/)
 
-- 使用vs和rider开发unity的对比：[https://www.jetbrains.com/rider/compare/unity-rider-vs-visual-studio/]
+- 使用vs和rider开发unity的对比：[https://www.jetbrains.com/rider/compare/unity-rider-vs-visual-studio/](https://www.jetbrains.com/rider/compare/unity-rider-vs-visual-studio/)
 
-- Rider官方和vs的对比文章：[https://www.jetbrains.com/rider/compare/rider-vs-visual-studio/]
+- Rider官方和vs的对比文章：[https://www.jetbrains.com/rider/compare/rider-vs-visual-studio/](https://www.jetbrains.com/rider/compare/rider-vs-visual-studio/)
 
 
 ### 修改单行字符的长度
