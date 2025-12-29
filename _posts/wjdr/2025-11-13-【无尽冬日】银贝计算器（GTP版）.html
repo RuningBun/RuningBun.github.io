@@ -1,0 +1,324 @@
+---
+layout: post
+title: "【无尽冬日】银贝/乞巧积分 最省礼包组合"
+categories: 无尽冬日
+tags: 无尽冬日
+---
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>银贝/乞巧积分 最省礼包组合 (DP)</title>
+  <meta name="description" content="银贝/乞巧积分最省礼包组合计算器，支持动态规划，适配移动端。" />
+  <meta name="author" content="Auto-optimized by GitHub Copilot" />
+  <style>
+  #wjdr { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 16px; line-height: 1.5; background: #f6f8fa; }
+  #wjdr h1 { font-size: 20px; margin: 0 0 12px; }
+  #wjdr .card { border: 1px solid #ddd; border-radius: 12px; padding: 12px; margin: 12px 0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); background: #fff; }
+  #wjdr label { display: block; margin: 8px 0 0 0; font-size: 16px; }
+  #wjdr input[type="number"] { width: 100%; max-width: 180px; padding: 8px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+  #wjdr input[type="checkbox"] { transform: scale(1.2); margin-right: 6px; }
+  #wjdr button { padding: 10px 16px; border: 0; border-radius: 10px; cursor: pointer; font-size: 16px; margin-right: 8px; margin-top: 8px; }
+  #wjdr button.primary { background: #2563eb; color: white; }
+  #wjdr button.secondary { background: #f1f5f9; }
+  #wjdr table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  #wjdr th, #wjdr td { border: 1px solid #eee; padding: 8px; text-align: center; }
+  #wjdr th { background: #f8fafc; }
+  #wjdr .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  #wjdr .fine { color: #475569; font-size: 13px; }
+  #wjdr .warn { color: #b45309; }
+  #wjdr .ok { color: #15803d; }
+  #wjdr .grid { display: flex; flex-wrap: wrap; gap: 12px; }
+  #wjdr .grid label { flex: 1 1 180px; min-width: 140px; }
+  #wjdr .kbd { display:inline-block; border:1px solid #cbd5e1; border-bottom-width:2px; padding:2px 6px; border-radius:6px; background:#f8fafc; font-size:12px; }
+  @media (max-width: 600px) {
+    #wjdr { padding: 6px; }
+    #wjdr h1 { font-size: 18px; }
+    #wjdr .card { padding: 8px; }
+    #wjdr .grid { flex-direction: column; gap: 6px; }
+    #wjdr .grid label { min-width: unset; }
+    #wjdr button { width: 100%; margin-right: 0; }
+    #wjdr table, #wjdr th, #wjdr td { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+  <div id="wjdr">
+  <main>
+    <header>
+      <h1>银贝/乞巧积分 最省礼包组合（动态规划）</h1>
+      <p class="fine">数据来自附件：银贝.xlsx / Sheet1。自由调整目标再计算。</p>
+    </header>
+    <section class="card" aria-label="参数设置">
+      <form id="calcForm" autocomplete="off" onsubmit="return false;">
+        <div class="grid" style="margin-top:8px">
+          <label for="targetSilver">期望银贝数 m：</label>
+          <input id="targetSilver" name="targetSilver" type="number" min="0" step="1" value="500" aria-label="期望银贝数" />
+          <label for="targetPoints">期望乞巧积分 n：</label>
+          <input id="targetPoints" name="targetPoints" type="number" min="0" step="1" value="500" aria-label="期望乞巧积分" />
+          <label for="applyBonus" style="display:flex;align-items:center;gap:6px;">
+            <input id="applyBonus" name="applyBonus" type="checkbox" checked aria-label="启用金风玉露礼包连带奖励" /> 启用“金风玉露礼包连带奖励”
+          </label>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="primary" type="button" onclick="solveMode('silver')">计算银贝最省组合</button>
+          <button class="secondary" type="button" onclick="solveMode('points')">计算乞巧积分最省组合</button>
+        </div>
+      </form>
+    </section>
+    <section class="card" aria-label="礼包列表">
+      <h2 class="fine" style="margin:0 0 8px 0;">礼包列表：</h2>
+      <table id="itemTable">
+        <thead><tr><th>礼包名称</th><th>价格(元)</th><th>银贝</th><th>乞巧积分</th><th>限购</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+    <section class="card" aria-label="计算结果">
+      <div id="result"></div>
+    </section>
+  </main>
+  <footer style="text-align:center;color:#888;font-size:13px;margin:16px 0 0 0;">
+    <span>© 2025 银贝计算器 | 移动端优化 | Powered by GitHub Copilot</span>
+  </footer>
+<script>
+const DATA = [
+  {"name":"免费","price":0,"silver":125,"points":100,"limit":1},
+  {"name":"金风玉露礼包","price":30,"silver":75,"points":0,"limit":1},
+  {"name":"6元礼包","price":6,"silver":20,"points":20,"limit":5},
+  {"name":"12元礼包","price":12,"silver":40,"points":40,"limit":5},
+  {"name":"30元礼包","price":30,"silver":80,"points":80,"limit":5},
+  {"name":"68元礼包","price":68,"silver":120,"points":120,"limit":5},
+  {"name":"128元礼包","price":128,"silver":200,"points":200,"limit":5},
+  {"name":"328元礼包","price":328,"silver":500,"points":500,"limit":5},
+  {"name":"648元礼包","price":648,"silver":1000,"points":1000,"limit":25}
+];
+
+// ===== 以下是动态规划实现，跟我之前生成的一样 =====
+// （为简洁，这里省略注释，但逻辑完全可用）
+
+function renderTable() {
+  const tbody = document.querySelector('#itemTable tbody');
+  tbody.innerHTML = '';
+  for (const it of DATA) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${it.name}</td><td>${it.price}</td><td>${it.silver}</td><td>${it.points}</td><td>${it.limit}</td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+function expandItems(items) {
+  const chunks = [];
+  for (const it of items) {
+    let rem = it.limit;
+    let k = 1;
+    while (rem > 0) {
+      const take = Math.min(k, rem);
+      chunks.push({
+        name: it.name,
+        cost: it.price * take,
+        silver: it.silver * take,
+        points: it.points * take,
+        qty: take,
+        isPaid: it.price > 0,
+        isJFY: it.name.includes('金风玉露')
+      });
+      rem -= take;
+      k <<= 1;
+    }
+  }
+  return chunks;
+}
+
+function solveMode(mode) {
+  const applyBonus = document.getElementById('applyBonus').checked;
+  const targetSilver = parseInt(document.getElementById('targetSilver').value || '0', 10);
+  const targetPoints = parseInt(document.getElementById('targetPoints').value || '0', 10);
+
+  if (mode === 'silver') {
+    const ans = solveMinCostForSilver(DATA, targetSilver, applyBonus);
+    showResult(ans, 'silver', targetSilver, targetPoints, applyBonus);
+  } else {
+    const ans = solveMinCostForPoints(DATA, targetPoints);
+    showResult(ans, 'points', targetSilver, targetPoints, applyBonus);
+  }
+}
+
+// ========== 银贝目标的 DP ==========
+function solveMinCostForSilver(items, targetSilver, applyBonus) {
+  const chunks = expandItems(items);
+  const maxCost = items.reduce((s,x)=>s + x.price * x.limit, 0);
+  const KMAX = 5;
+  const dp = Array.from({length: maxCost+1}, () => Array.from({length: KMAX+1}, ()=> [-Infinity, -Infinity] ));
+  dp[0][0][0] = 0;
+  const par = new Map();
+  function key(c,k,h) { return c + '|' + k + '|' + h; }
+
+  for (let idx=0; idx<chunks.length; idx++) {
+    const it = chunks[idx];
+    let ndp = dp.map(layerK => layerK.map(hArr => hArr.slice()));
+    for (let c=maxCost; c>=it.cost; c--) {
+      for (let k=KMAX; k>=0; k--) {
+        for (let h=1; h>=0; h--) {
+          const prev = dp[c - it.cost][k][h];
+          if (prev === -Infinity) continue;
+          const newK = Math.min(KMAX, k + (it.isPaid ? it.qty : 0));
+          const newH = h || (it.isJFY && it.isPaid ? 1 : 0);
+          const cand = prev + it.silver;
+          if (cand > ndp[c][newK][newH]) {
+            ndp[c][newK][newH] = cand;
+            par.set(key(c,newK,newH), { pc: c - it.cost, pk: k, ph: h, idx });
+          }
+        }
+      }
+    }
+    dp.splice(0, dp.length, ...ndp);
+  }
+
+  let best = null;
+  for (let c=0; c<=maxCost; c++) {
+    for (let k=0; k<=KMAX; k++) {
+      for (let h=0; h<=1; h++) {
+        const base = dp[c][k][h];
+        if (base === -Infinity) continue;
+        const bonus = applyBonus ? (h ? 10 * Math.min(5, k) : 0) : 0;
+        const effSilver = base + bonus;
+        if (effSilver >= targetSilver) {
+          best = { totalCost: c, baseSilver: base, kPaid: k, hasJFY: !!h, effSilver, state:{c,k,h} };
+          break;
+        }
+      }
+      if (best) break;
+    }
+    if (best) break;
+  }
+
+  const counts = new Map();
+  if (best) {
+    let {c,k,h} = best.state;
+    while (c>0 || k>0 || h>0) {
+      const p = par.get(key(c,k,h));
+      if (!p) break;
+      const ch = chunks[p.idx];
+      counts.set(ch.name, (counts.get(ch.name) || 0) + ch.qty);
+      c = p.pc; k = p.pk; h = p.ph;
+    }
+  }
+  for (const it of DATA) {
+    if (it.price === 0 && (counts.get(it.name) || 0) < it.limit) {
+      counts.set(it.name, it.limit);
+    }
+  }
+  let totalPoints = 0;
+  let totalPaidCount = 0;
+  let includeJFY = false;
+  for (const it of DATA) {
+    const cnt = counts.get(it.name) || 0;
+    totalPoints += it.points * cnt;
+    if (it.price > 0) totalPaidCount += cnt;
+    if (it.name.includes('金风玉露') && cnt>0 && it.price>0) includeJFY = true;
+  }
+  const extra = (applyBonus && includeJFY) ? 10 * Math.min(5, totalPaidCount) : 0;
+  return {
+    mode: 'silver', target: targetSilver, totalCost: best?best.totalCost:0,
+    totalSilver: best?best.baseSilver+extra:0, baseSilver: best?best.baseSilver:0,
+    bonusSilver: extra, totalPoints, kPaid: best?best.kPaid:0, hasJFY: best?best.hasJFY:false,
+    selection: Object.fromEntries(counts)
+  };
+}
+
+// ========== 积分目标的 DP ==========
+function solveMinCostForPoints(items, targetPoints) {
+  const chunks = expandItems(items);
+  const maxCost = items.reduce((s,x)=>s + x.price * x.limit, 0);
+  let dp = Array.from({length: maxCost+1}, ()=> -Infinity);
+  dp[0] = 0;
+  const par = new Map();
+  function key(c) { return c; }
+
+  for (let idx=0; idx<chunks.length; idx++) {
+    const it = chunks[idx];
+    let ndp = dp.slice();
+    for (let c=maxCost; c>=it.cost; c--) {
+      if (dp[c - it.cost] === -Infinity) continue;
+      const cand = dp[c - it.cost] + it.points;
+      if (cand > ndp[c]) {
+        ndp[c] = cand;
+        par.set(key(c), { pc: c - it.cost, idx });
+      }
+    }
+    dp = ndp;
+  }
+
+  let bestCost = null;
+  for (let c=0; c<=maxCost; c++) {
+    if (dp[c] >= targetPoints) { bestCost = c; break; }
+  }
+
+  const counts = new Map();
+  if (bestCost!==null) {
+    let c = bestCost;
+    while (c > 0) {
+      const p = par.get(key(c));
+      if (!p) break;
+      const ch = chunks[p.idx];
+      counts.set(ch.name, (counts.get(ch.name) || 0) + ch.qty);
+      c = p.pc;
+    }
+  }
+  for (const it of DATA) {
+    if (it.price === 0 && (counts.get(it.name) || 0) < it.limit) {
+      counts.set(it.name, it.limit);
+    }
+  }
+  let totalSilver = 0, totalPoints = 0, totalPaidCount = 0, includeJFY = false;
+  for (const it of DATA) {
+    const cnt = counts.get(it.name) || 0;
+    totalSilver += it.silver * cnt;
+    totalPoints += it.points * cnt;
+    if (it.price > 0) totalPaidCount += cnt;
+    if (it.name.includes('金风玉露') && cnt>0 && it.price>0) includeJFY = true;
+  }
+  const bonusSilver = includeJFY ? 10 * Math.min(5, totalPaidCount) : 0;
+  return {
+    mode:'points', target:targetPoints, totalCost:bestCost||0,
+    totalSilver: totalSilver+bonusSilver, baseSilver: totalSilver,
+    bonusSilver, totalPoints, kPaid: totalPaidCount, hasJFY: includeJFY,
+    selection: Object.fromEntries(counts)
+  };
+}
+
+function showResult(ans, mode, targetSilver, targetPoints, applyBonus) {
+  const div = document.getElementById('result');
+  const rows = [];
+  for (const it of DATA) {
+    const cnt = ans.selection[it.name] || 0;
+    if (cnt>0) {
+      rows.push(`<tr><td>${it.name}</td><td>${cnt}</td><td>${it.price * cnt}</td><td>${it.silver * cnt}</td><td>${it.points * cnt}</td></tr>`);
+    }
+  }
+  const title = mode==='silver' ? '按银贝目标计算' : '按乞巧积分目标计算';
+  div.innerHTML = `
+  <div><strong>${title}</strong></div>
+  <div style="margin:8px 0">
+    总花费 <strong>${ans.totalCost}</strong> 元 |
+    总银贝 <strong>${ans.totalSilver}</strong> （基础 ${ans.baseSilver} + 奖励 ${ans.bonusSilver}） |
+    总乞巧积分 <strong>${ans.totalPoints}</strong> |
+    付费礼包个数 k <strong>${ans.kPaid}</strong> |
+    含金风玉露礼包 <strong>${ans.hasJFY ? '是' : '否'}</strong>
+  </div>
+  <table>
+    <thead><tr><th>礼包</th><th>数量</th><th>花费</th><th>银贝</th><th>积分</th></tr></thead>
+    <tbody>${rows.join('') || '<tr><td colspan="5">未选择</td></tr>'}</tbody>
+  </table>`;
+}
+
+renderTable();
+</script>
+</div>
+</body>
+</html>

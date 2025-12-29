@@ -1,0 +1,1493 @@
+---
+layout: post
+title: "【无尽冬日】冰封宝藏活动模拟与收益统计工具"
+categories: 无尽冬日
+tags: 无尽冬日
+---
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title>冰封的宝藏 - 增强功能版</title> -->
+    <style>
+        /* Scoped styles for this post only */
+        #wjdr * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        #wjdr {
+            background: linear-gradient(135deg, #0c2461, #1e3799, #4a69bd);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            color: #fff;
+        }
+
+        #wjdr .game-container {
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 1100px;
+            text-align: center;
+        }
+
+        #wjdr h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+            color: #FFD700;
+            letter-spacing: 1px;
+        }
+
+        #wjdr h4 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #cccccc;
+        }
+
+        #wjdr .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+
+        #wjdr .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #wjdr .stat-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #FFD700;
+            margin-top: 3px;
+        }
+
+        #wjdr input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #FFD700;
+            border-radius: 5px;
+            color: #FFD700;
+            font-size: 1.2rem;
+            padding: 4px 8px;
+            width: 100px;
+            text-align: center;
+        }
+
+        #wjdr .milestone-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        #wjdr .milestone-title {
+            font-size: 1.1rem;
+            color: #FFD700;
+            margin-bottom: 8px;
+        }
+
+        #wjdr .milestone-table {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+
+        #wjdr .milestone-cell {
+            padding: 5px;
+            margin: 2px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        #wjdr .milestone-count {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        #wjdr .milestone-reward-text {
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        #wjdr .milestone-cell.active {
+            background: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+        }
+
+        #wjdr .chests-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+            position: relative;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #wjdr .chest {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            padding: 5px;
+        }
+
+        #wjdr .chest:hover {
+            transform: scale(1.03);
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        #wjdr .chest.luxury {
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        #wjdr .chest.delicate {
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+        }
+
+        #wjdr .chest.normal {
+            background: linear-gradient(135deg, #e6e6e6, #cccccc);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+
+        #wjdr .chest.opened {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #2c3e50;
+        }
+
+        #wjdr .chest-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-top: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        #wjdr .luxury-label {
+            color: #ffcccc;
+        }
+
+        #wjdr .delicate-label {
+            color: #fff0cc;
+        }
+
+        #wjdr .normal-label {
+            color: #333333;
+        }
+
+        #wjdr .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        #wjdr button {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            color: white;
+        }
+
+        #wjdr #refresh {
+            background: linear-gradient(to right, #3498db, #2980b9);
+        }
+
+        #wjdr #refresh:hover {
+            background: linear-gradient(to right, #2980b9, #1c6ea4);
+            transform: translateY(-2px);
+        }
+
+        #wjdr #open-all {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+        }
+
+        #wjdr #open-all:hover {
+            background: linear-gradient(to right, #c0392b, #a93226);
+            transform: translateY(-2px);
+        }
+
+        #wjdr .auto-btn {
+            background: linear-gradient(to right, #9b59b6, #8e44ad);
+        }
+
+        #wjdr .auto-btn:hover {
+            background: linear-gradient(to right, #8e44ad, #7d3c98);
+            transform: translateY(-2px);
+        }
+
+        #wjdr #auto-open-all {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+        }
+
+        #wjdr #auto-open-all:hover {
+            background: linear-gradient(to right, #27ae60, #219653);
+            transform: translateY(-2px);
+        }
+
+        #wjdr button:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #wjdr .refresh-info {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #FFD700;
+        }
+
+        #wjdr .packages-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        #wjdr .package {
+            background: rgba(50, 50, 100, 0.6);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            font-size: 0.9rem;
+        }
+
+        #wjdr .package:hover {
+            transform: translateY(-3px);
+            border-color: #FFD700;
+            box-shadow: 0 3px 8px rgba(255, 215, 0, 0.3);
+        }
+
+        #wjdr .package-title {
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 5px;
+        }
+
+        #wjdr .package-price {
+            font-size: 0.9rem;
+            color: #ff9999;
+            margin-bottom: 3px;
+        }
+
+        #wjdr .package-keys {
+            font-size: 0.9rem;
+            color: #99ff99;
+            margin-bottom: 5px;
+        }
+
+        #wjdr .package-limit {
+            font-size: 0.8rem;
+            color: #cccccc;
+        }
+
+        #wjdr .component-info {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        #wjdr .component-info h3 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #FFD700;
+            font-size: 1.1rem;
+        }
+
+        #wjdr .component-detail {
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        #wjdr .component-value {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        #wjdr .milestone-reward {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 101;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+            display: none;
+            width: 350px;
+        }
+
+        #wjdr .milestone-reward.show {
+            display: block;
+            animation: milestone-popup 1.5s ease;
+        }
+
+        @keyframes milestone-popup {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        #wjdr .milestone-title-popup {
+            font-size: 1.5rem;
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        #wjdr .milestone-reward-content {
+            font-size: 1.3rem;
+            color: #FFD700;
+            margin: 15px 0;
+        }
+
+        /* 新增物品记录区域样式 */
+        #wjdr .items-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #wjdr .items-container h3 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #FFD700;
+            font-size: 1.1rem;
+        }
+
+        #wjdr .items-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        #post-2025-11-12-wjdr .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        #post-2025-11-12-wjdr .item-name {
+            color: #ffffff;
+        }
+
+        #post-2025-11-12-wjdr .item-count {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        /* 新增价值统计区域样式 */
+        #post-2025-11-12-wjdr .value-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        #post-2025-11-12-wjdr .value-container h3 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #FFD700;
+            font-size: 1.1rem;
+        }
+
+        #post-2025-11-12-wjdr .value-details {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #post-2025-11-12-wjdr .value-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            min-width: 120px;
+        }
+
+        #post-2025-11-12-wjdr .value-label {
+            font-size: 0.9rem;
+            color: #cccccc;
+            margin-bottom: 5px;
+        }
+
+        #post-2025-11-12-wjdr .value-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        /* 宝箱奖励提示样式 - 修改为不自动消失 */
+        #post-2025-11-12-wjdr .chest-reward-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #FFD700;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-align: center;
+            z-index: 10;
+            white-space: normal;
+            word-wrap: break-word;
+            max-width: 90%;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            display: block;
+        }
+
+        /* 移除奖励提示动画 */
+    </style>
+</head>
+<body>
+    <div id="wjdr">
+    <div class="game-container">
+       <h1>冰封的宝藏</h1>
+<!--        <h4>制作人：桐，抖音账号：huajianlei1983</h4>-->
+        <div class="stats">
+            <div class="stat-item">
+                <div>秘宝钥匙</div>
+                <input type="number" id="keys-count" min="0" value="1080">
+            </div>
+            <div class="stat-item">
+                <div>秘宝玫瑰</div>
+                <div class="stat-value" id="roses-count">0</div>
+            </div>
+            <div class="stat-item">
+                <div>刷新次数</div>
+                <div class="stat-value" id="refresh-count">0</div>
+            </div>
+            <div class="stat-item">
+                <div>开箱次数</div>
+                <div class="stat-value" id="open-count">0</div>
+            </div>
+        </div>
+        
+        <div class="milestone-container">
+            <div class="milestone-title">累积开箱奖励</div>
+            <div class="milestone-table" id="milestone-table">
+                <!-- 里程碑将由JavaScript动态生成 -->
+            </div>
+        </div>
+        
+        <!-- 新增价值统计区域 -->
+        <div class="value-container">
+            <h3>奖品价值统计</h3>
+            <div class="value-details">
+                <div class="value-item">
+                    <div class="value-label">宝箱奖品价值</div>
+                    <div class="value-amount" id="chest-value">0元</div>
+                </div>
+                <div class="value-item">
+                    <div class="value-label">里程碑奖励价值</div>
+                    <div class="value-amount" id="milestone-value">0元</div>
+                </div>
+                <div class="value-item">
+                    <div class="value-label">总价值</div>
+                    <div class="value-amount" id="total-value">0元</div>
+                </div>
+                <div class="value-item">
+                    <div class="value-label">单箱平均价值</div>
+                    <div class="value-amount" id="avg-value">0元</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="refresh-info" id="refresh-cost-info">前21次刷新免费，之后每次刷新消耗90钥匙</div>
+        
+        <div class="chests-grid" id="chests-container">
+            <!-- 宝箱将由JavaScript动态生成 -->
+        </div>
+        
+        <div class="controls">
+            <button id="refresh">刷新宝箱</button>
+            <button id="open-all">一键开启 (540钥匙)</button>
+            <button id="auto-luxury" class="auto-btn">仅开华丽宝箱</button>
+            <button id="auto-luxury-delicate" class="auto-btn">开华丽+精致宝箱</button>
+            <button id="auto-open-all" class="auto-btn">自动一键全开</button>
+        </div>
+        
+        <!-- 物品记录区域 -->
+        <div class="items-container">
+            <h3>已获得物品</h3>
+            <div class="items-list" id="items-list">
+                <!-- 物品列表将由JavaScript动态生成 -->
+            </div>
+        </div>
+        
+        <div class="component-info">
+            <h3>专武组件兑换</h3>
+            <div>10秘宝玫瑰可兑换1个专武组件</div>
+            <div class="component-detail">
+                <div>可兑换组件: <span class="component-value" id="components-available">0</span></div>
+                <div>总组件数: <span class="component-value" id="total-components">0</span></div>
+                <div>总花费: <span class="component-value" id="total-cost">0</span> 元</div>
+                <div>组件单价: <span class="component-value" id="component-price">0</span> 元</div>
+            </div>
+        </div>
+        
+        <h3>购买礼包</h3>
+        <div class="packages-container">
+            <div class="package" data-price="30" data-keys="1200" data-limit="1" data-name="寻宝特训">
+                <div class="package-title">寻宝特训</div>
+                <div class="package-price">30元</div>
+                <div class="package-keys">1200钥匙</div>
+                <div class="package-limit">限购1次</div>
+            </div>
+            <div class="package" data-price="6" data-keys="120" data-limit="7" data-name="6元礼包">
+                <div class="package-title">6元礼包</div>
+                <div class="package-price">6元</div>
+                <div class="package-keys">120钥匙</div>
+                <div class="package-limit">限购7次</div>
+            </div>
+            <div class="package" data-price="18" data-keys="360" data-limit="7" data-name="18元礼包">
+                <div class="package-title">18元礼包</div>
+                <div class="package-price">18元</div>
+                <div class="package-keys">360钥匙</div>
+                <div class="package-limit">限购7次</div>
+            </div>
+            <div class="package" data-price="30" data-keys="500" data-limit="7" data-name="30元礼包">
+                <div class="package-title">30元礼包</div>
+                <div class="package-price">30元</div>
+                <div class="package-keys">500钥匙</div>
+                <div class="package-limit">限购7次</div>
+            </div>
+            <div class="package" data-price="68" data-keys="900" data-limit="7" data-name="68元礼包">
+                <div class="package-title">68元礼包</div>
+                <div class="package-price">68元</div>
+                <div class="package-keys">900钥匙</div>
+                <div class="package-limit">限购7次</div>
+            </div>
+            <div class="package" data-price="128" data-keys="1700" data-limit="7" data-name="128元礼包">
+                <div class="package-title">128元礼包</div>
+                <div class="package-price">128元</div>
+                <div class="package-keys">1700钥匙</div>
+                <div class="package-limit">限购7次</div>
+            </div>
+            <div class="package" data-price="328" data-keys="3500" data-limit="7" data-name="328元礼包">
+                <div class="package-title">328元礼包</div>
+                <div class="package-price">328元</div>
+                <div class="package-keys">3500钥匙</div>
+                <div class="package-limit">限购7次</div>
+            </div>
+            <div class="package" data-price="648" data-keys="6000" data-limit="21" data-name="648元礼包">
+                <div class="package-title">648元礼包</div>
+                <div class="package-price">648元</div>
+                <div class="package-keys">6000钥匙</div>
+                <div class="package-limit">限购21次</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="milestone-reward" id="milestone-reward">
+        <div class="milestone-title-popup">累积开箱奖励!</div>
+        <div class="milestone-reward-content" id="milestone-reward-content">奖励内容</div>
+        <div class="close-popup" onclick="closeMilestonePopup()">关闭</div>
+    </div>
+
+    <script>
+        // 奖品价值表
+        const ITEM_VALUES = {
+            "秘宝玫瑰": 0.3,
+            "火晶": 0.6,
+            "通用碎片": 3,
+            "紫色螺丝": 1.2,
+            "专武组件": 4,
+            "钻石": 0.002, // 1钻石=0.002元，500钻=1元
+            "寻宝秘匣": 1,
+            "英雄装备幸运宝箱": 0 // 暂定价值为0
+        };
+
+        // 游戏状态
+        const gameState = {
+            keys: 1080,
+            roses: 0,
+            refreshCount: 0,
+            openCount: 0,
+            chests: [],
+            totalSpent: 0,
+            // 价值统计
+            valueStats: {
+                chestValue: 0, // 宝箱奖品价值
+                milestoneValue: 0, // 里程碑奖励价值
+                totalValue: 0, // 总价值
+                avgValue: 0 // 单箱平均价值
+            },
+            collectedItems: {
+                // 资源类物品
+                resources: {
+                    "秘宝玫瑰": 0,
+                    "火晶": 0,
+                    "通用碎片": 0,
+                    "紫色螺丝": 0,
+                    "专武组件": 0,
+                    "钻石": 0
+                },
+                // 其他物品
+                others: {}
+            },
+            milestones: [
+                { count: 5, reward: "1000钻石", achieved: false },
+                { count: 10, reward: "5个紫色螺丝", achieved: false },
+                { count: 20, reward: "30个秘宝玫瑰", achieved: false },
+                { count: 30, reward: "10个紫色螺丝", achieved: false },
+                { count: 50, reward: "50个秘宝玫瑰", achieved: false },
+                { count: 100, reward: "20个专武组件", achieved: false },
+                { count: 200, reward: "20个通用碎片", achieved: false },
+                { count: 300, reward: "200个秘宝玫瑰", achieved: false },
+                { count: 500, reward: "30个专武组件", achieved: false }
+            ],
+            // 自动模式标志
+            autoMode: false,
+            // 专武组件总数（包括兑换和奖励）
+            totalComponents: 0
+        };
+
+        // 礼包数据
+        const PACKAGES = [
+            { name: "寻宝特训", price: 30, keys: 1200, limit: 1, bought: 0 },
+            { name: "6元礼包", price: 6, keys: 120, limit: 7, bought: 0 },
+            { name: "18元礼包", price: 18, keys: 360, limit: 7, bought: 0 },
+            { name: "30元礼包", price: 30, keys: 500, limit: 7, bought: 0 },
+            { name: "68元礼包", price: 68, keys: 900, limit: 7, bought: 0 },
+            { name: "128元礼包", price: 128, keys: 1700, limit: 7, bought: 0 },
+            { name: "328元礼包", price: 328, keys: 3500, limit: 7, bought: 0 },
+            { name: "648元礼包", price: 648, keys: 6000, limit: 21, bought: 0 }
+        ];
+
+        // 宝箱类型和奖品概率（已统一种类为奖品类，概率和为100%）
+        const CHEST_TYPES = {
+            LUXURY: {
+                name: "华丽宝箱",
+                probability: 8.5,
+                // 奖品概率和为100%
+                prizes: [
+                    { name: "秘宝玫瑰", amount: 100, probability: 2 },
+                    { name: "秘宝玫瑰", amount: 50, probability: 6 },
+                    { name: "秘宝玫瑰", amount: 20, probability: 42 },
+                    { name: "寻宝秘匣", amount: 10, probability: 9 },
+                    { name: "通用碎片", amount: 5, probability: 1 },
+                    { name: "通用碎片", amount: 3, probability: 5 },
+                    { name: "通用碎片", amount: 1, probability: 15 },
+                    { name: "英雄装备幸运宝箱", amount: 1, probability: 8 },
+                    { name: "火晶", amount: 100, probability: 0.5 },
+                    { name: "火晶", amount: 20, probability: 3.5 },
+                    { name: "火晶", amount: 10, probability: 8 },
+                ],
+                class: "luxury",
+                labelClass: "luxury-label"
+            },
+            DELICATE: {
+                name: "精致宝箱",
+                probability: 24,
+                // 奖品概率和为100%
+                prizes: [
+                    { name: "秘宝玫瑰", amount: 100, probability: 0.5 },
+                    { name: "秘宝玫瑰", amount: 20, probability: 6 },
+                    { name: "秘宝玫瑰", amount: 6, probability: 42 },
+                    { name: "寻宝秘匣", amount: 3, probability: 9 },
+                    { name: "通用碎片", amount: 3, probability: 1 },
+                    { name: "通用碎片", amount: 2, probability: 5 },
+                    { name: "通用碎片", amount: 1, probability: 16 },
+                    { name: "英雄装备幸运宝箱", amount: 1, probability: 8 },
+                    { name: "火晶", amount: 50, probability: 0.5 },
+                    { name: "火晶", amount: 10, probability: 4 },
+                    { name: "火晶", amount: 5, probability: 8 },
+                ],
+                class: "delicate",
+                labelClass: "delicate-label"
+            },
+            NORMAL: {
+                name: "普通宝箱",
+                probability: 67.5,
+                // 奖品概率和为100%
+                prizes: [
+                    { name: "秘宝玫瑰", amount: 100, probability: 0.3 },
+                    { name: "秘宝玫瑰", amount: 6, probability: 10.7 },
+                    { name: "秘宝玫瑰", amount: 2, probability: 40.5 },
+                    { name: "寻宝秘匣", amount: 1, probability: 10 },
+                    { name: "通用碎片", amount: 3, probability: 1 },
+                    { name: "通用碎片", amount: 2, probability: 4 },
+                    { name: "通用碎片", amount: 1, probability: 13 },
+                    { name: "英雄装备幸运宝箱", amount: 1, probability: 8 },
+                    { name: "火晶", amount: 20, probability: 0.5 },
+                    { name: "火晶", amount: 5, probability: 4 },
+                    { name: "火晶", amount: 2, probability: 8 },
+                ],
+                class: "normal",
+                labelClass: "normal-label"
+            }
+        };
+
+        // DOM元素
+        const chestsContainer = document.getElementById('chests-container');
+        const keysCountElement = document.getElementById('keys-count');
+        const rosesCountElement = document.getElementById('roses-count');
+        const refreshCountElement = document.getElementById('refresh-count');
+        const openCountElement = document.getElementById('open-count');
+        const refreshCostInfo = document.getElementById('refresh-cost-info');
+        const refreshButton = document.getElementById('refresh');
+        const openAllButton = document.getElementById('open-all');
+        const autoLuxuryButton = document.getElementById('auto-luxury');
+        const autoLuxuryDelicateButton = document.getElementById('auto-luxury-delicate');
+        const autoOpenAllButton = document.getElementById('auto-open-all');
+        const componentsAvailableElement = document.getElementById('components-available');
+        const totalComponentsElement = document.getElementById('total-components');
+        const totalCostElement = document.getElementById('total-cost');
+        const componentPriceElement = document.getElementById('component-price');
+        const packageElements = document.querySelectorAll('.package');
+        const milestoneTable = document.getElementById('milestone-table');
+        const milestoneRewardPopup = document.getElementById('milestone-reward');
+        const milestoneRewardContent = document.getElementById('milestone-reward-content');
+        const itemsListElement = document.getElementById('items-list');
+        
+        // 价值统计元素
+        const chestValueElement = document.getElementById('chest-value');
+        const milestoneValueElement = document.getElementById('milestone-value');
+        const totalValueElement = document.getElementById('total-value');
+        const avgValueElement = document.getElementById('avg-value');
+
+        // 初始化游戏
+        function initGame() {
+            updateStats();
+            generateChests();
+            setupEventListeners();
+            updatePackageButtons();
+            createMilestoneTable();
+            updateItemsList();
+            updateValueStats();
+        }
+
+        // 计算物品价值
+        function calculateItemValue(itemName, amount) {
+            // 查找物品价值
+            for (const [key, value] of Object.entries(ITEM_VALUES)) {
+                if (itemName.includes(key)) {
+                    // 钻石需要特殊处理
+                    if (key === "钻石") {
+                        return value * amount;
+                    }
+                    return value * amount;
+                }
+            }
+            return 0;
+        }
+
+        // 解析奖励字符串并计算价值
+        function parseRewardValue(rewardString) {
+            const match = rewardString.match(/(\d+)(.+)/);
+            if (match) {
+                const amount = parseInt(match[1]);
+                const itemName = match[2].trim();
+                return calculateItemValue(itemName, amount);
+            }
+            return 0;
+        }
+
+        // 更新价值统计
+        function updateValueStats() {
+            // 计算宝箱奖品价值
+            let chestValue = 0;
+            
+            // 计算资源类物品价值
+            for (const [resource, count] of Object.entries(gameState.collectedItems.resources)) {
+                chestValue += calculateItemValue(resource, count);
+            }
+            
+            // 计算其他物品价值
+            for (const [itemName, count] of Object.entries(gameState.collectedItems.others)) {
+                chestValue += calculateItemValue(itemName, count);
+            }
+            
+            // 计算里程碑奖励价值
+            let milestoneValue = 0;
+            for (const milestone of gameState.milestones) {
+                if (milestone.achieved) {
+                    milestoneValue += parseRewardValue(milestone.reward);
+                }
+            }
+            
+            // 更新游戏状态
+            gameState.valueStats.chestValue = chestValue;
+            gameState.valueStats.milestoneValue = milestoneValue;
+            gameState.valueStats.totalValue = chestValue + milestoneValue;
+            gameState.valueStats.avgValue = gameState.openCount > 0 ? 
+                (gameState.valueStats.totalValue / gameState.openCount).toFixed(2) : 0;
+            
+            // 更新UI
+            chestValueElement.textContent = `${chestValue.toFixed(2)}元`;
+            milestoneValueElement.textContent = `${milestoneValue.toFixed(2)}元`;
+            totalValueElement.textContent = `${gameState.valueStats.totalValue.toFixed(2)}元`;
+            avgValueElement.textContent = `${gameState.valueStats.avgValue}元`;
+        }
+
+        // 创建里程碑表格
+        function createMilestoneTable() {
+            milestoneTable.innerHTML = '';
+            gameState.milestones.forEach(milestone => {
+                const milestoneElement = document.createElement('div');
+                milestoneElement.className = 'milestone-cell';
+                milestoneElement.innerHTML = `
+                    <div class="milestone-count">${milestone.count}次</div>
+                    <div class="milestone-reward-text">${milestone.reward}</div>
+                `;
+                milestoneTable.appendChild(milestoneElement);
+            });
+            updateMilestoneTable();
+        }
+
+        // 更新里程碑表格
+        function updateMilestoneTable() {
+            const milestones = milestoneTable.querySelectorAll('.milestone-cell');
+            milestones.forEach((milestone, index) => {
+                if (gameState.openCount >= gameState.milestones[index].count) {
+                    milestone.classList.add('active');
+                    if (!gameState.milestones[index].achieved) {
+                        gameState.milestones[index].achieved = true;
+                        // 自动模式下不显示弹窗
+                        if (!gameState.autoMode) {
+                            showMilestoneReward(gameState.milestones[index].reward);
+                        }
+                        // 将里程碑奖励添加到物品记录
+                        addMilestoneRewardToItems(gameState.milestones[index].reward);
+                        // 更新价值统计
+                        updateValueStats();
+                    }
+                } else {
+                    milestone.classList.remove('active');
+                }
+            });
+        }
+
+        // 将里程碑奖励添加到物品记录
+        function addMilestoneRewardToItems(reward) {
+            // 解析奖励字符串
+            const match = reward.match(/(\d+)(.+)/);
+            if (match) {
+                const amount = parseInt(match[1]);
+                const itemName = match[2].trim();
+                
+                // 添加到物品记录
+                addItemToCollection(itemName, amount, true); // true表示是里程碑奖励
+                
+                // 如果是专武组件，更新总组件数
+                if (itemName.includes("专武组件")) {
+                    gameState.totalComponents += amount;
+                    updateComponentInfo();
+                }
+            }
+        }
+
+        // 显示里程碑奖励
+        function showMilestoneReward(reward) {
+            milestoneRewardContent.textContent = reward;
+            milestoneRewardPopup.classList.add('show');
+        }
+
+        // 关闭里程碑奖励弹窗
+        function closeMilestonePopup() {
+            milestoneRewardPopup.classList.remove('show');
+        }
+
+        // 更新统计显示
+        function updateStats() {
+            keysCountElement.value = gameState.keys;
+            rosesCountElement.textContent = gameState.roses;
+            refreshCountElement.textContent = gameState.refreshCount;
+            openCountElement.textContent = gameState.openCount;
+            
+            if (gameState.refreshCount >= 21) {
+                refreshCostInfo.textContent = "每次刷新需要消耗90钥匙";
+            } else {
+                refreshCostInfo.textContent = `前21次刷新免费，之后每次刷新消耗90钥匙 (剩余${21 - gameState.refreshCount}次免费)`;
+            }
+            
+            openAllButton.disabled = gameState.keys < 540;
+            updateComponentInfo();
+        }
+
+        // 更新专武组件信息
+        function updateComponentInfo() {
+            const componentsFromRoses = Math.floor(gameState.roses / 10);
+            const totalComponents = componentsFromRoses + gameState.totalComponents;
+            
+            componentsAvailableElement.textContent = componentsFromRoses;
+            totalComponentsElement.textContent = totalComponents;
+            totalCostElement.textContent = gameState.totalSpent;
+            
+            if (totalComponents > 0) {
+                componentPriceElement.textContent = (gameState.totalSpent / totalComponents).toFixed(2);
+            } else {
+                componentPriceElement.textContent = "0";
+            }
+        }
+
+        // 生成宝箱
+        function generateChests() {
+            chestsContainer.innerHTML = '';
+            gameState.chests = [];
+            
+            for (let i = 0; i < 9; i++) {
+                const chest = createChest();
+                gameState.chests.push(chest);
+                
+                const chestElement = document.createElement('div');
+                chestElement.className = `chest ${chest.class}`;
+                chestElement.dataset.index = i;
+                
+                const iconElement = document.createElement('div');
+                iconElement.className = 'chest-icon';
+                iconElement.innerHTML = '❖';
+                chestElement.appendChild(iconElement);
+                
+                const labelElement = document.createElement('div');
+                labelElement.className = `chest-label ${chest.labelClass}`;
+                labelElement.textContent = chest.name;
+                chestElement.appendChild(labelElement);
+                
+                chestElement.addEventListener('click', () => openChest(i));
+                
+                chestsContainer.appendChild(chestElement);
+            }
+        }
+
+        // 创建单个宝箱
+        function createChest() {
+            const rand = Math.random() * 100;
+            
+            if (rand < CHEST_TYPES.LUXURY.probability) {
+                return { ...CHEST_TYPES.LUXURY, opened: false };
+            } else if (rand < CHEST_TYPES.LUXURY.probability + CHEST_TYPES.DELICATE.probability) {
+                return { ...CHEST_TYPES.DELICATE, opened: false };
+            } else {
+                return { ...CHEST_TYPES.NORMAL, opened: false };
+            }
+        }
+
+        // 显示宝箱奖励提示
+        function showRewardPopup(chestElement, prize) {
+            // 移除已有的奖励提示
+            const existingPopup = chestElement.querySelector('.chest-reward-popup');
+            if (existingPopup) {
+                chestElement.removeChild(existingPopup);
+            }
+            
+            const popup = document.createElement('div');
+            popup.className = 'chest-reward-popup';
+            
+            let popupText = `+${prize.amount}${prize.name}`;
+            
+            popup.textContent = popupText;
+            chestElement.appendChild(popup);
+        }
+
+        // 打开宝箱
+        function openChest(index) {
+            const chest = gameState.chests[index];
+            
+            if (chest.opened || gameState.keys < 60) {
+                return;
+            }
+            
+            gameState.keys -= 60;
+            
+            const prize = calculatePrize(chest);
+            
+            // 记录获得的物品
+            addItemToCollection(prize.name, prize.amount, false);
+            
+            // 如果是秘宝玫瑰，更新玫瑰计数
+            if (prize.name === "秘宝玫瑰") {
+                gameState.roses += prize.amount;
+            }
+            
+            chest.opened = true;
+            gameState.openCount++;
+            
+            updateStats();
+            updateChestUI(index);
+            updateMilestoneTable();
+            updateItemsList();
+            updateValueStats();
+            
+            // 显示奖励提示
+            const chestElement = chestsContainer.children[index];
+            showRewardPopup(chestElement, prize);
+        }
+
+        // 计算奖品
+        function calculatePrize(chest) {
+            const rand = Math.random() * 100;
+            let cumulativeProbability = 0;
+            
+            for (const prize of chest.prizes) {
+                cumulativeProbability += prize.probability;
+                if (rand <= cumulativeProbability) {
+                    return prize;
+                }
+            }
+            
+            // 默认返回第一个奖品（理论上不会执行到这里）
+            return chest.prizes[0];
+        }
+
+        // 更新宝箱UI
+        function updateChestUI(index) {
+            const chestElement = chestsContainer.children[index];
+            const chest = gameState.chests[index];
+            
+            if (chest.opened) {
+                chestElement.classList.add('opened');
+                chestElement.style.cursor = 'not-allowed';
+            }
+        }
+
+        // 添加物品到收集记录
+        function addItemToCollection(itemName, amount = 1, isMilestone = false) {
+            // 检查是否是资源类物品
+            const resourceKeys = Object.keys(gameState.collectedItems.resources);
+            if (resourceKeys.some(key => itemName.includes(key))) {
+                // 找到对应的资源类型
+                for (const resource of resourceKeys) {
+                    if (itemName.includes(resource)) {
+                        gameState.collectedItems.resources[resource] += amount;
+                        break;
+                    }
+                }
+            } else {
+                // 其他物品
+                if (gameState.collectedItems.others[itemName]) {
+                    gameState.collectedItems.others[itemName] += amount;
+                } else {
+                    gameState.collectedItems.others[itemName] = amount;
+                }
+            }
+        }
+
+        // 更新物品列表显示
+        function updateItemsList() {
+            itemsListElement.innerHTML = '';
+            
+            let hasItems = false;
+            
+            // 显示累计的资源类物品
+            for (const [resource, count] of Object.entries(gameState.collectedItems.resources)) {
+                if (count > 0) {
+                    hasItems = true;
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'item';
+                    
+                    const nameElement = document.createElement('span');
+                    nameElement.className = 'item-name';
+                    nameElement.textContent = resource;
+                    
+                    const countElement = document.createElement('span');
+                    countElement.className = 'item-count';
+                    countElement.textContent = `x${count}`;
+                    
+                    itemElement.appendChild(nameElement);
+                    itemElement.appendChild(countElement);
+                    itemsListElement.appendChild(itemElement);
+                }
+            }
+            
+            // 显示累计的其他物品
+            for (const [itemName, count] of Object.entries(gameState.collectedItems.others)) {
+                if (count > 0) {
+                    hasItems = true;
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'item';
+                    
+                    const nameElement = document.createElement('span');
+                    nameElement.className = 'item-name';
+                    nameElement.textContent = itemName;
+                    
+                    const countElement = document.createElement('span');
+                    countElement.className = 'item-count';
+                    countElement.textContent = `x${count}`;
+                    
+                    itemElement.appendChild(nameElement);
+                    itemElement.appendChild(countElement);
+                    itemsListElement.appendChild(itemElement);
+                }
+            }
+            
+            if (!hasItems) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.textContent = '尚未获得任何物品';
+                emptyMsg.style.textAlign = 'center';
+                emptyMsg.style.color = '#aaa';
+                itemsListElement.appendChild(emptyMsg);
+            }
+        }
+
+        // 一键开启所有宝箱
+        function openAllChests() {
+            if (gameState.keys < 540) {
+                return;
+            }
+            
+            let items = [];
+            const chestPrizes = []; // 记录每个宝箱的奖品
+            
+            for (let i = 0; i < gameState.chests.length; i++) {
+                const chest = gameState.chests[i];
+                
+                if (!chest.opened) {
+                    const prize = calculatePrize(chest);
+                    items.push(prize);
+                    
+                    chestPrizes.push({ index: i, prize: prize });
+                    
+                    chest.opened = true;
+                    updateChestUI(i);
+                }
+            }
+            
+            gameState.keys -= 540;
+            gameState.openCount += 9;
+            
+            for (const prize of items) {
+                addItemToCollection(prize.name, prize.amount, false);
+                
+                // 如果是秘宝玫瑰，更新玫瑰计数
+                if (prize.name === "秘宝玫瑰") {
+                    gameState.roses += prize.amount;
+                }
+            }
+            
+            // 为每个宝箱显示奖励提示
+            for (const cp of chestPrizes) {
+                const chestElement = chestsContainer.children[cp.index];
+                showRewardPopup(chestElement, cp.prize);
+            }
+            
+            updateStats();
+            updateMilestoneTable();
+            updateItemsList();
+            updateValueStats();
+        }
+
+        // 刷新宝箱
+        function refreshChests() {
+            // 检查是否需要消耗钥匙
+            if (gameState.refreshCount >= 21) {
+                if (gameState.keys < 90) {
+                    alert("钥匙不足，无法刷新！");
+                    return false;
+                }
+                gameState.keys -= 90;
+            }
+            
+            // 增加刷新次数
+            gameState.refreshCount++;
+            
+            generateChests();
+            updateStats();
+            return true;
+        }
+
+        // 检查是否有目标宝箱
+        function hasTargetChests(targetTypes) {
+            for (let i = 0; i < gameState.chests.length; i++) {
+                const chest = gameState.chests[i];
+                if (!chest.opened && targetTypes.includes(chest.class)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // 仅打开华丽宝箱
+        function autoOpenLuxury() {
+            gameState.autoMode = true;
+            
+            // 检查是否有华丽宝箱
+            if (hasTargetChests(["luxury"])) {
+                let opened = false;
+                
+                for (let i = 0; i < gameState.chests.length; i++) {
+                    const chest = gameState.chests[i];
+                    
+                    if (!chest.opened && chest.class === "luxury" && gameState.keys >= 60) {
+                        openChest(i);
+                        opened = true;
+                        break;
+                    }
+                }
+                
+                if (opened && gameState.keys >= 60) {
+                    setTimeout(autoOpenLuxury, 500);
+                } else {
+                    gameState.autoMode = false;
+                }
+            } else {
+                // 没有华丽宝箱，刷新
+                if (refreshChests()) {
+                    // 延迟检查新宝箱
+                    setTimeout(() => {
+                        if (hasTargetChests(["luxury"]) && gameState.keys >= 60) {
+                            autoOpenLuxury();
+                        } else {
+                            // 如果刷新后仍然没有华丽宝箱，继续刷新
+                            autoOpenLuxury();
+                        }
+                    }, 500);
+                } else {
+                    gameState.autoMode = false;
+                }
+            }
+        }
+
+        // 打开华丽和精致宝箱（优先华丽）
+        function autoOpenLuxuryDelicate() {
+            gameState.autoMode = true;
+            
+            // 检查是否有华丽或精致宝箱
+            if (hasTargetChests(["luxury", "delicate"])) {
+                let opened = false;
+                
+                // 优先开华丽宝箱
+                for (let i = 0; i < gameState.chests.length; i++) {
+                    const chest = gameState.chests[i];
+                    
+                    if (!chest.opened && chest.class === "luxury" && gameState.keys >= 60) {
+                        openChest(i);
+                        opened = true;
+                        break;
+                    }
+                }
+                
+                // 如果没有华丽宝箱，开精致宝箱
+                if (!opened) {
+                    for (let i = 0; i < gameState.chests.length; i++) {
+                        const chest = gameState.chests[i];
+                        
+                        if (!chest.opened && chest.class === "delicate" && gameState.keys >= 60) {
+                            openChest(i);
+                            opened = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (opened && gameState.keys >= 60) {
+                    setTimeout(autoOpenLuxuryDelicate, 500);
+                } else {
+                    gameState.autoMode = false;
+                }
+            } else {
+                // 没有目标宝箱，刷新
+                if (refreshChests()) {
+                    // 延迟检查新宝箱
+                    setTimeout(() => {
+                        if (hasTargetChests(["luxury", "delicate"]) && gameState.keys >= 60) {
+                            autoOpenLuxuryDelicate();
+                        } else {
+                            // 如果刷新后仍然没有目标宝箱，继续刷新
+                            autoOpenLuxuryDelicate();
+                        }
+                    }, 500);
+                } else {
+                    gameState.autoMode = false;
+                }
+            }
+        }
+
+        // 自动一键全开功能
+        function autoOpenAll() {
+            gameState.autoMode = true;
+            
+            // 如果钥匙足够一键全开，则执行一键全开
+            if (gameState.keys >= 540) {
+                openAllChests();
+                
+                // 延迟后刷新宝箱
+                setTimeout(() => {
+                    if (refreshChests()) {
+                        // 继续自动一键全开
+                        setTimeout(autoOpenAll, 500);
+                    } else {
+                        // 刷新失败，尝试单个开箱
+                        autoOpenAllFallback();
+                    }
+                }, 500);
+            } else {
+                // 钥匙不足一键全开，尝试单个开箱
+                autoOpenAllFallback();
+            }
+        }
+
+        // 自动一键全开的备选方案（单个开箱）
+        function autoOpenAllFallback() {
+            // 优先开华丽宝箱
+            let opened = false;
+            
+            for (let i = 0; i < gameState.chests.length; i++) {
+                const chest = gameState.chests[i];
+                
+                if (!chest.opened && chest.class === "luxury" && gameState.keys >= 60) {
+                    openChest(i);
+                    opened = true;
+                    break;
+                }
+            }
+            
+            // 如果没有华丽宝箱，开精致宝箱
+            if (!opened) {
+                for (let i = 0; i < gameState.chests.length; i++) {
+                    const chest = gameState.chests[i];
+                    
+                    if (!chest.opened && chest.class === "delicate" && gameState.keys >= 60) {
+                        openChest(i);
+                        opened = true;
+                        break;
+                    }
+                }
+            }
+            
+            // 如果开了宝箱，继续尝试
+            if (opened && gameState.keys >= 60) {
+                setTimeout(autoOpenAll, 500);
+            } else {
+                // 没有可开的宝箱，尝试刷新
+                if (refreshChests()) {
+                    setTimeout(autoOpenAll, 500);
+                } else {
+                    gameState.autoMode = false;
+                }
+            }
+        }
+
+        // 购买礼包
+        function buyPackage(index) {
+            const package = PACKAGES[index];
+            
+            if (package.bought >= package.limit) {
+                alert(`已达到${package.name}的购买上限！`);
+                return;
+            }
+            
+            gameState.keys += package.keys;
+            gameState.totalSpent += package.price;
+            package.bought++;
+            
+            updateStats();
+            updatePackageButtons();
+            updateValueStats();
+        }
+
+        // 更新礼包按钮状态
+        function updatePackageButtons() {
+            packageElements.forEach((element, index) => {
+                const package = PACKAGES[index];
+                if (package.bought >= package.limit) {
+                    element.style.opacity = '0.6';
+                    element.style.cursor = 'not-allowed';
+                } else {
+                    element.style.opacity = '1';
+                    element.style.cursor = 'pointer';
+                }
+                
+                const limitElement = element.querySelector('.package-limit');
+                limitElement.textContent = `已购${package.bought}/${package.limit}次`;
+            });
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            refreshButton.addEventListener('click', refreshChests);
+            openAllButton.addEventListener('click', openAllChests);
+            autoLuxuryButton.addEventListener('click', autoOpenLuxury);
+            autoLuxuryDelicateButton.addEventListener('click', autoOpenLuxuryDelicate);
+            autoOpenAllButton.addEventListener('click', autoOpenAll);
+            
+            keysCountElement.addEventListener('change', () => {
+                let value = parseInt(keysCountElement.value);
+                if (isNaN(value) || value < 0) {
+                    value = 0;
+                }
+                gameState.keys = value;
+                keysCountElement.value = value;
+                updateStats();
+            });
+            
+            packageElements.forEach((element, index) => {
+                element.addEventListener('click', () => {
+                    buyPackage(index);
+                });
+            });
+            
+            window.addEventListener('click', (event) => {
+                if (event.target === milestoneRewardPopup) {
+                    closeMilestonePopup();
+                }
+            });
+        }
+
+        // 初始化游戏
+        initGame();
+    </script>
+    </div>
+</body>
+</html>

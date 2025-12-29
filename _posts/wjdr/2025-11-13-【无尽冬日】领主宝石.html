@@ -1,0 +1,533 @@
+---
+layout: post
+title: "【无尽冬日】领主宝石升级优化工具"
+categories: 无尽冬日
+tags: 无尽冬日
+---
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>领主宝石升级优化工具</title>
+    <style>
+        #wjdr * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        #wjdr {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 10px;
+        }
+        #wjdr .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+        }
+        #wjdr h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            font-size: 1.5rem;
+        }
+        #wjdr .description {
+            background-color: #e8f4fc;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            font-size: 0.9rem;
+        }
+        #wjdr .gem-inputs {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(3, auto);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+        #wjdr .gem-input {
+            background: #f8f9fa;
+            padding: 6px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        #wjdr .gem-input label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        #wjdr .gem-input input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px; /* 防止iOS缩放 */
+            text-align: center;
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+        /* 高亮样式 */
+        #wjdr .gem-input input.highlight {
+            background-color: #ffcccc;
+            border-color: #ff0000;
+        }
+        #wjdr .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        #wjdr button {
+            padding: 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        #wjdr button:hover {
+            background: #2980b9;
+        }
+        #wjdr #resetBtn {
+            background: #e74c3c;
+        }
+        #wjdr #resetBtn:hover {
+            background: #c0392b;
+        }
+        #wjdr #autoUpgradeBtn {
+            background: #27ae60;
+        }
+        #wjdr #autoUpgradeBtn:hover {
+            background: #219653;
+        }
+        #wjdr #stopAutoUpgradeBtn {
+            background: #f39c12;
+        }
+        #wjdr #stopAutoUpgradeBtn:hover {
+            background: #d35400;
+        }
+        #wjdr .result {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #2ecc71;
+        }
+        #wjdr .result h2 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+        #wjdr .recommendation {
+            padding: 12px;
+            background: #e8f6f3;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        #wjdr .status-bar {
+            background: #f0f0f0;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        #wjdr footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #7f8c8d;
+            font-size: 0.8rem;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            #wjdr .gem-inputs {
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(6, auto);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #wjdr .gem-inputs {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(9, auto);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="wjdr">
+    <div class="container">
+        <h1>领主宝石升级优化工具</h1>
+        <!-- <h3>制作：桐 抖音：Huajianlei1983</h3> -->
+        <div class="description">
+            <p>本工具帮助您计算领主宝石升级的最优性价比方案。性价比 = 花费增量 / 属性增量，数值越小表示性价比越高。</p>
+            <p>请输入您当前各宝石的等级（1-16），然后点击"计算最优升级"获取建议。</p>
+        </div>
+        
+        <div class="gem-inputs" id="gemInputs">
+            <!-- 宝石输入区域将由JavaScript动态生成 -->
+        </div>
+        
+        <div class="buttons">
+            <button id="calculateBtn">计算最优升级</button>
+            <button id="applyBtn">接受强化建议</button>
+            <button id="autoUpgradeBtn">请计算后续升级过程</button>
+            <button id="stopAutoUpgradeBtn" style="display:none;">停止自动升级</button>
+            <button id="resetBtn">重置所有等级</button>
+        </div>
+        
+        <div class="status-bar" id="statusBar" style="display: none;">
+            自动升级进行中...
+        </div>
+        
+        <div class="result" id="result" style="display: none;">
+            <h2>升级建议</h2>
+            <p id="recommendationText"></p>
+            <div class="recommendation" id="detailedRecommendation"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 领主宝石升级优化工具 | 数据仅供参考，请以游戏内实际数值为准</p>
+    </footer>
+
+    <script>
+        // 宝石数据（从Excel中提取）
+        const gemData = [
+            { level: 1, cost: 10, cloth: 0.099, pants: 0.099, ring: 0.099, staff: 0.099, hat: 0.054, watch: 0.054 },
+            { level: 2, cost: 65, cloth: 0.132, pants: 0.132, ring: 0.132, staff: 0.132, hat: 0.072, watch: 0.072 },
+            { level: 3, cost: 165, cloth: 0.176, pants: 0.176, ring: 0.176, staff: 0.176, hat: 0.096, watch: 0.096 },
+            { level: 4, cost: 345, cloth: 0.209, pants: 0.209, ring: 0.209, staff: 0.209, hat: 0.114, watch: 0.114 },
+            { level: 5, cost: 645, cloth: 0.275, pants: 0.275, ring: 0.275, staff: 0.275, hat: 0.15, watch: 0.15 },
+            { level: 6, cost: 1065, cloth: 0.33, pants: 0.33, ring: 0.33, staff: 0.33, hat: 0.18, watch: 0.18 },
+            { level: 7, cost: 1605, cloth: 0.385, pants: 0.385, ring: 0.385, staff: 0.385, hat: 0.21, watch: 0.21 },
+            { level: 8, cost: 2205, cloth: 0.44, pants: 0.44, ring: 0.44, staff: 0.44, hat: 0.24, watch: 0.24 },
+            { level: 9, cost: 2905, cloth: 0.495, pants: 0.495, ring: 0.495, staff: 0.495, hat: 0.27, watch: 0.27 },
+            { level: 10, cost: 3745, cloth: 0.55, pants: 0.55, ring: 0.55, staff: 0.55, hat: 0.3, watch: 0.3 },
+            { level: 11, cost: 4725, cloth: 0.605, pants: 0.605, ring: 0.605, staff: 0.605, hat: 0.33, watch: 0.33 },
+            { level: 12, cost: 6055, cloth: 0.704, pants: 0.704, ring: 0.704, staff: 0.704, hat: 0.384, watch: 0.384 },
+            { level: 13, cost: 7685, cloth: 0.803, pants: 0.803, ring: 0.803, staff: 0.803, hat: 0.438, watch: 0.438 },
+            { level: 14, cost: 9685, cloth: 0.902, pants: 0.902, ring: 0.902, staff: 0.902, hat: 0.492, watch: 0.492 },
+            { level: 15, cost: 12185, cloth: 1.001, pants: 1.001, ring: 1.001, staff: 1.001, hat: 0.546, watch: 0.546 },
+            { level: 16, cost: 15335, cloth: 1.1, pants: 1.1, ring: 1.1, staff: 1.1, hat: 0.6, watch: 0.6 }
+        ];
+
+        // 宝石类型
+        const gemTypes = [
+            { name: '衣服', key: 'cloth', count: 3 },
+            { name: '裤子', key: 'pants', count: 3 },
+            { name: '指环', key: 'ring', count: 3 },
+            { name: '手杖', key: 'staff', count: 3 },
+            { name: '帽子', key: 'hat', count: 3 },
+            { name: '怀表', key: 'watch', count: 3 }
+        ];
+
+        // 全局变量
+        let autoUpgradeInterval = null;
+
+        // 初始化函数
+        function init() {
+            createGemInputs();
+            loadFromLocalStorage();
+            attachEventListeners();
+        }
+
+        // 创建宝石输入区域（3行6列布局）
+        function createGemInputs() {
+            const container = document.getElementById('gemInputs');
+            container.innerHTML = '';
+            
+            gemTypes.forEach(type => {
+                for (let i = 1; i <= type.count; i++) {
+                    const inputDiv = document.createElement('div');
+                    inputDiv.className = 'gem-input';
+                    
+                    const label = document.createElement('label');
+                    label.textContent = `${type.name}${i}`;
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.min = '1';
+                    input.max = '16';
+                    input.value = '1';
+                    input.id = `${type.key}-${i}`;
+                    
+                    inputDiv.appendChild(label);
+                    inputDiv.appendChild(input);
+                    container.appendChild(inputDiv);
+                }
+            });
+        }
+
+        // 附加事件监听器
+        function attachEventListeners() {
+            document.getElementById('calculateBtn').addEventListener('click', calculateBestUpgrade);
+            document.getElementById('applyBtn').addEventListener('click', applyRecommendation);
+            document.getElementById('autoUpgradeBtn').addEventListener('click', startAutoUpgrade);
+            document.getElementById('stopAutoUpgradeBtn').addEventListener('click', stopAutoUpgrade);
+            document.getElementById('resetBtn').addEventListener('click', resetAllLevels);
+            
+            // 输入变化时保存到本地存储并高亮显示
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('change', function() {
+                    saveToLocalStorage();
+                    highlightInput(this);
+                });
+                
+                input.addEventListener('input', function() {
+                    highlightInput(this);
+                });
+            });
+        }
+
+        // 高亮输入框
+        function highlightInput(inputElement) {
+            // 移除之前的高亮类
+            inputElement.classList.remove('highlight');
+            
+            // 触发重排以重新启动动画
+            void inputElement.offsetWidth;
+            
+            // 添加高亮类
+            inputElement.classList.add('highlight');
+            
+            // 2秒后移除高亮类
+            setTimeout(() => {
+                inputElement.classList.remove('highlight');
+            }, 1000);
+        }
+
+        // 开始自动升级
+        function startAutoUpgrade() {
+            // 显示停止按钮，隐藏开始按钮
+            document.getElementById('autoUpgradeBtn').style.display = 'none';
+            document.getElementById('stopAutoUpgradeBtn').style.display = 'block';
+            document.getElementById('statusBar').style.display = 'block';
+            
+            // 设置定时器，每隔1秒执行一次升级
+            autoUpgradeInterval = setInterval(() => {
+                // 检查是否所有宝石都已满级
+                if (areAllGemsMaxLevel()) {
+                    stopAutoUpgrade();
+                    document.getElementById('statusBar').textContent = '所有宝石已达到最大等级(16级)！';
+                    return;
+                }
+                
+                // 计算最优升级
+                calculateBestUpgrade();
+                
+                // 接受强化建议
+                setTimeout(applyRecommendation, 100);
+            }, 1000);
+        }
+
+        // 停止自动升级
+        function stopAutoUpgrade() {
+            if (autoUpgradeInterval) {
+                clearInterval(autoUpgradeInterval);
+                autoUpgradeInterval = null;
+            }
+            
+            // 显示开始按钮，隐藏停止按钮
+            document.getElementById('autoUpgradeBtn').style.display = 'block';
+            document.getElementById('stopAutoUpgradeBtn').style.display = 'none';
+        }
+
+        // 检查所有宝石是否都已满级
+        function areAllGemsMaxLevel() {
+            const currentLevels = getAllGemLevels();
+            
+            for (const gemId in currentLevels) {
+                if (currentLevels[gemId] < 16) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        // 计算最优升级
+        function calculateBestUpgrade() {
+            const currentLevels = getAllGemLevels();
+            let bestOption = null;
+            let bestValue = Infinity;
+            let allMaxLevel = true;
+            
+            const recommendations = [];
+            
+            // 计算每个宝石升级的性价比
+            gemTypes.forEach(type => {
+                for (let i = 1; i <= type.count; i++) {
+                    const gemId = `${type.key}-${i}`;
+                    const currentLevel = currentLevels[gemId];
+                    
+                    if (currentLevel < 16) {
+                        allMaxLevel = false;
+                        
+                        const costIncrease = gemData[currentLevel].cost - gemData[currentLevel - 1].cost;
+                        const statIncrease = gemData[currentLevel][type.key] - gemData[currentLevel - 1][type.key];
+                        const value = costIncrease / statIncrease;
+                        
+                        recommendations.push({
+                            gem: `${type.name}宝石${i}`,
+                            value: value,
+                            currentLevel: currentLevel,
+                            nextLevel: currentLevel + 1,
+                            cost: costIncrease,
+                            statIncrease: statIncrease.toFixed(4)
+                        });
+                        
+                        if (value < bestValue) {
+                            bestValue = value;
+                            bestOption = {
+                                gem: `${type.name}宝石${i}`,
+                                value: value,
+                                currentLevel: currentLevel,
+                                nextLevel: currentLevel + 1,
+                                cost: costIncrease,
+                                statIncrease: statIncrease.toFixed(4)
+                            };
+                        }
+                    }
+                }
+            });
+            
+            // 显示结果
+            const resultDiv = document.getElementById('result');
+            const recommendationText = document.getElementById('recommendationText');
+            const detailedRecommendation = document.getElementById('detailedRecommendation');
+            
+            if (allMaxLevel) {
+                recommendationText.textContent = '所有宝石已达到最大等级(16级)，无需升级。';
+                detailedRecommendation.innerHTML = '';
+            } else {
+                recommendationText.textContent = `推荐升级: ${bestOption.gem} (从 ${bestOption.currentLevel} 级到 ${bestOption.nextLevel} 级)。性价比: ${bestOption.value.toFixed(2)} (花费增量/属性增量)`;
+                
+                // 生成详细推荐列表
+                detailedRecommendation.innerHTML = '<h3>所有宝石升级性价比排序:</h3>';
+                recommendations.sort((a, b) => a.value - b.value);
+                
+                const list = document.createElement('ol');
+                recommendations.forEach(rec => {
+                    const item = document.createElement('li');
+                    item.innerHTML = `${rec.gem}: 从 ${rec.currentLevel} 级到 ${rec.nextLevel} 级, 花费: ${rec.cost}, 属性增益: ${rec.statIncrease}, 性价比: ${rec.value.toFixed(2)}`;
+                    list.appendChild(item);
+                });
+                
+                detailedRecommendation.appendChild(list);
+            }
+            
+            resultDiv.style.display = 'block';
+            
+            // 保存当前推荐结果
+            localStorage.setItem('lastRecommendation', JSON.stringify({
+                bestOption: bestOption,
+                recommendations: recommendations
+            }));
+        }
+
+        // 应用推荐
+        function applyRecommendation() {
+            const lastRec = JSON.parse(localStorage.getItem('lastRecommendation') || '{}');
+            
+            if (!lastRec.bestOption) {
+                alert('请先计算最优升级建议！');
+                return;
+            }
+            
+            // 解析宝石名称和序号
+            const gemName = lastRec.bestOption.gem;
+            const gemType = gemName.replace(/宝石\d+$/, '');
+            const gemNumber = parseInt(gemName.match(/\d+$/)[0]);
+            
+            // 找到对应的key
+            let gemKey = '';
+            gemTypes.forEach(type => {
+                if (type.name === gemType) {
+                    gemKey = type.key;
+                }
+            });
+            
+            if (gemKey) {
+                const inputId = `${gemKey}-${gemNumber}`;
+                const input = document.getElementById(inputId);
+                const newLevel = parseInt(input.value) + 1;
+                
+                if (newLevel <= 16) {
+                    input.value = newLevel;
+                    saveToLocalStorage();
+                    highlightInput(input);
+                }
+            }
+        }
+
+        // 重置所有等级
+        function resetAllLevels() {
+            if (confirm('确定要重置所有宝石等级为1级吗？')) {
+                document.querySelectorAll('input').forEach(input => {
+                    input.value = '1';
+                });
+                saveToLocalStorage();
+                document.getElementById('result').style.display = 'none';
+            }
+        }
+
+        // 获取所有宝石的当前等级
+        function getAllGemLevels() {
+            const levels = {};
+            
+            gemTypes.forEach(type => {
+                for (let i = 1; i <= type.count; i++) {
+                    const inputId = `${type.key}-${i}`;
+                    const input = document.getElementById(inputId);
+                    levels[inputId] = parseInt(input.value) || 1;
+                }
+            });
+            
+            return levels;
+        }
+
+        // 保存到本地存储
+        function saveToLocalStorage() {
+            const levels = getAllGemLevels();
+            localStorage.setItem('gemLevels', JSON.stringify(levels));
+        }
+
+        // 从本地存储加载
+        function loadFromLocalStorage() {
+            const savedLevels = JSON.parse(localStorage.getItem('gemLevels') || '{}');
+            
+            for (const id in savedLevels) {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = savedLevels[id];
+                }
+            }
+        }
+
+        // 初始化
+        window.onload = init;
+    </script>
+    </div>
+</body>
+</html>

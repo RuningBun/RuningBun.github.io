@@ -1,0 +1,1062 @@
+---
+layout: post
+title: "【无尽冬日】领主装备升级性价比计算器"
+categories: 无尽冬日
+tags: 无尽冬日
+---
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>领主装备升级性价比计算器</title>
+    <style>
+        #wjdr * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #wjdr {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.5;
+            font-size: 16px;
+        }
+        #wjdr .phone-frame {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding: 15px;
+        }
+        #wjdr h1 {
+            color: #333;
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 0 0 15px 0;
+            padding: 0;
+        }
+        #wjdr .equipment-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        #wjdr .equipment-item {
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.5s ease;
+            background-color: #fff;
+        }
+        #wjdr label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        #wjdr select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background-color: #fff;
+            font-size: 1rem;
+            transition: all 0.5s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+        }
+        #wjdr .highlight {
+            background-color: #ffebee;
+            border-color: #f44336;
+            box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
+        }
+        #wjdr select.highlight {
+            background-color: #ffebee;
+            border-color: #f44336;
+        }
+        #wjdr .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        #wjdr button {
+            padding: 16px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        #wjdr button:active {
+            transform: scale(0.98);
+        }
+        #wjdr #calculate-btn {
+            background-color: #4CAF50;
+        }
+        #wjdr #calculate-btn:hover, #wjdr #calculate-btn:active {
+            background-color: #45a049;
+        }
+        #wjdr #accept-btn {
+            background-color: #2196F3;
+        }
+        #wjdr #accept-btn:hover, #wjdr #accept-btn:active {
+            background-color: #0b7dda;
+        }
+        #wjdr #auto-btn {
+            background-color: #FF9800;
+        }
+        #wjdr #auto-btn:hover, #wjdr #auto-btn:active {
+            background-color: #e68a00;
+        }
+        #wjdr #stop-btn {
+            background-color: #f44336;
+            display: none;
+        }
+        #wjdr #stop-btn:hover, #wjdr #stop-btn:active {
+            background-color: #d32f2f;
+        }
+        #wjdr #reset-btn {
+            background-color: #9E9E9E;
+        }
+        #wjdr #reset-btn:hover, #wjdr #reset-btn:active {
+            background-color: #757575;
+        }
+        #wjdr #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            font-size: 0.9rem;
+            max-height: 40vh;
+            overflow-y: auto;
+        }
+        #wjdr .best-option {
+            color: #e91e63;
+            font-weight: bold;
+        }
+        #wjdr .status-info {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        /* 稀有度颜色样式 */
+        #wjdr .rarity-common { color: green; }
+        #wjdr .rarity-rare { color: blue; }
+        #wjdr .rarity-epic { color: purple; }
+        #wjdr .rarity-legendary { color: orange; }
+        #wjdr .rarity-mythical { color: red; }
+        
+        /* 响应式调整 */
+        @media (min-width: 480px) {
+            #wjdr .button-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            #wjdr .button-container button {
+                flex: 1;
+                min-width: 45%;
+            }
+        }
+        
+        @media (max-height: 700px) {
+            #wjdr select {
+                padding: 10px;
+            }
+            #wjdr button {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="wjdr">
+    <div class="phone-frame">
+        <h1>领主装备升级性价比计算器</h1>
+        <!-- <h4>制作：桐  抖音号：Huajianlei1983</h4> -->
+        <div class="equipment-container">
+            <div class="equipment-item">
+                <label for="clothes">衣服:</label>
+                <select id="clothes">
+                <option value="良好">良好</option>
+                <option value="良好 (1) 星">良好 (1) 星</option>
+                <option value="稀有">稀有</option>
+                <option value="稀有 (1) 星">稀有 (1) 星</option>
+                <option value="稀有 (2) 星">稀有 (2) 星</option>
+                <option value="稀有 (3) 星" selected>稀有 (3) 星</option>
+                <option value="史诗">史诗</option>
+                <option value="史诗 (1) 星">史诗 (1) 星</option>
+                <option value="史诗 (2) 星">史诗 (2) 星</option>
+                <option value="史诗 (3) 星">史诗 (3) 星</option>
+                <option value="史诗 1 阶">史诗 1 阶</option>
+                <option value="史诗 1 阶 (1) 星">史诗 1 阶 (1) 星</option>
+                <option value="史诗 1 阶 (2) 星">史诗 1 阶 (2) 星</option>
+                <option value="史诗 1 阶 (3) 星">史诗 1 阶 (3) 星</option>
+                <option value="传说">传说</option>
+                <option value="传说 (1) 星">传说 (1) 星</option>
+                <option value="传说 (2) 星">传说 (2) 星</option>
+                <option value="传说 (3) 星">传说 (3) 星</option>
+                <option value="传说 1 阶">传说 1 阶</option>
+                <option value="传说 1 阶 (1) 星">传说 1 阶 (1) 星</option>
+                <option value="传说 1 阶 (2) 星">传说 1 阶 (2) 星</option>
+                <option value="传说 1 阶 (3) 星">传说 1 阶 (3) 星</option>
+                <option value="传说 2 阶">传说 2 阶</option>
+                <option value="传说 2 阶 (1) 星">传说 2 阶 (1) 星</option>
+                <option value="传说 2 阶 (2) 星">传说 2 阶 (2) 星</option>
+                <option value="传说 2 阶 (3) 星">传说 2 阶 (3) 星</option>
+                <option value="神话">神话</option>
+                <option value="神话 (1) 星">神话 (1) 星</option>
+                <option value="神话 (2) 星">神话 (2) 星</option>
+                <option value="神话 (3) 星">神话 (3) 星</option>
+                <option value="神话 1 阶">神话 1 阶</option>
+                <option value="神话 1 阶 (1) 星">神话 1 阶 (1) 星</option>
+                <option value="神话 1 阶 (2) 星">神话 1 阶 (2) 星</option>
+                <option value="神话 1 阶 (3) 星">神话 1 阶 (3) 星</option>
+                <option value="神话 2 阶">神话 2 阶</option>
+                <option value="神话 2 阶 (1) 星">神话 2 阶 (1) 星</option>
+                <option value="神话 2 阶 (2) 星">神话 2 阶 (2) 星</option>
+                <option value="神话 2 阶 (3) 星">神话 2 阶 (3) 星</option>
+                <option value="神话 3 阶">神话 3 阶</option>
+                <option value="神话 3 阶 (1) 星">神话 3 阶 (1) 星</option>
+                <option value="神话 3 阶 (2) 星">神话 3 阶 (2) 星</option>
+                <option value="神话 3 阶 (3) 星">神话 3 阶 (3) 星</option>
+                <option value="神话 3 阶 3星1段">神话 3 阶 3星1段</option>
+                <option value="神话 3 阶 3星2段">神话 3 阶 3星2段</option>
+                <option value="神话 3 阶 3星3段">神话 3 阶 3星3段</option>
+                <option value="神话 3 阶 3星4段">神话 3 阶 3星4段</option>
+                <option value="神话4阶">神话4阶</option>
+                <option value="神话4阶1段">神话4阶1段</option>
+                <option value="神话4阶2段">神话4阶2段</option>
+                <option value="神话4阶3段">神话4阶3段</option>
+                <option value="神话4阶4段">神话4阶4段</option>
+                <option value="神话4阶1星">神话4阶1星</option>
+                <option value="神话4阶1星1段">神话4阶1星1段</option>
+                <option value="神话4阶1星2段">神话4阶1星2段</option>
+                <option value="神话4阶1星3段">神话4阶1星3段</option>
+                <option value="神话4阶1星4段">神话4阶1星4段</option>
+                <option value="神话4阶2星">神话4阶2星</option>
+                <option value="神话4阶2星1段">神话4阶2星1段</option>
+                <option value="神话4阶2星2段">神话4阶2星2段</option>
+                <option value="神话4阶2星3段">神话4阶2星3段</option>
+                <option value="神话4阶2星4段">神话4阶2星4段</option>
+                <option value="神话4阶3星">神话4阶3星</option>
+            </select>
+        </div>
+        
+        <div class="equipment-item">
+            <label for="pants">裤子:</label>
+            <select id="pants">
+                <option value="良好">良好</option>
+                <option value="良好 (1) 星">良好 (1) 星</option>
+                <option value="稀有">稀有</option>
+                <option value="稀有 (1) 星">稀有 (1) 星</option>
+                <option value="稀有 (2) 星">稀有 (2) 星</option>
+                <option value="稀有 (3) 星" selected>稀有 (3) 星</option>
+                <option value="史诗">史诗</option>
+                <option value="史诗 (1) 星">史诗 (1) 星</option>
+                <option value="史诗 (2) 星">史诗 (2) 星</option>
+                <option value="史诗 (3) 星">史诗 (3) 星</option>
+                <option value="史诗 1 阶">史诗 1 阶</option>
+                <option value="史诗 1 阶 (1) 星">史诗 1 阶 (1) 星</option>
+                <option value="史诗 1 阶 (2) 星">史诗 1 阶 (2) 星</option>
+                <option value="史诗 1 阶 (3) 星">史诗 1 阶 (3) 星</option>
+                <option value="传说">传说</option>
+                <option value="传说 (1) 星">传说 (1) 星</option>
+                <option value="传说 (2) 星">传说 (2) 星</option>
+                <option value="传说 (3) 星">传说 (3) 星</option>
+                <option value="传说 1 阶">传说 1 阶</option>
+                <option value="传说 1 阶 (1) 星">传说 1 阶 (1) 星</option>
+                <option value="传说 1 阶 (2) 星">传说 1 阶 (2) 星</option>
+                <option value="传说 1 阶 (3) 星">传说 1 阶 (3) 星</option>
+                <option value="传说 2 阶">传说 2 阶</option>
+                <option value="传说 2 阶 (1) 星">传说 2 阶 (1) 星</option>
+                <option value="传说 2 阶 (2) 星">传说 2 阶 (2) 星</option>
+                <option value="传说 2 阶 (3) 星">传说 2 阶 (3) 星</option>
+                <option value="神话">神话</option>
+                <option value="神话 (1) 星">神话 (1) 星</option>
+                <option value="神话 (2) 星">神话 (2) 星</option>
+                <option value="神话 (3) 星">神话 (3) 星</option>
+                <option value="神话 1 阶">神话 1 阶</option>
+                <option value="神话 1 阶 (1) 星">神话 1 阶 (1) 星</option>
+                <option value="神话 1 阶 (2) 星">神话 1 阶 (2) 星</option>
+                <option value="神话 1 阶 (3) 星">神话 1 阶 (3) 星</option>
+                <option value="神话 2 阶">神话 2 阶</option>
+                <option value="神话 2 阶 (1) 星">神话 2 阶 (1) 星</option>
+                <option value="神话 2 阶 (2) 星">神话 2 阶 (2) 星</option>
+                <option value="神话 2 阶 (3) 星">神话 2 阶 (3) 星</option>
+                <option value="神话 3 阶">神话 3 阶</option>
+                <option value="神话 3 阶 (1) 星">神话 3 阶 (1) 星</option>
+                <option value="神话 3 阶 (2) 星">神话 3 阶 (2) 星</option>
+                <option value="神话 3 阶 (3) 星">神话 3 阶 (3) 星</option>
+                <option value="神话 3 阶 3星1段">神话 3 阶 3星1段</option>
+                <option value="神话 3 阶 3星2段">神话 3 阶 3星2段</option>
+                <option value="神话 3 阶 3星3段">神话 3 阶 3星3段</option>
+                <option value="神话 3 阶 3星4段">神话 3 阶 3星4段</option>
+                <option value="神话4阶">神话4阶</option>
+                <option value="神话4阶1段">神话4阶1段</option>
+                <option value="神话4阶2段">神话4阶2段</option>
+                <option value="神话4阶3段">神话4阶3段</option>
+                <option value="神话4阶4段">神话4阶4段</option>
+                <option value="神话4阶1星">神话4阶1星</option>
+                <option value="神话4阶1星1段">神话4阶1星1段</option>
+                <option value="神话4阶1星2段">神话4阶1星2段</option>
+                <option value="神话4阶1星3段">神话4阶1星3段</option>
+                <option value="神话4阶1星4段">神话4阶1星4段</option>
+                <option value="神话4阶2星">神话4阶2星</option>
+                <option value="神话4阶2星1段">神话4阶2星1段</option>
+                <option value="神话4阶2星2段">神话4阶2星2段</option>
+                <option value="神话4阶2星3段">神话4阶2星3段</option>
+                <option value="神话4阶2星4段">神话4阶2星4段</option>
+                <option value="神话4阶3星">神话4阶3星</option>
+            </select>
+        </div>
+        
+        <div class="equipment-item">
+            <label for="ring">指环:</label>
+            <select id="ring">
+                <option value="良好">良好</option>
+                <option value="良好 (1) 星">良好 (1) 星</option>
+                <option value="稀有">稀有</option>
+                <option value="稀有 (1) 星">稀有 (1) 星</option>
+                <option value="稀有 (2) 星">稀有 (2) 星</option>
+                <option value="稀有 (3) 星" selected>稀有 (3) 星</option>
+                <option value="史诗">史诗</option>
+                <option value="史诗 (1) 星">史诗 (1) 星</option>
+                <option value="史诗 (2) 星">史诗 (2) 星</option>
+                <option value="史诗 (3) 星">史诗 (3) 星</option>
+                <option value="史诗 1 阶">史诗 1 阶</option>
+                <option value="史诗 1 阶 (1) 星">史诗 1 阶 (1) 星</option>
+                <option value="史诗 1 阶 (2) 星">史诗 1 阶 (2) 星</option>
+                <option value="史诗 1 阶 (3) 星">史诗 1 阶 (3) 星</option>
+                <option value="传说">传说</option>
+                <option value="传说 (1) 星">传说 (1) 星</option>
+                <option value="传说 (2) 星">传说 (2) 星</option>
+                <option value="传说 (3) 星">传说 (3) 星</option>
+                <option value="传说 1 阶">传说 1 阶</option>
+                <option value="传说 1 阶 (1) 星">传说 1 阶 (1) 星</option>
+                <option value="传说 1 阶 (2) 星">传说 1 阶 (2) 星</option>
+                <option value="传说 1 阶 (3) 星">传说 1 阶 (3) 星</option>
+                <option value="传说 2 阶">传说 2 阶</option>
+                <option value="传说 2 阶 (1) 星">传说 2 阶 (1) 星</option>
+                <option value="传说 2 阶 (2) 星">传说 2 阶 (2) 星</option>
+                <option value="传说 2 阶 (3) 星">传说 2 阶 (3) 星</option>
+                <option value="神话">神话</option>
+                <option value="神话 (1) 星">神话 (1) 星</option>
+                <option value="神话 (2) 星">神话 (2) 星</option>
+                <option value="神话 (3) 星">神话 (3) 星</option>
+                <option value="神话 1 阶">神话 1 阶</option>
+                <option value="神话 1 阶 (1) 星">神话 1 阶 (1) 星</option>
+                <option value="神话 1 阶 (2) 星">神话 1 阶 (2) 星</option>
+                <option value="神话 1 阶 (3) 星">神话 1 阶 (3) 星</option>
+                <option value="神话 2 阶">神话 2 阶</option>
+                <option value="神话 2 阶 (1) 星">神话 2 阶 (1) 星</option>
+                <option value="神话 2 阶 (2) 星">神话 2 阶 (2) 星</option>
+                <option value="神话 2 阶 (3) 星">神话 2 阶 (3) 星</option>
+                <option value="神话 3 阶">神话 3 阶</option>
+                <option value="神话 3 阶 (1) 星">神话 3 阶 (1) 星</option>
+                <option value="神话 3 阶 (2) 星">神话 3 阶 (2) 星</option>
+                <option value="神话 3 阶 (3) 星">神话 3 阶 (3) 星</option>
+                <option value="神话 3 阶 3星1段">神话 3 阶 3星1段</option>
+                <option value="神话 3 阶 3星2段">神话 3 阶 3星2段</option>
+                <option value="神话 3 阶 3星3段">神话 3 阶 3星3段</option>
+                <option value="神话 3 阶 3星4段">神话 3 阶 3星4段</option>
+                <option value="神话4阶">神话4阶</option>
+                <option value="神话4阶1段">神话4阶1段</option>
+                <option value="神话4阶2段">神话4阶2段</option>
+                <option value="神话4阶3段">神话4阶3段</option>
+                <option value="神话4阶4段">神话4阶4段</option>
+                <option value="神话4阶1星">神话4阶1星</option>
+                <option value="神话4阶1星1段">神话4阶1星1段</option>
+                <option value="神话4阶1星2段">神话4阶1星2段</option>
+                <option value="神话4阶1星3段">神话4阶1星3段</option>
+                <option value="神话4阶1星4段">神话4阶1星4段</option>
+                <option value="神话4阶2星">神话4阶2星</option>
+                <option value="神话4阶2星1段">神话4阶2星1段</option>
+                <option value="神话4阶2星2段">神话4阶2星2段</option>
+                <option value="神话4阶2星3段">神话4阶2星3段</option>
+                <option value="神话4阶2星4段">神话4阶2星4段</option>
+                <option value="神话4阶3星">神话4阶3星</option>
+            </select>
+        </div>
+        
+        <div class="equipment-item">
+            <label for="staff">手杖:</label>
+            <select id="staff">
+                <option value="良好">良好</option>
+                <option value="良好 (1) 星">良好 (1) 星</option>
+                <option value="稀有">稀有</option>
+                <option value="稀有 (1) 星">稀有 (1) 星</option>
+                <option value="稀有 (2) 星">稀有 (2) 星</option>
+                <option value="稀有 (3) 星" selected>稀有 (3) 星</option>
+                <option value="史诗">史诗</option>
+                <option value="史诗 (1) 星">史诗 (1) 星</option>
+                <option value="史诗 (2) 星">史诗 (2) 星</option>
+                <option value="史诗 (3) 星">史诗 (3) 星</option>
+                <option value="史诗 1 阶">史诗 1 阶</option>
+                <option value="史诗 1 阶 (1) 星">史诗 1 阶 (1) 星</option>
+                <option value="史诗 1 阶 (2) 星">史诗 1 阶 (2) 星</option>
+                <option value="史诗 1 阶 (3) 星">史诗 1 阶 (3) 星</option>
+                <option value="传说">传说</option>
+                <option value="传说 (1) 星">传说 (1) 星</option>
+                <option value="传说 (2) 星">传说 (2) 星</option>
+                <option value="传说 (3) 星">传说 (3) 星</option>
+                <option value="传说 1 阶">传说 1 阶</option>
+                <option value="传说 1 阶 (1) 星">传说 1 阶 (1) 星</option>
+                <option value="传说 1 阶 (2) 星">传说 1 阶 (2) 星</option>
+                <option value="传说 1 阶 (3) 星">传说 1 阶 (3) 星</option>
+                <option value="传说 2 阶">传说 2 阶</option>
+                <option value="传说 2 阶 (1) 星">传说 2 阶 (1) 星</option>
+                <option value="传说 2 阶 (2) 星">传说 2 阶 (2) 星</option>
+                <option value="传说 2 阶 (3) 星">传说 2 阶 (3) 星</option>
+                <option value="神话">神话</option>
+                <option value="神话 (1) 星">神话 (1) 星</option>
+                <option value="神话 (2) 星">神话 (2) 星</option>
+                <option value="神话 (3) 星">神话 (3) 星</option>
+                <option value="神话 1 阶">神话 1 阶</option>
+                <option value="神话 1 阶 (1) 星">神话 1 阶 (1) 星</option>
+                <option value="神话 1 阶 (2) 星">神话 1 阶 (2) 星</option>
+                <option value="神话 1 阶 (3) 星">神话 1 阶 (3) 星</option>
+                <option value="神话 2 阶">神话 2 阶</option>
+                <option value="神话 2 阶 (1) 星">神话 2 阶 (1) 星</option>
+                <option value="神话 2 阶 (2) 星">神话 2 阶 (2) 星</option>
+                <option value="神话 2 阶 (3) 星">神话 2 阶 (3) 星</option>
+                <option value="神话 3 阶">神话 3 阶</option>
+                <option value="神话 3 阶 (1) 星">神话 3 阶 (1) 星</option>
+                <option value="神话 3 阶 (2) 星">神话 3 阶 (2) 星</option>
+                <option value="神话 3 阶 (3) 星">神话 3 阶 (3) 星</option>
+                <option value="神话 3 阶 3星1段">神话 3 阶 3星1段</option>
+                <option value="神话 3 阶 3星2段">神话 3 阶 3星2段</option>
+                <option value="神话 3 阶 3星3段">神话 3 阶 3星3段</option>
+                <option value="神话 3 阶 3星4段">神话 3 阶 3星4段</option>
+                <option value="神话4阶">神话4阶</option>
+                <option value="神话4阶1段">神话4阶1段</option>
+                <option value="神话4阶2段">神话4阶2段</option>
+                <option value="神话4阶3段">神话4阶3段</option>
+                <option value="神话4阶4段">神话4阶4段</option>
+                <option value="神话4阶1星">神话4阶1星</option>
+                <option value="神话4阶1星1段">神话4阶1星1段</option>
+                <option value="神话4阶1星2段">神话4阶1星2段</option>
+                <option value="神话4阶1星3段">神话4阶1星3段</option>
+                <option value="神话4阶1星4段">神话4阶1星4段</option>
+                <option value="神话4阶2星">神话4阶2星</option>
+                <option value="神话4阶2星1段">神话4阶2星1段</option>
+                <option value="神话4阶2星2段">神话4阶2星2段</option>
+                <option value="神话4阶2星3段">神话4阶2星3段</option>
+                <option value="神话4阶2星4段">神话4阶2星4段</option>
+                <option value="神话4阶3星">神话4阶3星</option>
+            </select>
+        </div>
+        
+        <div class="equipment-item">
+            <label for="hat">帽子:</label>
+            <select id="hat">
+                <option value="良好">良好</option>
+                <option value="良好 (1) 星">良好 (1) 星</option>
+                <option value="稀有">稀有</option>
+                <option value="稀有 (1) 星">稀有 (1) 星</option>
+                <option value="稀有 (2) 星">稀有 (2) 星</option>
+                <option value="稀有 (3) 星" selected>稀有 (3) 星</option>
+                <option value="史诗">史诗</option>
+                <option value="史诗 (1) 星">史诗 (1) 星</option>
+                <option value="史诗 (2) 星">史诗 (2) 星</option>
+                <option value="史诗 (3) 星">史诗 (3) 星</option>
+                <option value="史诗 1 阶">史诗 1 阶</option>
+                <option value="史诗 1 阶 (1) 星">史诗 1 阶 (1) 星</option>
+                <option value="史诗 1 阶 (2) 星">史诗 1 阶 (2) 星</option>
+                <option value="史诗 1 阶 (3) 星">史诗 1 阶 (3) 星</option>
+                <option value="传说">传说</option>
+                <option value="传说 (1) 星">传说 (1) 星</option>
+                <option value="传说 (2) 星">传说 (2) 星</option>
+                <option value="传说 (3) 星">传说 (3) 星</option>
+                <option value="传说 1 阶">传说 1 阶</option>
+                <option value="传说 1 阶 (1) 星">传说 1 阶 (1) 星</option>
+                <option value="传说 1 阶 (2) 星">传说 1 阶 (2) 星</option>
+                <option value="传说 1 阶 (3) 星">传说 1 阶 (3) 星</option>
+                <option value="传说 2 阶">传说 2 阶</option>
+                <option value="传说 2 阶 (1) 星">传说 2 阶 (1) 星</option>
+                <option value="传说 2 阶 (2) 星">传说 2 阶 (2) 星</option>
+                <option value="传说 2 阶 (3) 星">传说 2 阶 (3) 星</option>
+                <option value="神话">神话</option>
+                <option value="神话 (1) 星">神话 (1) 星</option>
+                <option value="神话 (2) 星">神话 (2) 星</option>
+                <option value="神话 (3) 星">神话 (3) 星</option>
+                <option value="神话 1 阶">神话 1 阶</option>
+                <option value="神话 1 阶 (1) 星">神话 1 阶 (1) 星</option>
+                <option value="神话 1 阶 (2) 星">神话 1 阶 (2) 星</option>
+                <option value="神话 1 阶 (3) 星">神话 1 阶 (3) 星</option>
+                <option value="神话 2 阶">神话 2 阶</option>
+                <option value="神话 2 阶 (1) 星">神话 2 阶 (1) 星</option>
+                <option value="神话 2 阶 (2) 星">神话 2 阶 (2) 星</option>
+                <option value="神话 2 阶 (3) 星">神话 2 阶 (3) 星</option>
+                <option value="神话 3 阶">神话 3 阶</option>
+                <option value="神话 3 阶 (1) 星">神话 3 阶 (1) 星</option>
+                <option value="神话 3 阶 (2) 星">神话 3 阶 (2) 星</option>
+                <option value="神话 3 阶 (3) 星">神话 3 阶 (3) 星</option>
+                <option value="神话 3 阶 3星1段">神话 3 阶 3星1段</option>
+                <option value="神话 3 阶 3星2段">神话 3 阶 3星2段</option>
+                <option value="神话 3 阶 3星3段">神话 3 阶 3星3段</option>
+                <option value="神话 3 阶 3星4段">神话 3 阶 3星4段</option>
+                <option value="神话4阶">神话4阶</option>
+                <option value="神话4阶1段">神话4阶1段</option>
+                <option value="神话4阶2段">神话4阶2段</option>
+                <option value="神话4阶3段">神话4阶3段</option>
+                <option value="神话4阶4段">神话4阶4段</option>
+                <option value="神话4阶1星">神话4阶1星</option>
+                <option value="神话4阶1星1段">神话4阶1星1段</option>
+                <option value="神话4阶1星2段">神话4阶1星2段</option>
+                <option value="神话4阶1星3段">神话4阶1星3段</option>
+                <option value="神话4阶1星4段">神话4阶1星4段</option>
+                <option value="神话4阶2星">神话4阶2星</option>
+                <option value="神话4阶2星1段">神话4阶2星1段</option>
+                <option value="神话4阶2星2段">神话4阶2星2段</option>
+                <option value="神话4阶2星3段">神话4阶2星3段</option>
+                <option value="神话4阶2星4段">神话4阶2星4段</option>
+                <option value="神话4阶3星">神话4阶3星</option>
+            </select>
+        </div>
+        
+        <div class="equipment-item">
+            <label for="watch">怀表:</label>
+            <select id="watch">
+                <option value="良好">良好</option>
+                <option value="良好 (1) 星">良好 (1) 星</option>
+                <option value="稀有">稀有</option>
+                <option value="稀有 (1) 星">稀有 (1) 星</option>
+                <option value="稀有 (2) 星">稀有 (2) 星</option>
+                <option value="稀有 (3) 星" selected>稀有 (3) 星</option>
+                <option value="史诗">史诗</option>
+                <option value="史诗 (1) 星">史诗 (1) 星</option>
+                <option value="史诗 (2) 星">史诗 (2) 星</option>
+                <option value="史诗 (3) 星">史诗 (3) 星</option>
+                <option value="史诗 1 阶">史诗 1 阶</option>
+                <option value="史诗 1 阶 (1) 星">史诗 1 阶 (1) 星</option>
+                <option value="史诗 1 阶 (2) 星">史诗 1 阶 (2) 星</option>
+                <option value="史诗 1 阶 (3) 星">史诗 1 阶 (3) 星</option>
+                <option value="传说">传说</option>
+                <option value="传说 (1) 星">传说 (1) 星</option>
+                <option value="传说 (2) 星">传说 (2) 星</option>
+                <option value="传说 (3) 星">传说 (3) 星</option>
+                <option value="传说 1 阶">传说 1 阶</option>
+                <option value="传说 1 阶 (1) 星">传说 1 阶 (1) 星</option>
+                <option value="传说 1 阶 (2) 星">传说 1 阶 (2) 星</option>
+                <option value="传说 1 阶 (3) 星">传说 1 阶 (3) 星</option>
+                <option value="传说 2 阶">传说 2 阶</option>
+                <option value="传说 2 阶 (1) 星">传说 2 阶 (1) 星</option>
+                <option value="传说 2 阶 (2) 星">传说 2 阶 (2) 星</option>
+                <option value="传说 2 阶 (3) 星">传说 2 阶 (3) 星</option>
+                <option value="神话">神话</option>
+                <option value="神话 (1) 星">神话 (1) 星</option>
+                <option value="神话 (2) 星">神话 (2) 星</option>
+                <option value="神话 (3) 星">神话 (3) 星</option>
+                <option value="神话 1 阶">神话 1 阶</option>
+                <option value="神话 1 阶 (1) 星">神话 1 阶 (1) 星</option>
+                <option value="神话 1 阶 (2) 星">神话 1 阶 (2) 星</option>
+                <option value="神话 1 阶 (3) 星">神话 1 阶 (3) 星</option>
+                <option value="神话 2 阶">神话 2 阶</option>
+                <option value="神话 2 阶 (1) 星">神话 2 阶 (1) 星</option>
+                <option value="神话 2 阶 (2) 星">神话 2 阶 (2) 星</option>
+                <option value="神话 2 阶 (3) 星">神话 2 阶 (3) 星</option>
+                <option value="神话 3 阶">神话 3 阶</option>
+                <option value="神话 3 阶 (1) 星">神话 3 阶 (1) 星</option>
+                <option value="神话 3 阶 (2) 星">神话 3 阶 (2) 星</option>
+                <option value="神话 3 阶 (3) 星">神话 3 阶 (3) 星</option>
+                <option value="神话 3 阶 3星1段">神话 3 阶 3星1段</option>
+                <option value="神话 3 阶 3星2段">神话 3 阶 3星2段</option>
+                <option value="神话 3 阶 3星3段">神话 3 阶 3星3段</option>
+                <option value="神话 3 阶 3星4段">神话 3 阶 3星4段</option>
+                <option value="神话4阶">神话4阶</option>
+                <option value="神话4阶1段">神话4阶1段</option>
+                <option value="神话4阶2段">神话4阶2段</option>
+                <option value="神话4阶3段">神话4阶3段</option>
+                <option value="神话4阶4段">神话4阶4段</option>
+                <option value="神话4阶1星">神话4阶1星</option>
+                <option value="神话4阶1星1段">神话4阶1星1段</option>
+                <option value="神话4阶1星2段">神话4阶1星2段</option>
+                <option value="神话4阶1星3段">神话4阶1星3段</option>
+                <option value="神话4阶1星4段">神话4阶1星4段</option>
+                <option value="神话4阶2星">神话4阶2星</option>
+                <option value="神话4阶2星1段">神话4阶2星1段</option>
+                <option value="神话4阶2星2段">神话4阶2星2段</option>
+                <option value="神话4阶2星3段">神话4阶2星3段</option>
+                <option value="神话4阶2星4段">神话4阶2星4段</option>
+                <option value="神话4阶3星">神话4阶3星</option>
+            </select>
+        </div>
+    </div>
+
+
+        <div class="button-container">
+            <button id="calculate-btn" onclick="calculateBestUpgrade()">计算最优升级方案</button>
+            <button id="accept-btn" onclick="acceptUpgrade()">接受强化建议</button>
+            <button id="auto-btn" onclick="startAutoUpgrade()">请计算后续升级过程</button>
+            <button id="stop-btn" onclick="stopAutoUpgrade()">停止自动升级</button>
+            <button id="reset-btn" onclick="resetEquipment()">重置装备等级</button>
+        </div>
+        
+        <div id="status" class="status-info"></div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 装备数据
+      const equipmentData = {
+            "良好": { price: 4.5, clothes: 0.10285, pants: 0.10285, ring: 0.10285, staff: 0.10285, hat: 0.0561, watch: 0.0561, threeSet: 0.026, sixSet: 0.03 },
+            "良好 (1) 星": { price: 16.2, clothes: 0.14025, pants: 0.14025, ring: 0.14025, staff: 0.14025, hat: 0.0765, watch: 0.0765, threeSet: 0.0325, sixSet: 0.0375 },
+            "稀有": { price: 37.2, clothes: 0.187, pants: 0.187, ring: 0.187, staff: 0.187, hat: 0.102, watch: 0.102, threeSet: 0.039, sixSet: 0.045 },
+            "稀有 (1) 星": { price: 66, clothes: 0.23375, pants: 0.23375, ring: 0.23375, staff: 0.23375, hat: 0.1275, watch: 0.1275, threeSet: 0.0455, sixSet: 0.0525 },
+            "稀有 (2) 星": { price: 99.75, clothes: 0.2805, pants: 0.2805, ring: 0.2805, staff: 0.2805, hat: 0.153, watch: 0.153, threeSet: 0.052, sixSet: 0.06 },
+            "稀有 (3) 星": { price: 137.25, clothes: 0.32725, pants: 0.32725, ring: 0.32725, staff: 0.32725, hat: 0.1785, watch: 0.1785, threeSet: 0.0585, sixSet: 0.0675 },
+            "史诗": { price: 182.25, clothes: 0.374, pants: 0.374, ring: 0.374, staff: 0.374, hat: 0.204, watch: 0.204, threeSet: 0.065, sixSet: 0.075 },
+            "史诗 (1) 星": { price: 234.75, clothes: 0.40579, pants: 0.40579, ring: 0.40579, staff: 0.40579, hat: 0.22134, watch: 0.22134, threeSet: 0.065, sixSet: 0.075 },
+            "史诗 (2) 星": { price: 284.25, clothes: 0.43758, pants: 0.43758, ring: 0.43758, staff: 0.43758, hat: 0.23868, watch: 0.23868, threeSet: 0.065, sixSet: 0.075 },
+            "史诗 (3) 星": { price: 345.75, clothes: 0.46937, pants: 0.46937, ring: 0.46937, staff: 0.46937, hat: 0.25602, watch: 0.25602, threeSet: 0.065, sixSet: 0.075 },
+            "史诗 1 阶": { price: 420, clothes: 0.50116, pants: 0.50116, ring: 0.50116, staff: 0.50116, hat: 0.27336, watch: 0.27336, threeSet: 0.078, sixSet: 0.09 },
+            "史诗 1 阶 (1) 星": { price: 505.5, clothes: 0.53295, pants: 0.53295, ring: 0.53295, staff: 0.53295, hat: 0.2907, watch: 0.2907, threeSet: 0.078, sixSet: 0.09 },
+            "史诗 1 阶 (2) 星": { price: 608.25, clothes: 0.56474, pants: 0.56474, ring: 0.56474, staff: 0.56474, hat: 0.30804, watch: 0.30804, threeSet: 0.078, sixSet: 0.09 },
+            "史诗 1 阶 (3) 星": { price: 729.75, clothes: 0.59653, pants: 0.59653, ring: 0.59653, staff: 0.59653, hat: 0.32538, watch: 0.32538, threeSet: 0.078, sixSet: 0.09 },
+            "传说": { price: 825.75, clothes: 0.62458, pants: 0.62458, ring: 0.62458, staff: 0.62458, hat: 0.34068, watch: 0.34068, threeSet: 0.091, sixSet: 0.105 },
+            "传说 (1) 星": { price: 924.75, clothes: 0.65263, pants: 0.65263, ring: 0.65263, staff: 0.65263, hat: 0.35598, watch: 0.35598, threeSet: 0.091, sixSet: 0.105 },
+            "传说 (2) 星": { price: 1033.5, clothes: 0.68068, pants: 0.68068, ring: 0.68068, staff: 0.68068, hat: 0.37128, watch: 0.37128, threeSet: 0.091, sixSet: 0.105 },
+            "传说 (3) 星": { price: 1145.25, clothes: 0.70873, pants: 0.70873, ring: 0.70873, staff: 0.70873, hat: 0.38658, watch: 0.38658, threeSet: 0.091, sixSet: 0.105 },
+            "传说 1 阶": { price: 1263, clothes: 0.73678, pants: 0.73678, ring: 0.73678, staff: 0.73678, hat: 0.40188, watch: 0.40188, threeSet: 0.104, sixSet: 0.12 },
+            "传说 1 阶 (1) 星": { price: 1388.25, clothes: 0.76483, pants: 0.76483, ring: 0.76483, staff: 0.76483, hat: 0.41718, watch: 0.41718, threeSet: 0.104, sixSet: 0.12 },
+            "传说 1 阶 (2) 星": { price: 1525.5, clothes: 0.79288, pants: 0.79288, ring: 0.79288, staff: 0.79288, hat: 0.43248, watch: 0.43248, threeSet: 0.104, sixSet: 0.12 },
+            "传说 1 阶 (3) 星": { price: 1670.25, clothes: 0.82093, pants: 0.82093, ring: 0.82093, staff: 0.82093, hat: 0.44778, watch: 0.44778, threeSet: 0.104, sixSet: 0.12 },
+            "传说 2 阶": { price: 1822.5, clothes: 0.84898, pants: 0.84898, ring: 0.84898, staff: 0.84898, hat: 0.46308, watch: 0.46308, threeSet: 0.117, sixSet: 0.135 },
+            "传说 2 阶 (1) 星": { price: 2007.75, clothes: 0.87703, pants: 0.87703, ring: 0.87703, staff: 0.87703, hat: 0.47838, watch: 0.47838, threeSet: 0.117, sixSet: 0.135 },
+            "传说 2 阶 (2) 星": { price: 2204.25, clothes: 0.90508, pants: 0.90508, ring: 0.90508, staff: 0.90508, hat: 0.49368, watch: 0.49368, threeSet: 0.117, sixSet: 0.135 },
+            "传说 2 阶 (3) 星": { price: 2415, clothes: 0.935, pants: 0.935, ring: 0.935, staff: 0.935, hat: 0.51, watch: 0.51, threeSet: 0.117, sixSet: 0.135 },
+            "神话": { price: 2708.25, clothes: 0.98175, pants: 0.98175, ring: 0.98175, staff: 0.98175, hat: 0.5355, watch: 0.5355, threeSet: 0.13, sixSet: 0.15 },
+            "神话 (1) 星": { price: 3012.75, clothes: 1.0285, pants: 1.0285, ring: 1.0285, staff: 1.0285, hat: 0.561, watch: 0.561, threeSet: 0.13, sixSet: 0.15 },
+            "神话 (2) 星": { price: 3328.5, clothes: 1.07525, pants: 1.07525, ring: 1.07525, staff: 1.07525, hat: 0.5865, watch: 0.5865, threeSet: 0.13, sixSet: 0.15 },
+            "神话 (3) 星": { price: 3655.5, clothes: 1.122, pants: 1.122, ring: 1.122, staff: 1.122, hat: 0.612, watch: 0.612, threeSet: 0.13, sixSet: 0.15 },
+            "神话 1 阶": { price: 4039.5, clothes: 1.16875, pants: 1.16875, ring: 1.16875, staff: 1.16875, hat: 0.6375, watch: 0.6375, threeSet: 0.143, sixSet: 0.165 },
+            "神话 1 阶 (1) 星": { price: 4434.75, clothes: 1.2155, pants: 1.2155, ring: 1.2155, staff: 1.2155, hat: 0.663, watch: 0.663, threeSet: 0.143, sixSet: 0.165 },
+            "神话 1 阶 (2) 星": { price: 4841.25, clothes: 1.26225, pants: 1.26225, ring: 1.26225, staff: 1.26225, hat: 0.6885, watch: 0.6885, threeSet: 0.143, sixSet: 0.165 },
+            "神话 1 阶 (3) 星": { price: 5259, clothes: 1.309, pants: 1.309, ring: 1.309, staff: 1.309, hat: 0.714, watch: 0.714, threeSet: 0.143, sixSet: 0.165 },
+            "神话 2 阶": { price: 5733.75, clothes: 1.35575, pants: 1.35575, ring: 1.35575, staff: 1.35575, hat: 0.7395, watch: 0.7395, threeSet: 0.156, sixSet: 0.18 },
+            "神话 2 阶 (1) 星": { price: 6219.75, clothes: 1.4025, pants: 1.4025, ring: 1.4025, staff: 1.4025, hat: 0.765, watch: 0.765, threeSet: 0.156, sixSet: 0.18 },
+            "神话 2 阶 (2) 星": { price: 6717, clothes: 1.44925, pants: 1.44925, ring: 1.44925, staff: 1.44925, hat: 0.7905, watch: 0.7905, threeSet: 0.156, sixSet: 0.18 },
+            "神话 2 阶 (3) 星": { price: 7225.5, clothes: 1.496, pants: 1.496, ring: 1.496, staff: 1.496, hat: 0.816, watch: 0.816, threeSet: 0.156, sixSet: 0.18 },
+            "神话 3 阶": { price: 7791, clothes: 1.54275, pants: 1.54275, ring: 1.54275, staff: 1.54275, hat: 0.8415, watch: 0.8415, threeSet: 0.169, sixSet: 0.195 },
+            "神话 3 阶 (1) 星": { price: 8370.75, clothes: 1.5895, pants: 1.5895, ring: 1.5895, staff: 1.5895, hat: 0.867, watch: 0.867, threeSet: 0.169, sixSet: 0.195 },
+            "神话 3 阶 (2) 星": { price: 8964.75, clothes: 1.63625, pants: 1.63625, ring: 1.63625, staff: 1.63625, hat: 0.8925, watch: 0.8925, threeSet: 0.169, sixSet: 0.195 },
+            "神话 3 阶 (3) 星": { price: 9576.75, clothes: 1.683, pants: 1.683, ring: 1.683, staff: 1.683, hat: 0.918, watch: 0.918, threeSet: 0.169, sixSet: 0.195 },
+            "神话 3 阶 3星1段": { price: 9755.25, clothes: 1.7017, pants: 1.7017, ring: 1.7017, staff: 1.7017, hat: 0.9282, watch: 0.9282, threeSet: 0.182, sixSet: 0.21 },
+            "神话 3 阶 3星2段": { price: 9933.75, clothes: 1.7204, pants: 1.7204, ring: 1.7204, staff: 1.7204, hat: 0.9384, watch: 0.9384, threeSet: 0.182, sixSet: 0.21 },
+            "神话 3 阶 3星3段": { price: 10112.25, clothes: 1.7391, pants: 1.7391, ring: 1.7391, staff: 1.7391, hat: 0.9486, watch: 0.9486, threeSet: 0.182, sixSet: 0.21 },
+            "神话 3 阶 3星4段": { price: 10290.75, clothes: 1.7578, pants: 1.7578, ring: 1.7578, staff: 1.7578, hat: 0.9588, watch: 0.9588, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶": { price: 10469.25, clothes: 1.7765, pants: 1.7765, ring: 1.7765, staff: 1.7765, hat: 0.969, watch: 0.969, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶1段": { price: 10662, clothes: 1.7952, pants: 1.7952, ring: 1.7952, staff: 1.7952, hat: 0.9792, watch: 0.9792, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶2段": { price: 10854.75, clothes: 1.8139, pants: 1.8139, ring: 1.8139, staff: 1.8139, hat: 0.9894, watch: 0.9894, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶3段": { price: 11047.5, clothes: 1.8326, pants: 1.8326, ring: 1.8326, staff: 1.8326, hat: 0.9996, watch: 0.9996, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶4段": { price: 11240.25, clothes: 1.8513, pants: 1.8513, ring: 1.8513, staff: 1.8513, hat: 1.0098, watch: 1.0098, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶1星": { price: 11433, clothes: 1.87, pants: 1.87, ring: 1.87, staff: 1.87, hat: 1.02, watch: 1.02, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶1星1段": { price: 11640, clothes: 1.8887, pants: 1.8887, ring: 1.8887, staff: 1.8887, hat: 1.0302, watch: 1.0302, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶1星2段": { price: 11847, clothes: 1.9074, pants: 1.9074, ring: 1.9074, staff: 1.9074, hat: 1.0404, watch: 1.0404, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶1星3段": { price: 12054, clothes: 1.9261, pants: 1.9261, ring: 1.9261, staff: 1.9261, hat: 1.0506, watch: 1.0506, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶1星4段": { price: 12261, clothes: 1.9448, pants: 1.9448, ring: 1.9448, staff: 1.9448, hat: 1.0608, watch: 1.0608, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶2星": { price: 12468, clothes: 1.9635, pants: 1.9635, ring: 1.9635, staff: 1.9635, hat: 1.071, watch: 1.071, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶2星1段": { price: 12690, clothes: 1.9822, pants: 1.9822, ring: 1.9822, staff: 1.9822, hat: 1.0812, watch: 1.0812, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶2星2段": { price: 12912, clothes: 2.0009, pants: 2.0009, ring: 2.0009, staff: 2.0009, hat: 1.0914, watch: 1.0914, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶2星3段": { price: 13134, clothes: 2.0196, pants: 2.0196, ring: 2.0196, staff: 2.0196, hat: 1.1016, watch: 1.1016, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶2星4段": { price: 13356, clothes: 2.0383, pants: 2.0383, ring: 2.0383, staff: 2.0383, hat: 1.1118, watch: 1.1118, threeSet: 0.182, sixSet: 0.21 },
+            "神话4阶3星": { price: 13578, clothes: 2.057, pants: 2.057, ring: 2.057, staff: 2.057, hat: 1.122, watch: 1.122, threeSet: 0.182, sixSet: 0.21 }
+        };
+
+
+
+        // 全局变量
+        let currentBestOption = null;
+        let autoUpgradeInterval = null;
+        let isAutoUpgrading = false;
+
+        // 获取装备的下一个等级
+        function getNextLevel(currentLevel) {
+            const levels = Object.keys(equipmentData);
+            const currentIndex = levels.indexOf(currentLevel);
+            if (currentIndex === -1 || currentIndex === levels.length - 1) {
+                return null;
+            }
+            return levels[currentIndex + 1];
+        }
+
+        // 计算当前总属性值
+        function calculateTotalStats(levels) {
+            let minLevel = levels[0];
+            let stats = 0;
+            
+            // 计算基础属性
+            for (let i = 0; i < levels.length; i++) {
+                const level = levels[i];
+                const equipment = equipmentData[level];
+                
+                if (i === 0) stats += equipment.clothes;
+                else if (i === 1) stats += equipment.pants;
+                else if (i === 2) stats += equipment.ring;
+                else if (i === 3) stats += equipment.staff;
+                else if (i === 4) stats += equipment.hat;
+                else if (i === 5) stats += equipment.watch;
+                
+                // 找出最小等级
+                const levelPrice = equipment.price;
+                const minLevelPrice = equipmentData[minLevel].price;
+                if (levelPrice < minLevelPrice) {
+                    minLevel = level;
+                }
+            }
+            
+            // 计算六件套属性
+            stats += equipmentData[minLevel].sixSet;
+            
+            // 计算三件套属性
+            const sortedLevels = [...levels].sort((a, b) => equipmentData[b].price - equipmentData[a].price);
+            const top3MinLevel = sortedLevels[2];
+            stats += equipmentData[top3MinLevel].threeSet;
+            
+            return stats;
+        }
+
+        // 高亮显示变化的装备
+        function highlightEquipment(index) {
+            const equipmentElements = [
+                document.getElementById('clothes'),
+                document.getElementById('pants'),
+                document.getElementById('ring'),
+                document.getElementById('staff'),
+                document.getElementById('hat'),
+                document.getElementById('watch')
+            ];
+            
+            const equipmentItems = document.querySelectorAll('.equipment-item');
+            const selectElement = equipmentElements[index];
+            const itemElement = equipmentItems[index];
+            
+            // 添加高亮类
+            selectElement.classList.add('highlight');
+            itemElement.classList.add('highlight');
+            
+            // 1秒后移除高亮类
+            setTimeout(() => {
+                selectElement.classList.remove('highlight');
+                itemElement.classList.remove('highlight');
+            }, 1000);
+        }
+
+        // 接受强化建议
+        function acceptUpgrade() {
+            if (!currentBestOption) {
+                alert('请先计算最优升级方案！');
+                return;
+            }
+            
+            const equipmentIndex = ['衣服', '裤子', '指环', '手杖', '帽子', '怀表'].indexOf(currentBestOption.equipment);
+            const equipmentElements = [
+                document.getElementById('clothes'),
+                document.getElementById('pants'),
+                document.getElementById('ring'),
+                document.getElementById('staff'),
+                document.getElementById('hat'),
+                document.getElementById('watch')
+            ];
+            
+            // 更新装备等级
+            equipmentElements[equipmentIndex].value = currentBestOption.nextLevel;
+            
+            // 更新颜色
+            updateSelectColor(equipmentElements[equipmentIndex]);
+            
+            // 保存状态
+            saveEquipmentState();
+            
+            // 高亮显示更新的装备
+            highlightEquipment(equipmentIndex);
+            
+            // 重新计算最优方案
+            calculateBestUpgrade();
+        }
+
+        // 开始自动升级
+        function startAutoUpgrade() {
+            if (isAutoUpgrading) return;
+            
+            isAutoUpgrading = true;
+            document.getElementById('auto-btn').style.display = 'none';
+            document.getElementById('stop-btn').style.display = 'block';
+            
+            const statusElement = document.getElementById('status');
+            statusElement.style.display = 'block';
+            statusElement.textContent = '自动升级中...';
+            
+            // 先计算一次
+            calculateBestUpgrade();
+            
+            // 设置定时器
+            autoUpgradeInterval = setInterval(() => {
+                if (!currentBestOption || currentBestOption.nextLevel === '无法升级') {
+                    stopAutoUpgrade();
+                    statusElement.textContent = '自动升级完成！所有装备已升至最高等级。';
+                    return;
+                }
+                
+                acceptUpgrade();
+            }, 1000);
+        }
+
+        // 停止自动升级
+        function stopAutoUpgrade() {
+            if (autoUpgradeInterval) {
+                clearInterval(autoUpgradeInterval);
+                autoUpgradeInterval = null;
+            }
+            
+            isAutoUpgrading = false;
+            document.getElementById('auto-btn').style.display = 'block';
+            document.getElementById('stop-btn').style.display = 'none';
+            
+            const statusElement = document.getElementById('status');
+            statusElement.textContent = '自动升级已停止。';
+        }
+
+        // 根据装备等级确定稀有度类
+        function getRarityClass(level) {
+            if (level.includes('神话')) return 'rarity-mythical';
+            if (level.includes('传说')) return 'rarity-legendary';
+            if (level.includes('史诗')) return 'rarity-epic';
+            if (level.includes('稀有')) return 'rarity-rare';
+            if (level.includes('良好')) return 'rarity-common';
+            return '';
+        }
+
+        // 更新单个选择的颜色
+        function updateSelectColor(selectElement) {
+            // 移除所有稀有度类
+            selectElement.classList.remove('rarity-common', 'rarity-rare', 'rarity-epic', 'rarity-legendary', 'rarity-mythical');
+            
+            // 添加适当的稀有度类
+            const rarityClass = getRarityClass(selectElement.value);
+            if (rarityClass) {
+                selectElement.classList.add(rarityClass);
+            }
+        }
+
+        // 保存装备状态到localStorage
+        function saveEquipmentState() {
+            const equipmentElements = [
+                document.getElementById('clothes'),
+                document.getElementById('pants'),
+                document.getElementById('ring'),
+                document.getElementById('staff'),
+                document.getElementById('hat'),
+                document.getElementById('watch')
+            ];
+            
+            const equipmentState = {};
+            equipmentElements.forEach((element, index) => {
+                equipmentState[`equipment_${index}`] = element.value;
+            });
+            
+            localStorage.setItem('equipmentState', JSON.stringify(equipmentState));
+        }
+
+        // 从localStorage加载装备状态
+        function loadEquipmentState() {
+            const savedState = localStorage.getItem('equipmentState');
+            if (savedState) {
+                const equipmentState = JSON.parse(savedState);
+                const equipmentElements = [
+                    document.getElementById('clothes'),
+                    document.getElementById('pants'),
+                    document.getElementById('ring'),
+                    document.getElementById('staff'),
+                    document.getElementById('hat'),
+                    document.getElementById('watch')
+                ];
+                
+                equipmentElements.forEach((element, index) => {
+                    const savedValue = equipmentState[`equipment_${index}`];
+                    if (savedValue && element.querySelector(`option[value="${savedValue}"]`)) {
+                        element.value = savedValue;
+                        updateSelectColor(element);
+                    }
+                });
+            }
+        }
+
+        // 重置装备到最低等级
+        function resetEquipment() {
+            const equipmentElements = [
+                document.getElementById('clothes'),
+                document.getElementById('pants'),
+                document.getElementById('ring'),
+                document.getElementById('staff'),
+                document.getElementById('hat'),
+                document.getElementById('watch')
+            ];
+            
+            equipmentElements.forEach(element => {
+                element.value = '良好';
+                updateSelectColor(element);
+            });
+            
+            // 保存状态
+            saveEquipmentState();
+            
+            // 重新计算
+            calculateBestUpgrade();
+            
+            // 显示提示
+            const statusElement = document.getElementById('status');
+            statusElement.style.display = 'block';
+            statusElement.textContent = '已重置所有装备到最低等级。';
+            
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 3000);
+        }
+
+        // 计算最优升级方案
+        function calculateBestUpgrade() {
+            const equipmentElements = [
+                document.getElementById('clothes'),
+                document.getElementById('pants'),
+                document.getElementById('ring'),
+                document.getElementById('staff'),
+                document.getElementById('hat'),
+                document.getElementById('watch')
+            ];
+            
+            const currentLevels = equipmentElements.map(el => el.value);
+            const currentStats = calculateTotalStats(currentLevels);
+            
+            let bestOption = null;
+            let bestValue = 0;
+            const options = [];
+            
+            // 检查每件装备是否可以升级
+            for (let i = 0; i < equipmentElements.length; i++) {
+                const currentLevel = currentLevels[i];
+                const nextLevel = getNextLevel(currentLevel);
+                
+                if (!nextLevel) {
+                    options.push({
+                        equipment: ['衣服', '裤子', '指环', '手杖', '帽子', '怀表'][i],
+                        currentLevel,
+                        nextLevel: '无法升级',
+                        value: 0,
+                        costIncrease: 0
+                    });
+                    continue;
+                }
+                
+                // 计算升级后的属性
+                const newLevels = [...currentLevels];
+                newLevels[i] = nextLevel;
+                const newStats = calculateTotalStats(newLevels);
+                
+                // 计算属性增加值
+                const statsIncrease = newStats - currentStats;
+                
+                // 计算价格增加值
+                const currentPrice = equipmentData[currentLevel].price;
+                const nextPrice = equipmentData[nextLevel].price;
+                const costIncrease = nextPrice - currentPrice;
+                
+                // 计算性价比
+                const value = statsIncrease / costIncrease;
+                
+                options.push({
+                    equipment: ['衣服', '裤子', '指环', '手杖', '帽子', '怀表'][i],
+                    currentLevel,
+                    nextLevel,
+                    value,
+                    costIncrease,
+                    statsIncrease
+                });
+                
+                // 更新最优选项
+                if (value > bestValue) {
+                    bestValue = value;
+                    bestOption = options[options.length - 1];
+                }
+            }
+            
+            // 保存当前最优选项到全局变量
+            currentBestOption = bestOption;
+            
+            // 显示结果
+            let resultHTML = '<h2>升级选项分析</h2><ul>';
+            
+            options.forEach(option => {
+                if (option.nextLevel === '无法升级') {
+                    resultHTML += `<li>${option.equipment}: 当前等级 ${option.currentLevel}，无法继续升级</li>`;
+                } else {
+                    const isBest = option === bestOption ? 'class="best-option"' : '';
+                    resultHTML += `<li ${isBest}>${option.equipment}: 从 ${option.currentLevel} 升级到 ${option.nextLevel}，`;
+                    resultHTML += `属性增加 ${option.statsIncrease.toFixed(6)}，花费 ${option.costIncrease}，`;
+                    resultHTML += `性价比 = ${option.value.toFixed(6)}</li>`;
+                }
+            });
+            
+            resultHTML += '</ul>';
+            
+            if (bestOption) {
+                resultHTML += `<p class="best-option">最优升级方案: 升级 ${bestOption.equipment} 到 ${bestOption.nextLevel}，性价比 = ${bestOption.value.toFixed(6)}</p>`;
+            } else {
+                resultHTML += `<p>所有装备均已达到最高等级，无法继续升级。</p>`;
+            }
+            
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+
+        // 初始化页面
+        window.onload = function() {
+            // 加载保存的状态
+            loadEquipmentState();
+            
+            // 为所有选择框添加change事件监听器
+            const equipmentElements = [
+                document.getElementById('clothes'),
+                document.getElementById('pants'),
+                document.getElementById('ring'),
+                document.getElementById('staff'),
+                document.getElementById('hat'),
+                document.getElementById('watch')
+            ];
+            
+            equipmentElements.forEach(element => {
+                element.addEventListener('change', function() {
+                    updateSelectColor(this);
+                    saveEquipmentState();
+                });
+            });
+            
+            // 初始计算
+            calculateBestUpgrade();
+        };
+    </script>
+</body>
+</html>

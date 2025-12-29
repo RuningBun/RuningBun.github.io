@@ -1,0 +1,2015 @@
+---
+layout: post
+title: "【无尽冬日】战争学院科技树"
+categories: 无尽冬日
+tags: 无尽冬日
+---
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战争学院科技树</title>
+    <style>
+        /* Fully scoped styles for #wjdr to prevent cross-page CSS leakage */
+        #wjdr * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        #wjdr {
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        #wjdr .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        #wjdr h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+
+        #wjdr .controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        #wjdr .control-btn {
+            padding: 10px 20px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        #wjdr .reset-btn {
+            background-color: #d9534f;
+        }
+
+        #wjdr .reset-btn:hover {
+            background-color: #c9302c;
+        }
+
+        #wjdr .simplify-btn {
+            background-color: #5cb85c;
+        }
+
+        #wjdr .simplify-btn:hover {
+            background-color: #4cae4c;
+        }
+
+        #wjdr .calculate-btn {
+            background-color: #337ab7;
+        }
+
+        #wjdr .calculate-btn:hover {
+            background-color: #286090;
+        }
+
+        #wjdr .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+        }
+
+        #wjdr .tab {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #e6e6e6;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            transition: background-color 0.3s;
+        }
+
+        #wjdr .tab.active {
+            background-color: #555;
+            color: #ffcc00;
+        }
+
+        #wjdr .tab:hover {
+            background-color: #444;
+        }
+
+        #wjdr .war-academy-container {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #wjdr .war-academy-node {
+            background: linear-gradient(145deg, #2a2a3e, #1e1e2e);
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            position: relative;
+            z-index: 10;
+        }
+
+        #wjdr .war-academy-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            border-color: #ffcc00;
+        }
+
+        #wjdr .war-academy-node.active {
+            border-color: #ff9900;
+            background: linear-gradient(145deg, #3a3a4e, #2a2a3e);
+        }
+
+        #wjdr .tech-tree-container {
+            position: relative;
+            min-height: 600px;
+            margin-bottom: 30px;
+        }
+
+        #wjdr .tech-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        #wjdr .tech-node {
+            background: linear-gradient(145deg, #2a2a3e, #1e1e2e);
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            width: 220px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+            position: relative;
+            z-index: 10;
+        }
+
+        #wjdr .tech-node:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            border-color: #ffcc00;
+        }
+
+        #wjdr .tech-node.active {
+            border-color: #ff9900;
+            background: linear-gradient(145deg, #3a3a4e, #2a2a3e);
+        }
+
+        #wjdr .tech-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #ffcc00;
+        }
+
+        #wjdr .tech-level {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #wjdr .level-btn {
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #wjdr .level-btn:hover {
+            background-color: #555;
+        }
+
+        #wjdr .level-btn:disabled {
+            background-color: #333;
+            color: #777;
+            cursor: not-allowed;
+        }
+
+        #wjdr .level-display {
+            margin: 0 10px;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        #wjdr .cost-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        #wjdr .cost-label {
+            color: #aaa;
+        }
+
+        #wjdr .cost-value {
+            font-weight: bold;
+        }
+
+        #wjdr .gain {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+            font-size: 14px;
+            color: #66cc66;
+        }
+
+        #wjdr .prerequisites {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #cc9966;
+        }
+
+        #wjdr .connections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #wjdr .connection {
+            position: absolute;
+            background-color: #ffcc00;
+            height: 2px;
+            transform-origin: 0 0;
+        }
+        
+        #wjdr .stats-panel {
+            background: linear-gradient(145deg, #2a2a3e, #1e1e2e);
+            border: 2px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        #wjdr .stats-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ffcc00;
+            text-align: center;
+        }
+        
+        #wjdr .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        #wjdr .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        #wjdr .stat-label {
+            color: #aaa;
+        }
+        
+        #wjdr .stat-value {
+            font-weight: bold;
+        }
+        
+        #wjdr .troop-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        #wjdr .troop-stat-group {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        #wjdr .troop-stat-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ffcc00;
+            text-align: center;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+        }
+        
+        #wjdr .troop-stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        #wjdr .total-cost {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #444;
+        }
+        
+        #wjdr .total-cost-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        #wjdr .total-cost-label {
+            color: #ff9966;
+        }
+        
+        #wjdr .total-cost-value {
+            font-weight: bold;
+            color: #ff9966;
+        }
+        
+        #wjdr .notes {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid #ffcc00;
+        }
+        
+        #wjdr .notes-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+        
+        #wjdr .note-item {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        /* 弹窗样式 */
+        #wjdr .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #wjdr .modal-content {
+            background: linear-gradient(145deg, #2a2a3e, #1e1e2e);
+            border: 2px solid #ffcc00;
+            border-radius: 8px;
+            padding: 20px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        #wjdr .modal-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #ffcc00;
+            text-align: center;
+        }
+        
+        #wjdr .prereq-list {
+            margin-bottom: 20px;
+        }
+        
+        #wjdr .prereq-item {
+            padding: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        
+        #wjdr .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        #wjdr .modal-btn {
+            padding: 10px 20px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        #wjdr .modal-btn.confirm {
+            background-color: #4CAF50;
+        }
+        
+        #wjdr .modal-btn.cancel {
+            background-color: #f44336;
+        }
+        
+        #wjdr .modal-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div id="wjdr">
+    <div class="container">
+        <h1>战争学院科技树</h1>
+        
+        <div class="controls">
+            <button class="control-btn reset-btn" id="reset-btn">重置所有科技</button>
+            <button class="control-btn simplify-btn" id="simplify-btn">简化显示</button>
+            <button class="control-btn calculate-btn" id="calculate-btn">测算火晶需求</button>
+        </div>
+        
+        <!-- 战争学院独立节点 -->
+        <div class="war-academy-container">
+            <div class="war-academy-node" id="war-academy-node">
+                <div class="tech-name">战争学院</div>
+                <div class="tech-level">
+                    <button class="level-btn" id="war-decrease-btn">-</button>
+                    <span class="level-display" id="war-level-display">0/5</span>
+                    <button class="level-btn" id="war-increase-btn">+</button>
+                </div>
+                <div id="war-academy-costs"></div>
+                <div id="war-academy-gains"></div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" data-type="shield">盾兵科技</button>
+            <button class="tab" data-type="archer">射手科技</button>
+            <button class="tab" data-type="spear">矛兵科技</button>
+        </div>
+        
+        <div class="tech-tree-container" id="tech-tree">
+            <!-- 科技树将通过JavaScript动态生成 -->
+        </div>
+        
+        <div class="stats-panel">
+            <div class="stats-title">资源消耗与增益统计</div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">总肉消耗:</span>
+                    <span class="stat-value" id="total-meat">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总木消耗:</span>
+                    <span class="stat-value" id="total-wood">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总煤消耗:</span>
+                    <span class="stat-value" id="total-coal">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总铁消耗:</span>
+                    <span class="stat-value" id="total-iron">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总火晶颗粒消耗:</span>
+                    <span class="stat-value" id="total-crystal">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总火晶消耗:</span>
+                    <span class="stat-value" id="total-fire-crystal">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总钢材消耗:</span>
+                    <span class="stat-value" id="total-steel">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">总火晶需求:</span>
+                    <span class="stat-value" id="total-fire-crystal-need">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">预估月数:</span>
+                    <span class="stat-value" id="estimate-months">0</span>
+                </div>
+            </div>
+            
+            <div class="troop-stats">
+                <div class="troop-stat-group">
+                    <div class="troop-stat-title">盾兵增益</div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">穿透力:</span>
+                        <span class="stat-value" id="gain-shield-penetration">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">生命值:</span>
+                        <span class="stat-value" id="gain-shield-hp">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">攻击力:</span>
+                        <span class="stat-value" id="gain-shield-attack">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">防御力:</span>
+                        <span class="stat-value" id="gain-shield-defense">0%</span>
+                    </div>
+                </div>
+                
+                <div class="troop-stat-group">
+                    <div class="troop-stat-title">射手增益</div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">穿透力:</span>
+                        <span class="stat-value" id="gain-archer-penetration">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">生命值:</span>
+                        <span class="stat-value" id="gain-archer-hp">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">攻击力:</span>
+                        <span class="stat-value" id="gain-archer-attack">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">防御力:</span>
+                        <span class="stat-value" id="gain-archer-defense">0%</span>
+                    </div>
+                </div>
+                
+                <div class="troop-stat-group">
+                    <div class="troop-stat-title">矛兵增益</div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">穿透力:</span>
+                        <span class="stat-value" id="gain-spear-penetration">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">生命值:</span>
+                        <span class="stat-value" id="gain-spear-hp">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">攻击力:</span>
+                        <span class="stat-value" id="gain-spear-attack">0%</span>
+                    </div>
+                    <div class="troop-stat-item">
+                        <span class="stat-label">防御力:</span>
+                        <span class="stat-value" id="gain-spear-defense">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="total-cost">
+                <div class="total-cost-item">
+                    <span class="total-cost-label">出征容量增益:</span>
+                    <span class="total-cost-value" id="gain-deploy">0</span>
+                </div>
+                <div class="total-cost-item">
+                    <span class="total-cost-label">集结容量增益:</span>
+                    <span class="total-cost-value" id="gain-rally">0</span>
+                </div>
+            </div>
+            
+            <div class="notes">
+                <div class="notes-title">推荐策略</div>
+                <div class="note-item">零微氪车身：先火5（2-3月），然后一路T11（6个月），然后再慢慢拉火八，推荐优先打熊做射手。</div>
+                <div class="note-item">中氪车身：战争学院开启后默认已火5，火八开启前拉一路T11即可，推荐兼顾打架做盾兵。火八开启后，每月3500，2个月到火八。</div>
+                <div class="note-item">大氪车头：战争学院开启后，拉3路T11，火八开启后，花10000元左右3周可到火八。</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="modal" id="prereq-modal">
+        <div class="modal-content">
+            <div class="modal-title" id="modal-title">前置科技</div>
+            <div class="prereq-list" id="prereq-list">
+                <!-- 前置科技列表 -->
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" id="confirm-upgrade">确认升级</button>
+                <button class="modal-btn cancel" id="cancel-upgrade">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 战争学院数据
+        const warAcademyTech = {
+            id: 'war_academy',
+            name: '战争学院',
+            levels: 5,
+            costs: [
+                [0, 0, 0, 0, 0, 0, 0], // 1级无需消耗 [肉,木,煤,铁,火晶颗粒,火晶,钢材]
+                [158400000, 158400000, 31680000, 7920000, 0, 355, 0], // 2级总消耗
+                [171600000, 171600000, 34760000, 8360000, 0, 535, 0], // 3级总消耗
+                [180400000, 180400000, 36080000, 8800000, 0, 630, 0], // 4级总消耗
+                [184800000, 184800000, 36080000, 9240000, 0, 750, 0]  // 5级总消耗
+            ],
+            gains: ['战争学院1级', '战争学院2级', '战争学院3级', '战争学院4级', '战争学院5级']
+        };
+
+        // 科技数据矩阵
+        const techData = {
+            shield: [
+                // 烈焰战队（盾）
+                {id: 'flame_team_shield', name: '烈焰战队（盾）', levels: 5, 
+                 costs: [
+                     [300000, 300000, 60000, 15000, 16, 0, 5000],
+                     [480000, 480000, 96000, 24000, 25, 0, 8000],
+                     [780000, 780000, 150000, 39000, 41, 0, 13000],
+                     [1200000, 1200000, 250000, 64000, 68, 0, 21000],
+                     [2000000, 2000000, 400000, 100000, 108, 0, 33000]
+                 ],
+                 gains: ['出征容量+200', '出征容量+200', '出征容量+200', '出征容量+200', '出征容量+200'],
+                 prerequisites: [],
+                 row: 1
+                },
+                // 怒焰猛击
+                {id: 'fury_strike', name: '怒焰猛击', levels: 8,
+                 costs: [
+                     [800000, 800000, 160000, 40000, 40, 0, 10000],
+                     [1100000, 1100000, 220000, 56000, 56, 0, 14000],
+                     [1400000, 1400000, 290000, 74000, 74, 0, 18000],
+                     [2000000, 2000000, 400000, 100000, 102, 0, 25000],
+                     [2700000, 2700000, 540000, 130000, 136, 0, 34000],
+                     [3600000, 3600000, 730000, 180000, 184, 0, 46000],
+                     [4900000, 4900000, 990000, 240000, 248, 0, 62000],
+                     [6600000, 6600000, 1300000, 330000, 334, 0, 83000]
+                 ],
+                 gains: ['盾兵穿透力+1.5%', '盾兵穿透力+1.5%', '盾兵穿透力+1.5%', '盾兵穿透力+1.5%', '盾兵穿透力+1.5%', '盾兵穿透力+1.5%', '盾兵穿透力+1.5%', '盾兵穿透力+1.5%'],
+                 prerequisites: [
+                     {tech: 'flame_team_shield', level: 3, warAcademy: 1},
+                     {tech: 'flame_team_shield', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_shield', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_shield', level: 4, warAcademy: 2},
+                     {tech: 'flame_team_shield', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_shield', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_shield', level: 5, warAcademy: 4},
+                     {tech: 'flame_team_shield', level: 5, warAcademy: 5}
+                 ],
+                 row: 2
+                },
+                // 怒焰坚盾
+                {id: 'fury_shield', name: '怒焰坚盾', levels: 8,
+                 costs: [
+                     [800000, 800000, 160000, 40000, 40, 0, 10000],
+                     [1100000, 1100000, 220000, 56000, 56, 0, 14000],
+                     [1400000, 1400000, 290000, 74000, 74, 0, 18000],
+                     [2000000, 2000000, 400000, 100000, 102, 0, 25000],
+                     [2700000, 2700000, 540000, 130000, 136, 0, 34000],
+                     [3600000, 3600000, 730000, 180000, 184, 0, 46000],
+                     [4900000, 4900000, 990000, 240000, 248, 0, 62000],
+                     [6600000, 6600000, 1300000, 330000, 334, 0, 83000]
+                 ],
+                 gains: ['盾兵生命值+1.5%', '盾兵生命值+1.5%', '盾兵生命值+1.5%', '盾兵生命值+1.5%', '盾兵生命值+1.5%', '盾兵生命值+1.5%', '盾兵生命值+1.5%', '盾兵生命值+1.5%'],
+                 prerequisites: [
+                     {tech: 'flame_team_shield', level: 3, warAcademy: 1},
+                     {tech: 'flame_team_shield', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_shield', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_shield', level: 4, warAcademy: 2},
+                     {tech: 'flame_team_shield', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_shield', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_shield', level: 5, warAcademy: 4},
+                     {tech: 'flame_team_shield', level: 5, warAcademy: 5}
+                 ],
+                 row: 2
+                },
+                // 怒焰战斧
+                {id: 'fury_axe', name: '怒焰战斧', levels: 12,
+                 costs: [
+                     [700000, 700000, 140000, 35000, 54, 0, 15000],
+                     [860000, 860000, 170000, 43000, 66, 0, 18000],
+                     [1000000, 1000000, 210000, 52000, 81, 0, 22000],
+                     [1200000, 1200000, 250000, 63000, 97, 0, 27000],
+                     [1500000, 1500000, 300000, 77000, 118, 0, 33000],
+                     [1800000, 1800000, 370000, 94000, 145, 0, 40000],
+                     [2300000, 2300000, 460000, 110000, 178, 0, 49000],
+                     [2800000, 2800000, 560000, 140000, 216, 0, 60000],
+                     [3500000, 3500000, 700000, 170000, 270, 0, 75000],
+                     [4200000, 4200000, 840000, 210000, 324, 0, 90000],
+                     [5000000, 5000000, 1000000, 250000, 388, 0, 100000],
+                     [6200000, 6200000, 1200000, 310000, 480, 0, 130000]
+                 ],
+                 gains: ['盾兵攻击力+2%', '盾兵攻击力+2%', '盾兵攻击力+2%', '盾兵攻击力+2.5%', '盾兵攻击力+2.5%', '盾兵攻击力+3%', '盾兵攻击力+3%', '盾兵攻击力+3%', '盾兵攻击力+5%', '盾兵攻击力+5%', '盾兵攻击力+5%', '盾兵攻击力+5%'],
+                 prerequisites: [
+                     {tech: 'fury_strike', level: 6, warAcademy: 3},
+                     {tech: 'fury_strike', level: 6, warAcademy: 3},
+                     {tech: 'fury_strike', level: 6, warAcademy: 4},
+                     {tech: 'fury_strike', level: 6, warAcademy: 4},
+                     {tech: 'fury_strike', level: 6, warAcademy: 4},
+                     {tech: 'fury_strike', level: 6, warAcademy: 4},
+                     {tech: 'fury_strike', level: 7, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, warAcademy: 5}
+                 ],
+                 row: 3
+                },
+                // 怒焰护盾
+                {id: 'fury_protection', name: '怒焰护盾', levels: 12,
+                 costs: [
+                     [700000, 700000, 140000, 35000, 54, 0, 15000],
+                     [860000, 860000, 170000, 43000, 66, 0, 18000],
+                     [1000000, 1000000, 210000, 52000, 81, 0, 22000],
+                     [1200000, 1200000, 250000, 63000, 97, 0, 27000],
+                     [1500000, 1500000, 300000, 77000, 118, 0, 33000],
+                     [1800000, 1800000, 370000, 94000, 145, 0, 40000],
+                     [2300000, 2300000, 460000, 110000, 178, 0, 49000],
+                     [2800000, 2800000, 560000, 140000, 216, 0, 60000],
+                     [3500000, 3500000, 700000, 170000, 270, 0, 75000],
+                     [4200000, 4200000, 840000, 210000, 324, 0, 90000],
+                     [5000000, 5000000, 1000000, 250000, 388, 0, 100000],
+                     [6200000, 6200000, 1200000, 310000, 480, 0, 130000]
+                 ],
+                 gains: ['盾兵防御力+2%', '盾兵防御力+2%', '盾兵防御力+2%', '盾兵防御力+2.5%', '盾兵防御力+2.5%', '盾兵防御力+3%', '盾兵防御力+3%', '盾兵防御力+3%', '盾兵防御力+5%', '盾兵防御力+5%', '盾兵防御力+5%', '盾兵防御力+5%'],
+                 prerequisites: [
+                     {tech: 'fury_shield', level: 6, warAcademy: 3},
+                     {tech: 'fury_shield', level: 6, warAcademy: 3},
+                     {tech: 'fury_shield', level: 6, warAcademy: 4},
+                     {tech: 'fury_shield', level: 6, warAcademy: 4},
+                     {tech: 'fury_shield', level: 6, warAcademy: 4},
+                     {tech: 'fury_shield', level: 6, warAcademy: 4},
+                     {tech: 'fury_shield', level: 7, warAcademy: 5},
+                     {tech: 'fury_shield', level: 8, warAcademy: 5},
+                     {tech: 'fury_shield', level: 8, warAcademy: 5},
+                     {tech: 'fury_shield', level: 8, warAcademy: 5},
+                     {tech: 'fury_shield', level: 8, warAcademy: 5},
+                     {tech: 'fury_shield', level: 8, warAcademy: 5}
+                 ],
+                 row: 3
+                },
+                // 烈焰军团（盾）- 单独一行
+                {id: 'flame_legion_shield', name: '烈焰军团（盾）', levels: 12,
+                 costs: [
+                     [1000000, 1000000, 210000, 54000, 83, 0, 23000],
+                     [1300000, 1300000, 260000, 66000, 102, 0, 28000],
+                     [1600000, 1600000, 320000, 81000, 125, 0, 34000],
+                     [1900000, 1900000, 390000, 97000, 150, 0, 41000],
+                     [2300000, 2300000, 470000, 110000, 184, 0, 51000],
+                     [2900000, 2900000, 580000, 140000, 225, 0, 62000],
+                     [3500000, 3500000, 710000, 170000, 276, 0, 76000],
+                     [4300000, 4300000, 860000, 210000, 334, 0, 83000],
+                     [5400000, 5400000, 1000000, 270000, 418, 0, 110000],
+                     [6500000, 6500000, 1300000, 320000, 502, 0, 130000],
+                     [7800000, 7800000, 1500000, 390000, 602, 0, 160000],
+                     [9600000, 9600000, 1900000, 480000, 744, 0, 200000]
+                 ],
+                 gains: ['集结容量+1500', '集结容量+1500', '集结容量+2000', '集结容量+2000', '集结容量+2500', '集结容量+2500', '集结容量+2500', '集结容量+3000', '集结容量+3500', '集结容量+4000', '集结容量+4000', '集结容量+4500'],
+                 prerequisites: [
+                     {tech: 'fury_strike', level: 6, tech2: 'fury_shield', level2: 6, warAcademy: 4},
+                     {tech: 'fury_strike', level: 6, tech2: 'fury_shield', level2: 6, warAcademy: 4},
+                     {tech: 'fury_strike', level: 6, tech2: 'fury_shield', level2: 6, warAcademy: 4},
+                     {tech: 'fury_strike', level: 6, tech2: 'fury_shield', level2: 6, warAcademy: 5},
+                     {tech: 'fury_strike', level: 6, tech2: 'fury_shield', level2: 6, warAcademy: 5},
+                     {tech: 'fury_strike', level: 6, tech2: 'fury_shield', level2: 6, warAcademy: 5},
+                     {tech: 'fury_strike', level: 7, tech2: 'fury_shield', level2: 7, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, tech2: 'fury_shield', level2: 8, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, tech2: 'fury_shield', level2: 8, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, tech2: 'fury_shield', level2: 8, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, tech2: 'fury_shield', level2: 8, warAcademy: 5},
+                     {tech: 'fury_strike', level: 8, tech2: 'fury_shield', level2: 8, warAcademy: 5}
+                 ],
+                 row: 4
+                },
+                // 烈日盾兵
+                {id: 'sun_shield', name: '烈日盾兵', levels: 1,
+                 costs: [[85000000, 85000000, 17000000, 4200000, 2236, 0, 1000000]],
+                 gains: ['解锁11级盾兵'],
+                 prerequisites: [
+                     {tech: 'fury_axe', level: 12, tech2: 'fury_protection', level2: 12, tech3: 'flame_legion_shield', level3: 12, warAcademy: 5}
+                 ],
+                 row: 5
+                }
+            ],
+            archer: [
+                // 烈焰战队（射）
+                {id: 'flame_team_archer', name: '烈焰战队（射）', levels: 5, 
+                 costs: [
+                     [300000, 300000, 60000, 15000, 16, 0, 5000],
+                     [480000, 480000, 96000, 24000, 25, 0, 8000],
+                     [780000, 780000, 150000, 39000, 41, 0, 13000],
+                     [1200000, 1200000, 250000, 64000, 68, 0, 21000],
+                     [2000000, 2000000, 400000, 100000, 108, 0, 33000]
+                 ],
+                 gains: ['出征容量+200', '出征容量+200', '出征容量+200', '出征容量+200', '出征容量+200'],
+                 prerequisites: [],
+                 row: 1
+                },
+                // 燃晶视界
+                {id: 'crystal_vision', name: '燃晶视界', levels: 8,
+                 costs: [
+                     [800000, 800000, 160000, 40000, 40, 0, 10000],
+                     [1100000, 1100000, 220000, 56000, 56, 0, 14000],
+                     [1400000, 1400000, 290000, 74000, 74, 0, 18000],
+                     [2000000, 2000000, 400000, 100000, 102, 0, 25000],
+                     [2700000, 2700000, 540000, 130000, 136, 0, 34000],
+                     [3600000, 3600000, 730000, 180000, 184, 0, 46000],
+                     [4900000, 4900000, 990000, 240000, 248, 0, 62000],
+                     [6600000, 6600000, 1300000, 330000, 334, 0, 83000]
+                 ],
+                 gains: ['射手穿透力+1.5%', '射手穿透力+1.5%', '射手穿透力+1.5%', '射手穿透力+1.5%', '射手穿透力+1.5%', '射手穿透力+1.5%', '射手穿透力+1.5%', '射手穿透力+1.5%'],
+                 prerequisites: [
+                     {tech: 'flame_team_archer', level: 3, warAcademy: 1},
+                     {tech: 'flame_team_archer', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_archer', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_archer', level: 4, warAcademy: 2},
+                     {tech: 'flame_team_archer', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_archer', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_archer', level: 5, warAcademy: 4},
+                     {tech: 'flame_team_archer', level: 5, warAcademy: 5}
+                 ],
+                 row: 2
+                },
+                // 燃晶鳞甲
+                {id: 'crystal_scale', name: '燃晶鳞甲', levels: 8,
+                 costs: [
+                     [800000, 800000, 160000, 40000, 40, 0, 10000],
+                     [1100000, 1100000, 220000, 56000, 56, 0, 14000],
+                     [1400000, 1400000, 290000, 74000, 74, 0, 18000],
+                     [2000000, 2000000, 400000, 100000, 102, 0, 25000],
+                     [2700000, 2700000, 540000, 130000, 136, 0, 34000],
+                     [3600000, 3600000, 730000, 180000, 184, 0, 46000],
+                     [4900000, 4900000, 990000, 240000, 248, 0, 62000],
+                     [6600000, 6600000, 1300000, 330000, 334, 0, 83000]
+                 ],
+                 gains: ['射手生命值+1.5%', '射手生命值+1.5%', '射手生命值+1.5%', '射手生命值+1.5%', '射手生命值+1.5%', '射手生命值+1.5%', '射手生命值+1.5%', '射手生命值+1.5%'],
+                 prerequisites: [
+                     {tech: 'flame_team_archer', level: 3, warAcademy: 1},
+                     {tech: 'flame_team_archer', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_archer', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_archer', level: 4, warAcademy: 2},
+                     {tech: 'flame_team_archer', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_archer', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_archer', level: 5, warAcademy: 4},
+                     {tech: 'flame_team_archer', level: 5, warAcademy: 5}
+                 ],
+                 row: 2
+                },
+                // 燃晶矢石
+                {id: 'crystal_arrow', name: '燃晶矢石', levels: 12,
+                 costs: [
+                     [700000, 700000, 140000, 35000, 54, 0, 15000],
+                     [860000, 860000, 170000, 43000, 66, 0, 18000],
+                     [1000000, 1000000, 210000, 52000, 81, 0, 22000],
+                     [1200000, 1200000, 250000, 63000, 97, 0, 27000],
+                     [1500000, 1500000, 300000, 77000, 118, 0, 33000],
+                     [1800000, 1800000, 370000, 94000, 145, 0, 40000],
+                     [2300000, 2300000, 460000, 110000, 178, 0, 49000],
+                     [2800000, 2800000, 560000, 140000, 216, 0, 60000],
+                     [3500000, 3500000, 700000, 170000, 270, 0, 75000],
+                     [4200000, 4200000, 840000, 210000, 324, 0, 90000],
+                     [5000000, 5000000, 1000000, 250000, 388, 0, 100000],
+                     [6200000, 6200000, 1200000, 310000, 480, 0, 130000]
+                 ],
+                 gains: ['射手攻击力+2%', '射手攻击力+2%', '射手攻击力+2%', '射手攻击力+2.5%', '射手攻击力+2.5%', '射手攻击力+3%', '射手攻击力+3%', '射手攻击力+3%', '射手攻击力+5%', '射手攻击力+5%', '射手攻击力+5%', '射手攻击力+5%'],
+                 prerequisites: [
+                     {tech: 'crystal_vision', level: 6, warAcademy: 3},
+                     {tech: 'crystal_vision', level: 6, warAcademy: 3},
+                     {tech: 'crystal_vision', level: 6, warAcademy: 4},
+                     {tech: 'crystal_vision', level: 6, warAcademy: 4},
+                     {tech: 'crystal_vision', level: 6, warAcademy: 4},
+                     {tech: 'crystal_vision', level: 6, warAcademy: 4},
+                     {tech: 'crystal_vision', level: 7, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, warAcademy: 5}
+                 ],
+                 row: 3
+                },
+                // 燃晶庇佑
+                {id: 'crystal_protection', name: '燃晶庇佑', levels: 12,
+                 costs: [
+                     [700000, 700000, 140000, 35000, 54, 0, 15000],
+                     [860000, 860000, 170000, 43000, 66, 0, 18000],
+                     [1000000, 1000000, 210000, 52000, 81, 0, 22000],
+                     [1200000, 1200000, 250000, 63000, 97, 0, 27000],
+                     [1500000, 1500000, 300000, 77000, 118, 0, 33000],
+                     [1800000, 1800000, 370000, 94000, 145, 0, 40000],
+                     [2300000, 2300000, 460000, 110000, 178, 0, 49000],
+                     [2800000, 2800000, 560000, 140000, 216, 0, 60000],
+                     [3500000, 3500000, 700000, 170000, 270, 0, 75000],
+                     [4200000, 4200000, 840000, 210000, 324, 0, 90000],
+                     [5000000, 5000000, 1000000, 250000, 388, 0, 100000],
+                     [6200000, 6200000, 1200000, 310000, 480, 0, 130000]
+                 ],
+                 gains: ['射手防御力+2%', '射手防御力+2%', '射手防御力+2%', '射手防御力+2.5%', '射手防御力+2.5%', '射手防御力+3%', '射手防御力+3%', '射手防御力+3%', '射手防御力+5%', '射手防御力+5%', '射手防御力+5%', '射手防御力+5%'],
+                 prerequisites: [
+                     {tech: 'crystal_scale', level: 6, warAcademy: 3},
+                     {tech: 'crystal_scale', level: 6, warAcademy: 3},
+                     {tech: 'crystal_scale', level: 6, warAcademy: 4},
+                     {tech: 'crystal_scale', level: 6, warAcademy: 4},
+                     {tech: 'crystal_scale', level: 6, warAcademy: 4},
+                     {tech: 'crystal_scale', level: 6, warAcademy: 4},
+                     {tech: 'crystal_scale', level: 7, warAcademy: 5},
+                     {tech: 'crystal_scale', level: 8, warAcademy: 5},
+                     {tech: 'crystal_scale', level: 8, warAcademy: 5},
+                     {tech: 'crystal_scale', level: 8, warAcademy: 5},
+                     {tech: 'crystal_scale', level: 8, warAcademy: 5},
+                     {tech: 'crystal_scale', level: 8, warAcademy: 5}
+                 ],
+                 row: 3
+                },
+                // 烈焰军团（射）- 单独一行
+                {id: 'flame_legion_archer', name: '烈焰军团（射）', levels: 12,
+                 costs: [
+                     [1000000, 1000000, 210000, 54000, 83, 0, 23000],
+                     [1300000, 1300000, 260000, 66000, 102, 0, 28000],
+                     [1600000, 1600000, 320000, 81000, 125, 0, 34000],
+                     [1900000, 1900000, 390000, 97000, 150, 0, 41000],
+                     [2300000, 2300000, 470000, 110000, 184, 0, 51000],
+                     [2900000, 2900000, 580000, 140000, 225, 0, 62000],
+                     [3500000, 3500000, 710000, 170000, 276, 0, 76000],
+                     [4300000, 4300000, 860000, 210000, 334, 0, 83000],
+                     [5400000, 5400000, 1000000, 270000, 418, 0, 110000],
+                     [6500000, 6500000, 1300000, 320000, 502, 0, 130000],
+                     [7800000, 7800000, 1500000, 390000, 602, 0, 160000],
+                     [9600000, 9600000, 1900000, 480000, 744, 0, 200000]
+                 ],
+                 gains: ['集结容量+1500', '集结容量+1500', '集结容量+2000', '集结容量+2000', '集结容量+2500', '集结容量+2500', '集结容量+2500', '集结容量+3000', '集结容量+3500', '集结容量+4000', '集结容量+4000', '集结容量+4500'],
+                 prerequisites: [
+                     {tech: 'crystal_vision', level: 6, tech2: 'crystal_scale', level2: 6, warAcademy: 4},
+                     {tech: 'crystal_vision', level: 6, tech2: 'crystal_scale', level2: 6, warAcademy: 4},
+                     {tech: 'crystal_vision', level: 6, tech2: 'crystal_scale', level2: 6, warAcademy: 4},
+                     {tech: 'crystal_vision', level: 6, tech2: 'crystal_scale', level2: 6, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 6, tech2: 'crystal_scale', level2: 6, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 6, tech2: 'crystal_scale', level2: 6, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 7, tech2: 'crystal_scale', level2: 7, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, tech2: 'crystal_scale', level2: 8, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, tech2: 'crystal_scale', level2: 8, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, tech2: 'crystal_scale', level2: 8, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, tech2: 'crystal_scale', level2: 8, warAcademy: 5},
+                     {tech: 'crystal_vision', level: 8, tech2: 'crystal_scale', level2: 8, warAcademy: 5}
+                 ],
+                 row: 4
+                },
+                // 烈日射兵
+                {id: 'sun_archer', name: '烈日射兵', levels: 1,
+                 costs: [[85000000, 85000000, 17000000, 4200000, 2236, 0, 1000000]],
+                 gains: ['解锁11级射手'],
+                 prerequisites: [
+                     {tech: 'crystal_arrow', level: 12, tech2: 'crystal_protection', level2: 12, tech3: 'flame_legion_archer', level3: 12, warAcademy: 5}
+                 ],
+                 row: 5
+                }
+            ],
+            spear: [
+                // 烈焰战队（矛）
+                {id: 'flame_team_spear', name: '烈焰战队（矛）', levels: 5, 
+                 costs: [
+                     [300000, 300000, 60000, 15000, 16, 0, 5000],
+                     [480000, 480000, 96000, 24000, 25, 0, 8000],
+                     [780000, 780000, 150000, 39000, 41, 0, 13000],
+                     [1200000, 1200000, 250000, 64000, 68, 0, 21000],
+                     [2000000, 2000000, 400000, 100000, 108, 0, 33000]
+                 ],
+                 gains: ['出征容量+200', '出征容量+200', '出征容量+200', '出征容量+200', '出征容量+200'],
+                 prerequisites: [],
+                 row: 1
+                },
+                // 炽烈冲锋
+                {id: 'blaze_charge', name: '炽烈冲锋', levels: 8,
+                 costs: [
+                     [800000, 800000, 160000, 40000, 40, 0, 10000],
+                     [1100000, 1100000, 220000, 56000, 56, 0, 14000],
+                     [1400000, 1400000, 290000, 74000, 74, 0, 18000],
+                     [2000000, 2000000, 400000, 100000, 102, 0, 25000],
+                     [2700000, 2700000, 540000, 130000, 136, 0, 34000],
+                     [3600000, 3600000, 730000, 180000, 184, 0, 46000],
+                     [4900000, 4900000, 990000, 240000, 248, 0, 62000],
+                     [6600000, 6600000, 1300000, 330000, 334, 0, 83000]
+                 ],
+                 gains: ['矛兵穿透力+1.5%', '矛兵穿透力+1.5%', '矛兵穿透力+1.5%', '矛兵穿透力+1.5%', '矛兵穿透力+1.5%', '矛兵穿透力+1.5%', '矛兵穿透力+1.5%', '矛兵穿透力+1.5%'],
+                 prerequisites: [
+                     {tech: 'flame_team_spear', level: 3, warAcademy: 1},
+                     {tech: 'flame_team_spear', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_spear', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_spear', level: 4, warAcademy: 2},
+                     {tech: 'flame_team_spear', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_spear', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_spear', level: 5, warAcademy: 4},
+                     {tech: 'flame_team_spear', level: 5, warAcademy: 5}
+                 ],
+                 row: 2
+                },
+                // 炽烈护甲
+                {id: 'blaze_armor', name: '炽烈护甲', levels: 8,
+                 costs: [
+                     [800000, 800000, 160000, 40000, 40, 0, 10000],
+                     [1100000, 1100000, 220000, 56000, 56, 0, 14000],
+                     [1400000, 1400000, 290000, 74000, 74, 0, 18000],
+                     [2000000, 2000000, 400000, 100000, 102, 0, 25000],
+                     [2700000, 2700000, 540000, 130000, 136, 0, 34000],
+                     [3600000, 3600000, 730000, 180000, 184, 0, 46000],
+                     [4900000, 4900000, 990000, 240000, 248, 0, 62000],
+                     [6600000, 6600000, 1300000, 330000, 334, 0, 83000]
+                 ],
+                 gains: ['矛兵生命值+1.5%', '矛兵生命值+1.5%', '矛兵生命值+1.5%', '矛兵生命值+1.5%', '矛兵生命值+1.5%', '矛兵生命值+1.5%', '矛兵生命值+1.5%', '矛兵生命值+1.5%'],
+                 prerequisites: [
+                     {tech: 'flame_team_spear', level: 3, warAcademy: 1},
+                     {tech: 'flame_team_spear', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_spear', level: 3, warAcademy: 2},
+                     {tech: 'flame_team_spear', level: 4, warAcademy: 2},
+                     {tech: 'flame_team_spear', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_spear', level: 5, warAcademy: 3},
+                     {tech: 'flame_team_spear', level: 5, warAcademy: 4},
+                     {tech: 'flame_team_spear', level: 5, warAcademy: 5}
+                 ],
+                 row: 2
+                },
+                // 炽烈战矛
+                {id: 'blaze_spear', name: '炽烈战矛', levels: 12,
+                 costs: [
+                     [700000, 700000, 140000, 35000, 54, 0, 15000],
+                     [860000, 860000, 170000, 43000, 66, 0, 18000],
+                     [1000000, 1000000, 210000, 52000, 81, 0, 22000],
+                     [1200000, 1200000, 250000, 63000, 97, 0, 27000],
+                     [1500000, 1500000, 300000, 77000, 118, 0, 33000],
+                     [1800000, 1800000, 370000, 94000, 145, 0, 40000],
+                     [2300000, 2300000, 460000, 110000, 178, 0, 49000],
+                     [2800000, 2800000, 560000, 140000, 216, 0, 60000],
+                     [3500000, 3500000, 700000, 170000, 270, 0, 75000],
+                     [4200000, 4200000, 840000, 210000, 324, 0, 90000],
+                     [5000000, 5000000, 1000000, 250000, 388, 0, 100000],
+                     [6200000, 6200000, 1200000, 310000, 480, 0, 130000]
+                 ],
+                 gains: ['矛兵攻击力+2%', '矛兵攻击力+2%', '矛兵攻击力+2%', '矛兵攻击力+2.5%', '矛兵攻击力+2.5%', '矛兵攻击力+3%', '矛兵攻击力+3%', '矛兵攻击力+3%', '矛兵攻击力+5%', '矛兵攻击力+5%', '矛兵攻击力+5%', '矛兵攻击力+5%'],
+                 prerequisites: [
+                     {tech: 'blaze_charge', level: 6, warAcademy: 3},
+                     {tech: 'blaze_charge', level: 6, warAcademy: 3},
+                     {tech: 'blaze_charge', level: 6, warAcademy: 4},
+                     {tech: 'blaze_charge', level: 6, warAcademy: 4},
+                     {tech: 'blaze_charge', level: 6, warAcademy: 4},
+                     {tech: 'blaze_charge', level: 6, warAcademy: 4},
+                     {tech: 'blaze_charge', level: 7, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, warAcademy: 5}
+                 ],
+                 row: 3
+                },
+                // 炽烈守护
+                {id: 'blaze_guard', name: '炽烈守护', levels: 12,
+                 costs: [
+                     [700000, 700000, 140000, 35000, 54, 0, 15000],
+                     [860000, 860000, 170000, 43000, 66, 0, 18000],
+                     [1000000, 1000000, 210000, 52000, 81, 0, 22000],
+                     [1200000, 1200000, 250000, 63000, 97, 0, 27000],
+                     [1500000, 1500000, 300000, 77000, 118, 0, 33000],
+                     [1800000, 1800000, 370000, 94000, 145, 0, 40000],
+                     [2300000, 2300000, 460000, 110000, 178, 0, 49000],
+                     [2800000, 2800000, 560000, 140000, 216, 0, 60000],
+                     [3500000, 3500000, 700000, 170000, 270, 0, 75000],
+                     [4200000, 4200000, 840000, 210000, 324, 0, 90000],
+                     [5000000, 5000000, 1000000, 250000, 388, 0, 100000],
+                     [6200000, 6200000, 1200000, 310000, 480, 0, 130000]
+                 ],
+                 gains: ['矛兵防御力+2%', '矛兵防御力+2%', '矛兵防御力+2%', '矛兵防御力+2.5%', '矛兵防御力+2.5%', '矛兵防御力+3%', '矛兵防御力+3%', '矛兵防御力+3%', '矛兵防御力+5%', '矛兵防御力+5%', '矛兵防御力+5%', '矛兵防御力+5%'],
+                 prerequisites: [
+                     {tech: 'blaze_armor', level: 6, warAcademy: 3},
+                     {tech: 'blaze_armor', level: 6, warAcademy: 3},
+                     {tech: 'blaze_armor', level: 6, warAcademy: 4},
+                     {tech: 'blaze_armor', level: 6, warAcademy: 4},
+                     {tech: 'blaze_armor', level: 6, warAcademy: 4},
+                     {tech: 'blaze_armor', level: 6, warAcademy: 4},
+                     {tech: 'blaze_armor', level: 7, warAcademy: 5},
+                     {tech: 'blaze_armor', level: 8, warAcademy: 5},
+                     {tech: 'blaze_armor', level: 8, warAcademy: 5},
+                     {tech: 'blaze_armor', level: 8, warAcademy: 5},
+                     {tech: 'blaze_armor', level: 8, warAcademy: 5},
+                     {tech: 'blaze_armor', level: 8, warAcademy: 5}
+                 ],
+                 row: 3
+                },
+                // 烈焰军团（矛）- 单独一行
+                {id: 'flame_legion_spear', name: '烈焰军团（矛）', levels: 12,
+                 costs: [
+                     [1000000, 1000000, 210000, 54000, 83, 0, 23000],
+                     [1300000, 1300000, 260000, 66000, 102, 0, 28000],
+                     [1600000, 1600000, 320000, 81000, 125, 0, 34000],
+                     [1900000, 1900000, 390000, 97000, 150, 0, 41000],
+                     [2300000, 2300000, 470000, 110000, 184, 0, 51000],
+                     [2900000, 2900000, 580000, 140000, 225, 0, 62000],
+                     [3500000, 3500000, 710000, 170000, 276, 0, 76000],
+                     [4300000, 4300000, 860000, 210000, 334, 0, 83000],
+                     [5400000, 5400000, 1000000, 270000, 418, 0, 110000],
+                     [6500000, 6500000, 1300000, 320000, 502, 0, 130000],
+                     [7800000, 7800000, 1500000, 390000, 602, 0, 160000],
+                     [9600000, 9600000, 1900000, 480000, 744, 0, 200000]
+                 ],
+                 gains: ['集结容量+1500', '集结容量+1500', '集结容量+2000', '集结容量+2000', '集结容量+2500', '集结容量+2500', '集结容量+2500', '集结容量+3000', '集结容量+3500', '集结容量+4000', '集结容量+4000', '集结容量+4500'],
+                 prerequisites: [
+                     {tech: 'blaze_charge', level: 6, tech2: 'blaze_armor', level2: 6, warAcademy: 4},
+                     {tech: 'blaze_charge', level: 6, tech2: 'blaze_armor', level2: 6, warAcademy: 4},
+                     {tech: 'blaze_charge', level: 6, tech2: 'blaze_armor', level2: 6, warAcademy: 4},
+                     {tech: 'blaze_charge', level: 6, tech2: 'blaze_armor', level2: 6, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 6, tech2: 'blaze_armor', level2: 6, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 6, tech2: 'blaze_armor', level2: 6, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 7, tech2: 'blaze_armor', level2: 7, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, tech2: 'blaze_armor', level2: 8, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, tech2: 'blaze_armor', level2: 8, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, tech2: 'blaze_armor', level2: 8, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, tech2: 'blaze_armor', level2: 8, warAcademy: 5},
+                     {tech: 'blaze_charge', level: 8, tech2: 'blaze_armor', level2: 8, warAcademy: 5}
+                 ],
+                 row: 4
+                },
+                // 烈日矛兵
+                {id: 'sun_spear', name: '烈日矛兵', levels: 1,
+                 costs: [[85000000, 85000000, 17000000, 4200000, 2236, 0, 1000000]],
+                 gains: ['解锁11级矛兵'],
+                 prerequisites: [
+                     {tech: 'blaze_spear', level: 12, tech2: 'blaze_guard', level2: 12, tech3: 'flame_legion_spear', level3: 12, warAcademy: 5}
+                 ],
+                 row: 5
+                }
+            ]
+        };
+
+        // 全局状态
+        let currentTechType = 'shield';
+        let warAcademyLevel = 0;
+        let techStates = {};
+        let totalCosts = {
+            meat: 0,
+            wood: 0,
+            coal: 0,
+            iron: 0,
+            crystal: 0,   // 火晶颗粒
+            fireCrystal: 0, // 火晶
+            steel: 0
+        };
+        let totalGains = {
+            deploy: 0,
+            rally: 0,
+            shield: {
+                penetration: 0,
+                hp: 0,
+                attack: 0,
+                defense: 0
+            },
+            archer: {
+                penetration: 0,
+                hp: 0,
+                attack: 0,
+                defense: 0
+            },
+            spear: {
+                penetration: 0,
+                hp: 0,
+                attack: 0,
+                defense: 0
+            }
+        };
+
+        // 当前选择的科技（用于弹窗）
+        let selectedTech = null;
+        let selectedLevel = 0;
+
+        // 简化显示状态
+        let isSimplified = false;
+        
+        // 测算状态
+        let isCalculated = false;
+
+        // 初始化
+        function init() {
+            // 初始化科技状态
+            Object.keys(techData).forEach(type => {
+                techStates[type] = {};
+                techData[type].forEach(tech => {
+                    techStates[type][tech.id] = 0;
+                });
+            });
+            
+            // 初始化战争学院
+            updateWarAcademyDisplay();
+            
+            // 渲染界面
+            renderTechTree();
+            updateStats();
+            
+            // 绑定标签页事件
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentTechType = this.getAttribute('data-type');
+                    renderTechTree();
+                });
+            });
+            
+            // 绑定按钮事件
+            document.getElementById('reset-btn').addEventListener('click', resetAllTechs);
+            document.getElementById('simplify-btn').addEventListener('click', toggleSimplify);
+            document.getElementById('calculate-btn').addEventListener('click', toggleCalculate);
+            
+            // 绑定战争学院按钮事件
+            document.getElementById('war-decrease-btn').addEventListener('click', () => changeWarAcademyLevel(-1));
+            document.getElementById('war-increase-btn').addEventListener('click', () => changeWarAcademyLevel(1));
+            
+            // 绑定弹窗事件
+            document.getElementById('confirm-upgrade').addEventListener('click', confirmUpgrade);
+            document.getElementById('cancel-upgrade').addEventListener('click', closeModal);
+            
+            // 点击弹窗外部关闭
+            document.getElementById('prereq-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+        }
+
+        // 更新战争学院显示
+        function updateWarAcademyDisplay() {
+            document.getElementById('war-level-display').textContent = `${warAcademyLevel}/${warAcademyTech.levels}`;
+            
+            // 更新按钮状态
+            document.getElementById('war-decrease-btn').disabled = warAcademyLevel <= 0;
+            document.getElementById('war-increase-btn').disabled = warAcademyLevel >= warAcademyTech.levels;
+            
+            // 更新消耗显示
+            const costsContainer = document.getElementById('war-academy-costs');
+            costsContainer.innerHTML = '';
+            
+            if (warAcademyLevel > 0) {
+                const totalCost = [0, 0, 0, 0, 0, 0, 0];
+                for (let i = 0; i < warAcademyLevel; i++) {
+                    for (let j = 0; j < 7; j++) {
+                        totalCost[j] += warAcademyTech.costs[i][j];
+                    }
+                }
+                
+                // 基础资源（肉、木、煤、铁）
+                if (!isSimplified) {
+                    const basicResources = ['肉', '木', '煤', '铁'];
+                    basicResources.forEach((resource, index) => {
+                        if (totalCost[index] > 0) {
+                            const costItem = document.createElement('div');
+                            costItem.className = 'cost-item';
+                            
+                            const label = document.createElement('span');
+                            label.className = 'cost-label';
+                            label.textContent = resource + ':';
+                            
+                            const value = document.createElement('span');
+                            value.className = 'cost-value';
+                            value.textContent = totalCost[index].toLocaleString();
+                            
+                            costItem.appendChild(label);
+                            costItem.appendChild(value);
+                            costsContainer.appendChild(costItem);
+                        }
+                    });
+                }
+                
+                // 火晶
+                if (totalCost[5] > 0) {
+                    const costItem = document.createElement('div');
+                    costItem.className = 'cost-item';
+                    
+                    const label = document.createElement('span');
+                    label.className = 'cost-label';
+                    label.textContent = '火晶:';
+                    
+                    const value = document.createElement('span');
+                    value.className = 'cost-value';
+                    value.textContent = totalCost[5].toLocaleString();
+                    
+                    costItem.appendChild(label);
+                    costItem.appendChild(value);
+                    costsContainer.appendChild(costItem);
+                }
+            }
+            
+            // 更新增益显示
+            const gainsContainer = document.getElementById('war-academy-gains');
+            gainsContainer.innerHTML = '';
+            
+            if (warAcademyLevel > 0) {
+                const gainElem = document.createElement('div');
+                gainElem.className = 'gain';
+                gainElem.textContent = warAcademyTech.gains[warAcademyLevel - 1];
+                gainsContainer.appendChild(gainElem);
+            }
+        }
+
+        // 改变战争学院等级
+        function changeWarAcademyLevel(delta) {
+            let newLevel = warAcademyLevel + delta;
+            newLevel = Math.max(0, Math.min(warAcademyTech.levels, newLevel));
+            
+            if (newLevel === warAcademyLevel) return;
+            
+            warAcademyLevel = newLevel;
+            
+            // 更新显示
+            updateWarAcademyDisplay();
+            
+            // 更新消耗和增益
+            updateCostsAndGains();
+            
+            // 重新渲染科技树（因为战争学院等级可能影响其他科技的前置条件）
+            renderTechTree();
+            updateStats();
+        }
+
+        // 渲染科技树
+        function renderTechTree() {
+            const container = document.getElementById('tech-tree');
+            container.innerHTML = '';
+            
+            const techs = techData[currentTechType];
+            
+            // 按行分组
+            const rows = {};
+            techs.forEach(tech => {
+                if (!rows[tech.row]) {
+                    rows[tech.row] = [];
+                }
+                rows[tech.row].push(tech);
+            });
+            
+            // 创建行
+            Object.keys(rows).sort((a, b) => a - b).forEach(rowNum => {
+                const row = document.createElement('div');
+                row.className = 'tech-row';
+                row.setAttribute('data-row', rowNum);
+                
+                // 获取当前行的科技
+                const rowTechs = rows[rowNum];
+                
+                // 添加科技节点到行
+                rowTechs.forEach(tech => {
+                    const techNode = createTechNode(tech);
+                    row.appendChild(techNode);
+                });
+                
+                container.appendChild(row);
+            });
+            
+            // 绘制连接线
+            drawConnections();
+        }
+
+        // 创建科技节点
+        function createTechNode(tech) {
+            const node = document.createElement('div');
+            node.className = 'tech-node';
+            node.setAttribute('data-id', tech.id);
+            node.setAttribute('data-row', tech.row);
+            
+            const currentLevel = techStates[currentTechType][tech.id];
+            
+            // 科技名称
+            const nameElem = document.createElement('div');
+            nameElem.className = 'tech-name';
+            nameElem.textContent = tech.name;
+            node.appendChild(nameElem);
+            
+            // 等级控制
+            const levelControl = document.createElement('div');
+            levelControl.className = 'tech-level';
+            
+            const decreaseBtn = document.createElement('button');
+            decreaseBtn.className = 'level-btn';
+            decreaseBtn.textContent = '-';
+            decreaseBtn.addEventListener('click', () => changeTechLevel(tech.id, -1));
+            
+            const levelDisplay = document.createElement('span');
+            levelDisplay.className = 'level-display';
+            levelDisplay.textContent = `${currentLevel}/${tech.levels}`;
+            
+            const increaseBtn = document.createElement('button');
+            increaseBtn.className = 'level-btn';
+            increaseBtn.textContent = '+';
+            increaseBtn.addEventListener('click', () => handleLevelIncrease(tech.id, currentLevel + 1));
+            
+            // 禁用按钮逻辑
+            decreaseBtn.disabled = currentLevel <= 0;
+            increaseBtn.disabled = currentLevel >= tech.levels;
+            
+            levelControl.appendChild(decreaseBtn);
+            levelControl.appendChild(levelDisplay);
+            levelControl.appendChild(increaseBtn);
+            node.appendChild(levelControl);
+            
+            // 总消耗（从1级到当前等级）
+            if (currentLevel > 0) {
+                const totalCost = [0, 0, 0, 0, 0, 0, 0];
+                for (let i = 0; i < currentLevel; i++) {
+                    for (let j = 0; j < 7; j++) {
+                        totalCost[j] += tech.costs[i][j];
+                    }
+                }
+                
+                const costContainer = document.createElement('div');
+                costContainer.className = 'cost-container';
+                
+                // 基础资源（肉、木、煤、铁）
+                if (!isSimplified) {
+                    const basicResources = ['肉', '木', '煤', '铁'];
+                    basicResources.forEach((resource, index) => {
+                        if (totalCost[index] > 0) {
+                            const costItem = document.createElement('div');
+                            costItem.className = 'cost-item';
+                            
+                            const label = document.createElement('span');
+                            label.className = 'cost-label';
+                            label.textContent = resource + ':';
+                            
+                            const value = document.createElement('span');
+                            value.className = 'cost-value';
+                            value.textContent = totalCost[index].toLocaleString();
+                            
+                            costItem.appendChild(label);
+                            costItem.appendChild(value);
+                            costContainer.appendChild(costItem);
+                        }
+                    });
+                }
+                
+                // 火晶颗粒
+                if (totalCost[4] > 0) {
+                    const costItem = document.createElement('div');
+                    costItem.className = 'cost-item';
+                    
+                    const label = document.createElement('span');
+                    label.className = 'cost-label';
+                    label.textContent = '火晶颗粒:';
+                    
+                    const value = document.createElement('span');
+                    value.className = 'cost-value';
+                    value.textContent = totalCost[4].toLocaleString();
+                    
+                    costItem.appendChild(label);
+                    costItem.appendChild(value);
+                    costContainer.appendChild(costItem);
+                }
+                
+                // 钢材
+                if (totalCost[6] > 0) {
+                    const costItem = document.createElement('div');
+                    costItem.className = 'cost-item';
+                    
+                    const label = document.createElement('span');
+                    label.className = 'cost-label';
+                    label.textContent = '钢材:';
+                    
+                    const value = document.createElement('span');
+                    value.className = 'cost-value';
+                    value.textContent = totalCost[6].toLocaleString();
+                    
+                    costItem.appendChild(label);
+                    costItem.appendChild(value);
+                    costContainer.appendChild(costItem);
+                }
+                
+                // 测算火晶需求
+                if (isCalculated && totalCost[4] > 0) {
+                    // 换算为火晶 (130火晶颗粒 = 100火晶)
+                    const fireCrystalNeed = Math.ceil(totalCost[4] * 100 / 130);
+                    
+                    // 计算预估天数 (每天70火晶)
+                    const estimateDays = Math.ceil(fireCrystalNeed / 70);
+                    
+                    const estimateItem = document.createElement('div');
+                    estimateItem.className = 'cost-item';
+                    
+                    const label = document.createElement('span');
+                    label.className = 'cost-label';
+                    label.textContent = '预估天数:';
+                    
+                    const value = document.createElement('span');
+                    value.className = 'cost-value';
+                    value.textContent = `${estimateDays}天`;
+                    value.style.color = '#ff9966';
+                    
+                    estimateItem.appendChild(label);
+                    estimateItem.appendChild(value);
+                    costContainer.appendChild(estimateItem);
+                }
+                
+                node.appendChild(costContainer);
+            }
+            
+            // 增益
+            if (currentLevel > 0) {
+                const gainElem = document.createElement('div');
+                gainElem.className = 'gain';
+                gainElem.textContent = tech.gains[currentLevel - 1];
+                node.appendChild(gainElem);
+            }
+            
+            // 前置条件
+            if (tech.prerequisites.length > 0 && currentLevel > 0) {
+                const prereq = tech.prerequisites[currentLevel - 1];
+                const prereqElem = document.createElement('div');
+                prereqElem.className = 'prerequisites';
+                
+                let prereqText = '前置: ';
+                if (prereq.tech) {
+                    prereqText += `${getTechName(prereq.tech)} ${prereq.level}级`;
+                }
+                if (prereq.tech2) {
+                    prereqText += `, ${getTechName(prereq.tech2)} ${prereq.level2}级`;
+                }
+                if (prereq.tech3) {
+                    prereqText += `, ${getTechName(prereq.tech3)} ${prereq.level3}级`;
+                }
+                if (prereq.warAcademy) {
+                    prereqText += `, 战争学院${prereq.warAcademy}级`;
+                }
+                
+                prereqElem.textContent = prereqText;
+                node.appendChild(prereqElem);
+            }
+            
+            return node;
+        }
+
+        // 绘制连接线
+        function drawConnections() {
+            const container = document.getElementById('tech-tree');
+            const connections = document.createElement('div');
+            connections.className = 'connections';
+            container.appendChild(connections);
+            
+            const techs = techData[currentTechType];
+            
+            techs.forEach(tech => {
+                if (tech.prerequisites.length > 0) {
+                    tech.prerequisites.forEach(prereq => {
+                        if (prereq.tech) {
+                            drawConnection(prereq.tech, tech.id);
+                        }
+                        if (prereq.tech2) {
+                            drawConnection(prereq.tech2, tech.id);
+                        }
+                        if (prereq.tech3) {
+                            drawConnection(prereq.tech3, tech.id);
+                        }
+                    });
+                }
+            });
+        }
+
+        // 绘制单个连接线
+        function drawConnection(fromTechId, toTechId) {
+            const fromNode = document.querySelector(`.tech-node[data-id="${fromTechId}"]`);
+            const toNode = document.querySelector(`.tech-node[data-id="${toTechId}"]`);
+            
+            if (!fromNode || !toNode) return;
+            
+            const fromRect = fromNode.getBoundingClientRect();
+            const toRect = toNode.getBoundingClientRect();
+            const containerRect = document.getElementById('tech-tree').getBoundingClientRect();
+            
+            const fromX = fromRect.left + fromRect.width / 2 - containerRect.left;
+            const fromY = fromRect.top + fromRect.height - containerRect.top;
+            const toX = toRect.left + toRect.width / 2 - containerRect.left;
+            const toY = toRect.top - containerRect.top;
+            
+            const length = Math.sqrt(Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2));
+            const angle = Math.atan2(toY - fromY, toX - fromX) * 180 / Math.PI;
+            
+            const connection = document.createElement('div');
+            connection.className = 'connection';
+            connection.style.width = `${length}px`;
+            connection.style.left = `${fromX}px`;
+            connection.style.top = `${fromY}px`;
+            connection.style.transform = `rotate(${angle}deg)`;
+            
+            document.querySelector('.connections').appendChild(connection);
+        }
+
+        // 处理升级按钮点击
+        function handleLevelIncrease(techId, targetLevel) {
+            const tech = techData[currentTechType].find(t => t.id === techId);
+            if (!tech || targetLevel > tech.levels) return;
+            
+            // 检查前置条件是否满足
+            const allPrereqs = getAllPrerequisites(techId, targetLevel);
+            const unmetPrereqs = allPrereqs.filter(prereq => {
+                if (prereq.tech === 'war_academy') {
+                    return warAcademyLevel < prereq.level;
+                } else {
+                    const currentLevel = techStates[currentTechType][prereq.tech] || 0;
+                    return currentLevel < prereq.level;
+                }
+            });
+            
+            // 如果前置条件全部满足，直接升级
+            if (unmetPrereqs.length === 0) {
+                changeTechLevel(techId, 1);
+            } else {
+                // 否则显示弹窗
+                showPrereqModal(techId, targetLevel);
+            }
+        }
+
+        // 显示前置科技弹窗
+        function showPrereqModal(techId, targetLevel) {
+            const tech = techData[currentTechType].find(t => t.id === techId);
+            if (!tech || targetLevel > tech.levels) return;
+            
+            selectedTech = techId;
+            selectedLevel = targetLevel;
+            
+            // 获取所有前置科技（递归）
+            const allPrereqs = getAllPrerequisites(techId, targetLevel);
+            
+            // 更新弹窗内容
+            document.getElementById('modal-title').textContent = `升级 ${tech.name} 到 ${targetLevel} 级`;
+            
+            const prereqList = document.getElementById('prereq-list');
+            prereqList.innerHTML = '';
+            
+            if (allPrereqs.length === 0) {
+                const item = document.createElement('div');
+                item.className = 'prereq-item';
+                item.textContent = '无前置条件';
+                prereqList.appendChild(item);
+            } else {
+                allPrereqs.forEach(prereq => {
+                    const item = document.createElement('div');
+                    item.className = 'prereq-item';
+                    
+                    let currentLevel;
+                    let status;
+                    
+                    if (prereq.tech === 'war_academy') {
+                        currentLevel = warAcademyLevel;
+                        status = currentLevel >= prereq.level ? '✓' : '✗';
+                        item.textContent = `战争学院 ${prereq.level}级 (当前: ${currentLevel}级) ${status}`;
+                    } else {
+                        currentLevel = techStates[currentTechType][prereq.tech] || 0;
+                        status = currentLevel >= prereq.level ? '✓' : '✗';
+                        item.textContent = `${getTechName(prereq.tech)} ${prereq.level}级 (当前: ${currentLevel}级) ${status}`;
+                    }
+                    
+                    prereqList.appendChild(item);
+                });
+            }
+            
+            // 显示弹窗
+            document.getElementById('prereq-modal').style.display = 'flex';
+        }
+
+        // 获取所有前置科技（递归）
+        function getAllPrerequisites(techId, targetLevel) {
+            const tech = techData[currentTechType].find(t => t.id === techId);
+            if (!tech || targetLevel < 1) return [];
+            
+            const prereq = tech.prerequisites[targetLevel - 1];
+            if (!prereq) return [];
+            
+            const allPrereqs = [];
+            
+            // 添加直接前置
+            if (prereq.tech) {
+                allPrereqs.push({tech: prereq.tech, level: prereq.level});
+                
+                // 递归获取前置科技的前置
+                const subPrereqs = getAllPrerequisites(prereq.tech, prereq.level);
+                allPrereqs.push(...subPrereqs);
+            }
+            
+            if (prereq.tech2) {
+                allPrereqs.push({tech: prereq.tech2, level: prereq.level2});
+                
+                // 递归获取前置科技的前置
+                const subPrereqs = getAllPrerequisites(prereq.tech2, prereq.level2);
+                allPrereqs.push(...subPrereqs);
+            }
+            
+            if (prereq.tech3) {
+                allPrereqs.push({tech: prereq.tech3, level: prereq.level3});
+                
+                // 递归获取前置科技的前置
+                const subPrereqs = getAllPrerequisites(prereq.tech3, prereq.level3);
+                allPrereqs.push(...subPrereqs);
+            }
+            
+            // 添加战争学院等级前置
+            if (prereq.warAcademy) {
+                allPrereqs.push({tech: 'war_academy', level: prereq.warAcademy});
+            }
+            
+            // 去重
+            const uniquePrereqs = [];
+            allPrereqs.forEach(prereq => {
+                if (!uniquePrereqs.find(p => p.tech === prereq.tech && p.level === prereq.level)) {
+                    uniquePrereqs.push(prereq);
+                }
+            });
+            
+            return uniquePrereqs;
+        }
+
+        // 确认升级
+        function confirmUpgrade() {
+            if (!selectedTech) return;
+            
+            // 获取所有前置科技
+            const allPrereqs = getAllPrerequisites(selectedTech, selectedLevel);
+            
+            // 升级所有前置科技
+            allPrereqs.forEach(prereq => {
+                if (prereq.tech === 'war_academy') {
+                    // 升级战争学院
+                    if (warAcademyLevel < prereq.level) {
+                        warAcademyLevel = prereq.level;
+                        updateWarAcademyDisplay();
+                    }
+                } else {
+                    // 升级其他科技
+                    autoUpgradeTech(prereq.tech, prereq.level);
+                }
+            });
+            
+            // 升级目标科技
+            changeTechLevel(selectedTech, 1);
+            
+            closeModal();
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('prereq-modal').style.display = 'none';
+            selectedTech = null;
+            selectedLevel = 0;
+        }
+
+        // 改变科技等级
+        function changeTechLevel(techId, delta) {
+            const currentLevel = techStates[currentTechType][techId];
+            const tech = techData[currentTechType].find(t => t.id === techId);
+            
+            let newLevel = currentLevel + delta;
+            newLevel = Math.max(0, Math.min(tech.levels, newLevel));
+            
+            if (newLevel === currentLevel) return;
+            
+            // 检查是否可以降级（防止影响后置科技）
+            if (delta < 0 && !canDecreaseLevel(techId, newLevel)) {
+                alert(`无法降低${getTechName(techId)}的等级，因为这将影响其他已升级科技的前置条件！`);
+                return;
+            }
+            
+            techStates[currentTechType][techId] = newLevel;
+            
+            // 更新消耗和增益
+            updateCostsAndGains();
+            
+            // 重新渲染
+            renderTechTree();
+            updateStats();
+        }
+
+        // 检查是否可以降低等级
+        function canDecreaseLevel(techId, newLevel) {
+            const techs = techData[currentTechType];
+            
+            // 检查所有科技
+            for (const tech of techs) {
+                const currentTechLevel = techStates[currentTechType][tech.id];
+                
+                // 如果该科技已经升级，检查它的前置条件是否依赖当前科技
+                if (currentTechLevel > 0) {
+                    for (let i = 1; i <= currentTechLevel; i++) {
+                        const prereq = tech.prerequisites[i-1];
+                        if (prereq) {
+                            // 检查是否依赖当前科技
+                            if (prereq.tech === techId && prereq.level > newLevel) {
+                                return false;
+                            }
+                            if (prereq.tech2 === techId && prereq.level2 > newLevel) {
+                                return false;
+                            }
+                            if (prereq.tech3 === techId && prereq.level3 > newLevel) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return true;
+        }
+
+        // 自动升级科技
+        function autoUpgradeTech(techId, targetLevel) {
+            const currentLevel = techStates[currentTechType][techId] || 0;
+            
+            if (currentLevel >= targetLevel) return;
+            
+            // 升级到目标等级
+            for (let i = currentLevel + 1; i <= targetLevel; i++) {
+                changeTechLevel(techId, 1);
+            }
+        }
+
+        // 获取科技名称
+        function getTechName(techId) {
+            const tech = techData[currentTechType].find(t => t.id === techId);
+            return tech ? tech.name : techId;
+        }
+
+        // 更新消耗和增益
+        function updateCostsAndGains() {
+            // 重置统计
+            totalCosts = {
+                meat: 0,
+                wood: 0,
+                coal: 0,
+                iron: 0,
+                crystal: 0,   // 火晶颗粒
+                fireCrystal: 0, // 火晶
+                steel: 0
+            };
+            
+            totalGains = {
+                deploy: 0,
+                rally: 0,
+                shield: {
+                    penetration: 0,
+                    hp: 0,
+                    attack: 0,
+                    defense: 0
+                },
+                archer: {
+                    penetration: 0,
+                    hp: 0,
+                    attack: 0,
+                    defense: 0
+                },
+                spear: {
+                    penetration: 0,
+                    hp: 0,
+                    attack: 0,
+                    defense: 0
+                }
+            };
+            
+            // 计算战争学院消耗和增益
+            for (let i = 0; i < warAcademyLevel; i++) {
+                const cost = warAcademyTech.costs[i];
+                totalCosts.meat += cost[0];
+                totalCosts.wood += cost[1];
+                totalCosts.coal += cost[2];
+                totalCosts.iron += cost[3];
+                totalCosts.fireCrystal += cost[5]; // 战争学院使用火晶
+            }
+            
+            // 计算科技消耗和增益
+            Object.keys(techStates).forEach(type => {
+                techData[type].forEach(tech => {
+                    const level = techStates[type][tech.id];
+                    for (let i = 0; i < level; i++) {
+                        const cost = tech.costs[i];
+                        totalCosts.meat += cost[0];
+                        totalCosts.wood += cost[1];
+                        totalCosts.coal += cost[2];
+                        totalCosts.iron += cost[3];
+                        totalCosts.crystal += cost[4]; // 其他科技使用火晶颗粒
+                        totalCosts.steel += cost[6];
+                        
+                        // 解析增益
+                        const gain = tech.gains[i];
+                        
+                        // 根据科技类型确定兵种
+                        let troopType = 'shield';
+                        if (type === 'archer') troopType = 'archer';
+                        if (type === 'spear') troopType = 'spear';
+                        
+                        if (gain.includes('出征容量')) {
+                            const match = gain.match(/\+(\d+)/);
+                            if (match) totalGains.deploy += parseInt(match[1]);
+                        } else if (gain.includes('集结容量')) {
+                            const match = gain.match(/\+(\d+)/);
+                            if (match) totalGains.rally += parseInt(match[1]);
+                        } else if (gain.includes('穿透力')) {
+                            const match = gain.match(/\+([\d.]+)%/);
+                            if (match) totalGains[troopType].penetration += parseFloat(match[1]);
+                        } else if (gain.includes('生命值')) {
+                            const match = gain.match(/\+([\d.]+)%/);
+                            if (match) totalGains[troopType].hp += parseFloat(match[1]);
+                        } else if (gain.includes('攻击力')) {
+                            const match = gain.match(/\+([\d.]+)%/);
+                            if (match) totalGains[troopType].attack += parseFloat(match[1]);
+                        } else if (gain.includes('防御力')) {
+                            const match = gain.match(/\+([\d.]+)%/);
+                            if (match) totalGains[troopType].defense += parseFloat(match[1]);
+                        }
+                    }
+                });
+            });
+        }
+
+        // 更新统计显示
+        function updateStats() {
+            document.getElementById('total-meat').textContent = totalCosts.meat.toLocaleString();
+            document.getElementById('total-wood').textContent = totalCosts.wood.toLocaleString();
+            document.getElementById('total-coal').textContent = totalCosts.coal.toLocaleString();
+            document.getElementById('total-iron').textContent = totalCosts.iron.toLocaleString();
+            document.getElementById('total-crystal').textContent = totalCosts.crystal.toLocaleString();
+            document.getElementById('total-fire-crystal').textContent = totalCosts.fireCrystal.toLocaleString();
+            document.getElementById('total-steel').textContent = totalCosts.steel.toLocaleString();
+            
+            // 计算总火晶需求（包括换算的火晶颗粒）
+            const totalFireCrystalNeed = totalCosts.fireCrystal + Math.ceil(totalCosts.crystal * 100 / 130);
+            document.getElementById('total-fire-crystal-need').textContent = totalFireCrystalNeed.toLocaleString();
+            
+            // 计算预估月数（每月2100火晶）
+            const estimateMonths = (totalFireCrystalNeed / 2100).toFixed(1);
+            document.getElementById('estimate-months').textContent = estimateMonths + '个月';
+            
+            document.getElementById('gain-deploy').textContent = totalGains.deploy.toLocaleString();
+            document.getElementById('gain-rally').textContent = totalGains.rally.toLocaleString();
+            
+            // 盾兵增益
+            document.getElementById('gain-shield-penetration').textContent = totalGains.shield.penetration.toFixed(1) + '%';
+            document.getElementById('gain-shield-hp').textContent = totalGains.shield.hp.toFixed(1) + '%';
+            document.getElementById('gain-shield-attack').textContent = totalGains.shield.attack.toFixed(1) + '%';
+            document.getElementById('gain-shield-defense').textContent = totalGains.shield.defense.toFixed(1) + '%';
+            
+            // 射手增益
+            document.getElementById('gain-archer-penetration').textContent = totalGains.archer.penetration.toFixed(1) + '%';
+            document.getElementById('gain-archer-hp').textContent = totalGains.archer.hp.toFixed(1) + '%';
+            document.getElementById('gain-archer-attack').textContent = totalGains.archer.attack.toFixed(1) + '%';
+            document.getElementById('gain-archer-defense').textContent = totalGains.archer.defense.toFixed(1) + '%';
+            
+            // 矛兵增益
+            document.getElementById('gain-spear-penetration').textContent = totalGains.spear.penetration.toFixed(1) + '%';
+            document.getElementById('gain-spear-hp').textContent = totalGains.spear.hp.toFixed(1) + '%';
+            document.getElementById('gain-spear-attack').textContent = totalGains.spear.attack.toFixed(1) + '%';
+            document.getElementById('gain-spear-defense').textContent = totalGains.spear.defense.toFixed(1) + '%';
+        }
+
+        // 重置所有科技
+        function resetAllTechs() {
+            if (confirm('确定要重置所有科技等级吗？')) {
+                warAcademyLevel = 0;
+                updateWarAcademyDisplay();
+                
+                Object.keys(techStates).forEach(type => {
+                    Object.keys(techStates[type]).forEach(techId => {
+                        techStates[type][techId] = 0;
+                    });
+                });
+                
+                updateCostsAndGains();
+                renderTechTree();
+                updateStats();
+            }
+        }
+
+        // 切换简化显示
+        function toggleSimplify() {
+            isSimplified = !isSimplified;
+            document.getElementById('simplify-btn').textContent = isSimplified ? '显示全部' : '简化显示';
+            updateWarAcademyDisplay();
+            renderTechTree();
+        }
+
+        // 切换测算显示
+        function toggleCalculate() {
+            isCalculated = !isCalculated;
+            document.getElementById('calculate-btn').textContent = isCalculated ? '关闭测算' : '测算火晶需求';
+            renderTechTree();
+            updateStats();
+        }
+
+        // 初始化应用
+        window.onload = init;
+    </script>
+    </div>
+</body>
+</html>
